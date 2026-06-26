@@ -1,6 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
-import appCss from "@workspace/ui/globals.css?url"
+import { DevStyleXInject } from "../DevStyleXInject"
+import appCss from "@/styles/globals.css?url"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -34,9 +35,15 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <DevStyleXInject cssHref="/stylex.css" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('vite-ui-theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark'}else{document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light'}}catch(e){}`,
+          }}
+        />
       </head>
       <body>
         {children}
