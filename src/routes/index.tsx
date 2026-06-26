@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { useTheme } from "@/hooks/use-theme"
+
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
+import { useTheme } from "@/hooks/use-theme"
 
 export const Route = createFileRoute("/")({ component: App })
 
@@ -12,7 +13,13 @@ function App() {
   const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length]
 
   return (
-    <Box display="flex" flexDirection="column" minHeight="100svh" padding="xl" gap="xl">
+    <Box
+      display="flex"
+      flexDirection="column"
+      minHeight="100svh"
+      padding="xl"
+      gap="xl"
+    >
       <Box display="flex" justifyContent="between" alignItems="center">
         <Box as="h1" fontSize="xl" fontWeight="bold" color="text-primary">
           shadcn-x
@@ -37,8 +44,9 @@ function App() {
           Box Component
         </Box>
         <Box color="text-secondary" fontSize="s">
-          A polymorphic layout primitive from the Orbit design system. Uses StyleX tokens for
-          type-safe, intent-based styling with automatic dark mode via{" "}
+          A polymorphic layout primitive from the Orbit design system. Uses
+          StyleX tokens for type-safe, intent-based styling with automatic dark
+          mode via{" "}
           <Box as="code" color="accent">
             light-dark()
           </Box>
@@ -50,7 +58,11 @@ function App() {
         Examples
       </Box>
 
-      <Box display="grid" gap="m" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
+      <Box
+        display="grid"
+        gap="m"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
+      >
         <Box
           display="flex"
           flexDirection="column"
@@ -65,10 +77,15 @@ function App() {
             Card
           </Box>
           <Box color="text-secondary" fontSize="s">
-            A basic card surface with border, rounded corners, and card background.
+            A basic card surface with border, rounded corners, and card
+            background.
           </Box>
           <Box as="p" color="text-primary" fontSize="s">
-            Use <Box as="code" color="accent">backgroundColor="background-card"</Box> for card surfaces.
+            Use{" "}
+            <Box as="code" color="accent">
+              backgroundColor="background-card"
+            </Box>{" "}
+            for card surfaces.
           </Box>
         </Box>
 
@@ -86,18 +103,40 @@ function App() {
             Flex Layout
           </Box>
           <Box display="flex" gap="s">
-            <Box padding="xs" backgroundColor="accent" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="xs"
+              backgroundColor="accent"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Item 1
             </Box>
-            <Box padding="xs" backgroundColor="accent" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="xs"
+              backgroundColor="accent"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Item 2
             </Box>
-            <Box padding="xs" backgroundColor="accent" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="xs"
+              backgroundColor="accent"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Item 3
             </Box>
           </Box>
           <Box color="text-secondary" fontSize="s">
-            Use <Box as="code" color="accent">display="flex" gap="s"</Box> for inline flex layouts.
+            Use{" "}
+            <Box as="code" color="accent">
+              display="flex" gap="s"
+            </Box>{" "}
+            for inline flex layouts.
           </Box>
         </Box>
 
@@ -114,13 +153,30 @@ function App() {
           <Box fontSize="s" fontWeight="semibold" color="text-primary">
             Semantic HTML
           </Box>
-          <Box as="nav" display="flex" gap="s" padding="s" backgroundColor="background-muted" borderRadius="s">
-            <Box as="a" color="accent" fontSize="s" href="#">Home</Box>
-            <Box as="a" color="accent" fontSize="s" href="#">About</Box>
-            <Box as="a" color="accent" fontSize="s" href="#">Contact</Box>
+          <Box
+            as="nav"
+            display="flex"
+            gap="s"
+            padding="s"
+            backgroundColor="background-muted"
+            borderRadius="s"
+          >
+            <Box as="a" color="accent" fontSize="s" href="#">
+              Home
+            </Box>
+            <Box as="a" color="accent" fontSize="s" href="#">
+              About
+            </Box>
+            <Box as="a" color="accent" fontSize="s" href="#">
+              Contact
+            </Box>
           </Box>
           <Box color="text-secondary" fontSize="s">
-            Use <Box as="code" color="accent">as="nav"</Box> for semantic elements with all Box styling.
+            Use{" "}
+            <Box as="code" color="accent">
+              as="nav"
+            </Box>{" "}
+            for semantic elements with all Box styling.
           </Box>
         </Box>
 
@@ -138,18 +194,40 @@ function App() {
             Themed Tokens
           </Box>
           <Box display="flex" gap="s">
-            <Box padding="s" backgroundColor="success" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="s"
+              backgroundColor="success"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Success
             </Box>
-            <Box padding="s" backgroundColor="danger" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="s"
+              backgroundColor="danger"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Danger
             </Box>
-            <Box padding="s" backgroundColor="accent" borderRadius="s" color="text-primary" fontSize="s">
+            <Box
+              padding="s"
+              backgroundColor="accent"
+              borderRadius="s"
+              color="text-primary"
+              fontSize="s"
+            >
               Accent
             </Box>
           </Box>
           <Box color="text-secondary" fontSize="s">
-            Tokens use <Box as="code" color="accent">light-dark()</Box> — no dark: variants needed.
+            Tokens use{" "}
+            <Box as="code" color="accent">
+              light-dark()
+            </Box>{" "}
+            — no dark: variants needed.
           </Box>
         </Box>
       </Box>

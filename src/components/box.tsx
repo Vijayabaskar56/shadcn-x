@@ -1,7 +1,25 @@
 import * as stylex from "@stylexjs/stylex"
-import { spacing, colors, borderRadius, fontSize, fontWeight, boxShadow } from "../styles/tokens.stylex"
 
-type SpacingKey = "none" | "xs" | "s" | "m" | "l" | "xl" | "2xl" | "3xl" | "4xl" | "5xl"
+import {
+  spacing,
+  colors,
+  borderRadius,
+  fontSize,
+  fontWeight,
+  boxShadow,
+} from "../styles/tokens.stylex"
+
+type SpacingKey =
+  | "none"
+  | "xs"
+  | "s"
+  | "m"
+  | "l"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
 type ColorKey =
   | "background-primary"
   | "background-card"
@@ -183,11 +201,24 @@ const styles = stylex.create({
   borderRight: { borderRightWidth: 1, borderRightStyle: "solid" },
 })
 
-type Display = "flex" | "grid" | "inline-flex" | "block" | "inline" | "inline-block" | "none"
+type Display =
+  | "flex"
+  | "grid"
+  | "inline-flex"
+  | "block"
+  | "inline"
+  | "inline-block"
+  | "none"
 type FlexDirection = "row" | "column" | "row-reverse" | "column-reverse"
 type FlexWrap = "wrap" | "nowrap" | "wrap-reverse"
 type AlignItems = "start" | "end" | "center" | "stretch" | "baseline"
-type JustifyContent = "start" | "end" | "center" | "between" | "around" | "evenly"
+type JustifyContent =
+  | "start"
+  | "end"
+  | "center"
+  | "between"
+  | "around"
+  | "evenly"
 type Position = "static" | "relative" | "absolute" | "fixed" | "sticky"
 type Overflow = "visible" | "hidden" | "scroll" | "auto" | "clip"
 type TextAlign = "left" | "center" | "right"
@@ -265,7 +296,20 @@ type BoxProps<E extends AllowedElement = "div"> = {
   borderBottom?: boolean
   borderLeft?: boolean
   borderRight?: boolean
-} & Omit<React.ComponentPropsWithoutRef<E>, "as" | "children" | "className" | "style" | "color" | "width" | "height" | "display" | "flex" | "order" | "overflow">
+} & Omit<
+  React.ComponentPropsWithoutRef<E>,
+  | "as"
+  | "children"
+  | "className"
+  | "style"
+  | "color"
+  | "width"
+  | "height"
+  | "display"
+  | "flex"
+  | "order"
+  | "overflow"
+>
 
 const displayMap = {
   flex: styles.displayFlex,
@@ -554,11 +598,12 @@ export function Box<E extends AllowedElement = "div">({
     borderTop !== undefined && styles.borderTop,
     borderBottom !== undefined && styles.borderBottom,
     borderLeft !== undefined && styles.borderLeft,
-    borderRight !== undefined && styles.borderRight,
+    borderRight !== undefined && styles.borderRight
   )
 
-  const combinedStyle: React.CSSProperties & Record<string, string | number | undefined> = {
-    ...(style ?? {}),
+  const combinedStyle: React.CSSProperties &
+    Record<string, string | number | undefined> = {
+    ...style,
     ...(flexGrow !== undefined ? { flexGrow } : {}),
     ...(flexShrink !== undefined ? { flexShrink } : {}),
     ...(order !== undefined ? { order } : {}),

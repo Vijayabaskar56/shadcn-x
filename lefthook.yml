@@ -1,0 +1,32 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: fmt
+      run: bunx oxfmt {staged_files}
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+    - name: lint
+      run: bunx oxlint --type-aware --fix {staged_files}
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+      stage_fixed: true
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: typecheck
+      run: bunx tsc --noEmit
+    - name: knip
+      run: bunx knip --use-tsconfig-files
+    - name: test
+      run: bunx vitest run

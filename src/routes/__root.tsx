@@ -1,7 +1,8 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
-import { DevStyleXInject } from "../DevStyleXInject"
 import appCss from "@/styles/globals.css?url"
+
+import { DevStyleXInject } from "../DevStyleXInject"
 
 export const Route = createRootRoute({
   head: () => ({

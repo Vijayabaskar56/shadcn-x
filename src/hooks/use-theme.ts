@@ -31,7 +31,7 @@ function useStoredTheme(): Theme {
   return useSyncExternalStore(
     subscribeStoredTheme,
     getStoredTheme,
-    getStoredThemeServerSnapshot,
+    getStoredThemeServerSnapshot
   )
 }
 
@@ -76,7 +76,7 @@ export function useResolvedTheme(): "dark" | "light" {
   const systemTheme = useSyncExternalStore(
     subscribeSystemTheme,
     getSystemThemeSnapshot,
-    getSystemThemeServerSnapshot,
+    getSystemThemeServerSnapshot
   )
   return systemTheme
 }
