@@ -1,8 +1,18 @@
+import * as stylex from "@stylexjs/stylex"
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
+import { Box } from "@/components/box"
 import appCss from "@/styles/globals.css?url"
 
 import { DevStyleXInject } from "../DevStyleXInject"
+
+const styles = stylex.create({
+  notFound: {
+    marginInline: "auto",
+    maxWidth: "80rem",
+    paddingTop: "4rem",
+  },
+})
 
 export const Route = createRootRoute({
   head: () => ({
@@ -26,10 +36,10 @@ export const Route = createRootRoute({
     ],
   }),
   notFoundComponent: () => (
-    <main className="container mx-auto p-4 pt-16">
+    <Box as="main" padding="l" sx={styles.notFound}>
       <h1>404</h1>
       <p>The requested page could not be found.</p>
-    </main>
+    </Box>
   ),
   shellComponent: RootDocument,
 })

@@ -1,30 +1,66 @@
+import * as stylex from "@stylexjs/stylex"
+
 import type { TocEntry } from "@/lib/markdown"
 
-import { cn } from "@/lib/utils"
+import { Box } from "@/components/box"
+
+import { colors, spacing } from "../../styles/tokens.stylex"
+
+const styles = stylex.create({
+  label: {
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+  },
+  link: {
+    display: "block",
+    color: {
+      default: colors["muted-foreground"],
+      ":hover": colors["text-primary"],
+    },
+    transitionProperty: "color",
+    transitionDuration: "150ms",
+  },
+  linkNested: {
+    paddingLeft: spacing.m,
+  },
+})
 
 export function DocToc({ toc }: { toc: Array<TocEntry> }) {
   if (toc.length === 0) return null
 
   return (
-    <nav className="flex flex-col gap-2 text-sm" aria-label="On this page">
-      <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+    <Box
+      as="nav"
+      display="flex"
+      flexDirection="column"
+      gap="s"
+      fontSize="s"
+      aria-label="On this page"
+    >
+      <Box
+        as="p"
+        fontSize="xs"
+        fontWeight="semibold"
+        color="text-secondary"
+        sx={styles.label}
+      >
         On this page
-      </p>
-      <ul className="flex flex-col gap-1.5">
+      </Box>
+      <Box as="ul" display="flex" flexDirection="column" gap="xs">
         {toc.map((entry) => (
-          <li key={entry.id}>
+          <Box as="li" key={entry.id}>
             <a
               href={`#${entry.id}`}
-              className={cn(
-                "block text-muted-foreground transition-colors hover:text-foreground",
-                entry.depth === 3 && "pl-3"
+              {...stylex.props(
+                styles.link,
+                entry.depth === 3 && styles.linkNested
               )}
             >
               {entry.value}
             </a>
-          </li>
+          </Box>
         ))}
-      </ul>
-    </nav>
+      </Box>
+    </Box>
   )
 }

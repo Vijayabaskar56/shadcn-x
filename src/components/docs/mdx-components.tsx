@@ -1,8 +1,9 @@
 import type { ComponentPropsWithoutRef } from "react"
 
+import * as stylex from "@stylexjs/stylex"
+
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
-import { cn } from "@/lib/utils"
 
 /**
  * Component map handed to compiled MDX docs. It exposes our primitives so docs
@@ -11,32 +12,163 @@ import { cn } from "@/lib/utils"
  * `.md` (prose) pipeline.
  *
  * This file is docs/library infrastructure, so raw HTML elements are expected.
+ * Tags that `Box` does not expose (`table`, `th`, `td`, `hr`, `img`) are styled
+ * with `stylex.props(...)` — the StyleX idiom for raw elements — never with a
+ * hand-authored `className`.
  */
 
-type AnchorProps = ComponentPropsWithoutRef<"a">
-type HeadingProps = ComponentPropsWithoutRef<"h1">
-type CodeProps = ComponentPropsWithoutRef<"code">
+// `Box` exposes a typed `color` prop, so we drop the (deprecated) HTML `color`
+// attribute from the spread props to avoid a type clash.
+type Without<E extends keyof React.JSX.IntrinsicElements> = Omit<
+  ComponentPropsWithoutRef<E>,
+  "color"
+>
 
-function MdxAnchor({ className, ...props }: AnchorProps) {
+type AnchorProps = Without<"a">
+type HeadingProps = Without<"h1">
+type CodeProps = Without<"code">
+
+// Literal values are fine here: this is docs/library infrastructure, and `sx`
+// is the sanctioned escape valve for anything the Box token props don't expose
+// (line-height, letter-spacing, em-based padding, list markers, anchors, etc.).
+const styles = stylex.create({
+  anchor: {
+    textDecoration: { default: "underline", ":hover": "none" },
+    textUnderlineOffset: "4px",
+  },
+  inlineCode: {
+    paddingLeft: "0.4em",
+    paddingRight: "0.4em",
+    paddingTop: "0.2em",
+    paddingBottom: "0.2em",
+    fontFamily:
+      "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace",
+    fontSize: "0.875em",
+  },
+  h1: {
+    marginTop: "0.5rem",
+    marginBottom: "1rem",
+    scrollMarginTop: "5rem",
+    letterSpacing: "-0.025em",
+    lineHeight: 1.1,
+  },
+  h2: {
+    marginTop: "2.5rem",
+    marginBottom: "1rem",
+    paddingBottom: "0.5rem",
+    scrollMarginTop: "5rem",
+    letterSpacing: "-0.025em",
+    lineHeight: 1.2,
+  },
+  h3: {
+    marginTop: "2rem",
+    marginBottom: "0.75rem",
+    scrollMarginTop: "5rem",
+    letterSpacing: "-0.025em",
+    lineHeight: 1.3,
+  },
+  p: {
+    lineHeight: 1.75,
+    marginTop: { default: "1.25rem", ":first-child": "0" },
+    marginBottom: "0",
+  },
+  ul: {
+    marginTop: "1.25rem",
+    marginBottom: "1.25rem",
+    paddingLeft: "1.5rem",
+    listStyleType: "disc",
+  },
+  ol: {
+    marginTop: "1.25rem",
+    marginBottom: "1.25rem",
+    paddingLeft: "1.5rem",
+    listStyleType: "decimal",
+  },
+  li: {
+    lineHeight: 1.75,
+    marginTop: { default: "0.5rem", ":first-child": "0" },
+  },
+  blockquote: {
+    marginTop: "1.5rem",
+    paddingLeft: "1.5rem",
+    borderLeftWidth: "2px",
+    borderLeftStyle: "solid",
+    fontStyle: "italic",
+  },
+  // Keep `pre` minimal: shiki emits `<pre class="shiki">` and globals.css owns
+  // its background/border/padding/radius. We only add vertical rhythm so we
+  // don't fight shiki's own styling.
+  pre: {
+    marginTop: "1.5rem",
+    marginBottom: "1.5rem",
+  },
+  tableWrap: {
+    marginTop: "1.5rem",
+    marginBottom: "1.5rem",
+    width: "100%",
+    overflowX: "auto",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: "0.875rem",
+  },
+  th: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--border)",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    paddingTop: "0.5rem",
+    paddingBottom: "0.5rem",
+    textAlign: "left",
+    fontWeight: 600,
+  },
+  td: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--border)",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    paddingTop: "0.5rem",
+    paddingBottom: "0.5rem",
+  },
+  hr: {
+    marginTop: "2rem",
+    marginBottom: "2rem",
+    borderWidth: "0",
+    borderTopWidth: "1px",
+    borderTopStyle: "solid",
+    borderTopColor: "var(--border)",
+  },
+  img: {
+    borderRadius: "var(--radius-md)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--border)",
+  },
+})
+
+function MdxAnchor(props: AnchorProps) {
   return (
-    <a
-      className={cn(
-        "font-medium text-primary underline underline-offset-4 hover:no-underline",
-        className
-      )}
+    <Box
+      as="a"
+      color="accent"
+      fontWeight="medium"
+      sx={styles.anchor}
       {...props}
     />
   )
 }
 
-function MdxCode({ className, ...props }: CodeProps) {
+function MdxCode(props: CodeProps) {
+  // shiki-highlighted blocks live inside <pre>; only style inline code.
   return (
-    <code
-      className={cn(
-        // shiki-highlighted blocks live inside <pre>; only style inline code.
-        "rounded bg-muted px-[0.4em] py-[0.2em] font-mono text-[0.875em]",
-        className
-      )}
+    <Box
+      as="code"
+      backgroundColor="background-muted"
+      borderRadius="s"
+      sx={styles.inlineCode}
       {...props}
     />
   )
@@ -48,104 +180,60 @@ export const mdxComponents = {
   Button,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
-  h1: ({ className, ...props }: HeadingProps) => (
-    <h1
-      className={cn(
-        "mt-2 mb-4 scroll-m-20 text-3xl font-bold tracking-tight",
-        className
-      )}
+  h1: (props: HeadingProps) => (
+    <Box as="h1" fontSize="3xl" fontWeight="bold" sx={styles.h1} {...props} />
+  ),
+  h2: (props: HeadingProps) => (
+    <Box
+      as="h2"
+      fontSize="2xl"
+      fontWeight="semibold"
+      borderBottom
+      borderColor="border-primary"
+      sx={styles.h2}
       {...props}
     />
   ),
-  h2: ({ className, ...props }: HeadingProps) => (
-    <h2
-      className={cn(
-        "mt-10 mb-4 scroll-m-20 border-b border-border pb-2 text-2xl font-semibold tracking-tight",
-        className
-      )}
+  h3: (props: HeadingProps) => (
+    <Box
+      as="h3"
+      fontSize="xl"
+      fontWeight="semibold"
+      sx={styles.h3}
       {...props}
     />
   ),
-  h3: ({ className, ...props }: HeadingProps) => (
-    <h3
-      className={cn(
-        "mt-8 mb-3 scroll-m-20 text-xl font-semibold tracking-tight",
-        className
-      )}
-      {...props}
-    />
-  ),
-  p: ({ className, ...props }: ComponentPropsWithoutRef<"p">) => (
-    <p className={cn("leading-7 not-first:mt-5", className)} {...props} />
-  ),
+  p: (props: Without<"p">) => <Box as="p" sx={styles.p} {...props} />,
   a: MdxAnchor,
-  ul: ({ className, ...props }: ComponentPropsWithoutRef<"ul">) => (
-    <ul
-      className={cn("my-5 ml-6 list-disc [&>li]:mt-2", className)}
-      {...props}
-    />
-  ),
-  ol: ({ className, ...props }: ComponentPropsWithoutRef<"ol">) => (
-    <ol
-      className={cn("my-5 ml-6 list-decimal [&>li]:mt-2", className)}
-      {...props}
-    />
-  ),
-  li: ({ className, ...props }: ComponentPropsWithoutRef<"li">) => (
-    <li className={cn("leading-7", className)} {...props} />
-  ),
-  blockquote: ({
-    className,
-    ...props
-  }: ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote
-      className={cn(
-        "mt-6 border-l-2 border-border pl-6 text-muted-foreground italic",
-        className
-      )}
+  ul: (props: Without<"ul">) => <Box as="ul" sx={styles.ul} {...props} />,
+  ol: (props: Without<"ol">) => <Box as="ol" sx={styles.ol} {...props} />,
+  li: (props: Without<"li">) => <Box as="li" sx={styles.li} {...props} />,
+  blockquote: (props: Without<"blockquote">) => (
+    <Box
+      as="blockquote"
+      color="text-secondary"
+      borderColor="border-primary"
+      sx={styles.blockquote}
       {...props}
     />
   ),
   code: MdxCode,
-  pre: ({ className, ...props }: ComponentPropsWithoutRef<"pre">) => (
-    <pre
-      className={cn(
-        "my-6 overflow-x-auto rounded-lg border border-border p-4 text-sm",
-        className
-      )}
-      {...props}
-    />
-  ),
-  table: ({ className, ...props }: ComponentPropsWithoutRef<"table">) => (
-    <div className="my-6 w-full overflow-x-auto">
-      <table
-        className={cn("w-full border-collapse text-sm", className)}
-        {...props}
-      />
+  pre: (props: Without<"pre">) => <Box as="pre" sx={styles.pre} {...props} />,
+  table: (props: ComponentPropsWithoutRef<"table">) => (
+    <div {...stylex.props(styles.tableWrap)}>
+      <table {...stylex.props(styles.table)} {...props} />
     </div>
   ),
-  th: ({ className, ...props }: ComponentPropsWithoutRef<"th">) => (
-    <th
-      className={cn(
-        "border border-border px-4 py-2 text-left font-semibold",
-        className
-      )}
-      {...props}
-    />
+  th: (props: ComponentPropsWithoutRef<"th">) => (
+    <th {...stylex.props(styles.th)} {...props} />
   ),
-  td: ({ className, ...props }: ComponentPropsWithoutRef<"td">) => (
-    <td
-      className={cn("border border-border px-4 py-2", className)}
-      {...props}
-    />
+  td: (props: ComponentPropsWithoutRef<"td">) => (
+    <td {...stylex.props(styles.td)} {...props} />
   ),
-  hr: ({ className, ...props }: ComponentPropsWithoutRef<"hr">) => (
-    <hr className={cn("my-8 border-border", className)} {...props} />
+  hr: (props: ComponentPropsWithoutRef<"hr">) => (
+    <hr {...stylex.props(styles.hr)} {...props} />
   ),
-  img: ({ className, ...props }: ComponentPropsWithoutRef<"img">) => (
-    <img
-      className={cn("rounded-lg border border-border", className)}
-      {...props}
-    />
+  img: (props: ComponentPropsWithoutRef<"img">) => (
+    <img {...stylex.props(styles.img)} {...props} />
   ),
 }

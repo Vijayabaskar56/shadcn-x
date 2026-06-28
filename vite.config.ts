@@ -1,7 +1,6 @@
 import contentCollections from "@content-collections/vite"
 import babel from "@rolldown/plugin-babel"
 import stylex from "@stylexjs/unplugin"
-import tailwindcss from "@tailwindcss/vite"
 import { devtools } from "@tanstack/devtools-vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react"
@@ -27,7 +26,6 @@ const config = defineConfig({
       lightningcssOptions: { targets: cssTargets },
     }),
     devtools(),
-    tailwindcss(),
     tanstackStart(),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),

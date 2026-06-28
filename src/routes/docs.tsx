@@ -1,39 +1,90 @@
+import * as stylex from "@stylexjs/stylex"
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router"
 
+import { Box } from "@/components/box"
 import { DocsSidebar } from "@/components/docs/docs-sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+import { colors } from "../styles/tokens.stylex"
+
 export const Route = createFileRoute("/docs")({ component: DocsLayout })
+
+const styles = stylex.create({
+  container: {
+    marginInline: "auto",
+    width: "100%",
+    maxWidth: "80rem",
+    minHeight: "100svh",
+  },
+  header: {
+    height: "3.5rem",
+  },
+  separator: {
+    marginInline: "0.5rem",
+    color: colors["muted-foreground"],
+  },
+  spacer: {
+    marginLeft: "auto",
+  },
+  aside: {
+    display: "none",
+    width: "14rem",
+    flexShrink: 0,
+    "@media (min-width: 768px)": {
+      display: "block",
+    },
+  },
+  sticky: {
+    position: "sticky",
+    top: "2rem",
+  },
+  main: {
+    minWidth: 0,
+  },
+})
 
 function DocsLayout() {
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-7xl flex-col px-4">
-      <header className="flex h-14 items-center border-b border-border">
-        <Link to="/" className="text-sm font-semibold">
-          shadcn-x
-        </Link>
-        <span className="mx-2 text-muted-foreground">/</span>
-        <Link
-          to="/docs/$"
-          params={{ _splat: "introduction" }}
-          className="text-sm"
-        >
-          docs
-        </Link>
-        <div className="ml-auto">
+    <Box
+      as="div"
+      display="flex"
+      flexDirection="column"
+      paddingX="l"
+      sx={styles.container}
+    >
+      <Box
+        as="header"
+        display="flex"
+        alignItems="center"
+        borderBottom
+        borderColor="border-primary"
+        sx={styles.header}
+      >
+        <Box as="span" fontSize="s" fontWeight="semibold">
+          <Link to="/">shadcn-x</Link>
+        </Box>
+        <Box as="span" sx={styles.separator}>
+          /
+        </Box>
+        <Box as="span" fontSize="s">
+          <Link to="/docs/$" params={{ _splat: "introduction" }}>
+            docs
+          </Link>
+        </Box>
+        <Box as="div" sx={styles.spacer}>
           <ThemeToggle />
-        </div>
-      </header>
-      <div className="flex flex-1 gap-10 py-8">
-        <aside className="hidden w-56 shrink-0 md:block">
-          <div className="sticky top-8">
+        </Box>
+      </Box>
+      <Box as="div" display="flex" flex="1" gap="2xl" paddingY="2xl">
+        <Box as="aside" sx={styles.aside}>
+          <Box as="div" sx={styles.sticky}>
             <DocsSidebar />
-          </div>
-        </aside>
-        <main className="min-w-0 flex-1">
+          </Box>
+        </Box>
+        <Box as="main" flex="1" sx={styles.main}>
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }
