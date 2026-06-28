@@ -118,3 +118,14 @@ These drive raw-HTML usage toward zero. Build first.
 7. **Docs** — a per-component docs page in shadcn-styled format (usage, props,
    variants, examples). Nothing undocumented.
 8. **Verify** — typecheck + oxlint + test pass.
+
+---
+
+## Guardrail hardening (lint plugin backlog)
+
+- [ ] **`no-stylex-atoms`** — ban `@stylexjs/atoms` imports in the consumer app
+  layer. Atoms (`x.padding._16px`, `x.color(color)`, `x.width['calc(...)']`) are
+  an open arbitrary-value inline surface — the same off-system escape hatch as
+  raw `className` (ADR-0002). Either a standalone rule or a banned-import check
+  folded into `no-className-style`. (StyleX in app code must go through tokens +
+  the closed prop surface, not atoms.)
