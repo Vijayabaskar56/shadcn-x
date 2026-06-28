@@ -55,6 +55,11 @@ Spacing, color, radius, and typography props accept token names, not pixels or
 hex. Two elements with `padding="l"` declare the *same decision*, not a
 coincidence — and a typo is a type error, not a silent visual drift.
 
+The scales are **derived from single knobs**, the same way shadcn themes work:
+spacing steps are multiples of `--spacing` and radius steps are computed from
+`--radius`. Box has no hardcoded values — it only references tokens — so it
+re-scales for free when those knobs change (see [Theming](#theming)).
+
 | Prop              | Token scale                                                            |
 | ----------------- | --------------------------------------------------------------------- |
 | `padding` / `gap` | `none` `xs` `s` `m` `l` `xl` `2xl` `3xl` `4xl` `5xl`                   |
@@ -77,7 +82,8 @@ coincidence — and a typo is a type error, not a silent visual drift.
 
 - **`sx`** — a typed StyleX style merged last (for the rare property Box doesn't
   expose, e.g. `gridTemplateColumns`).
-- **`createTheme`** — re-skin a subtree by overriding token values.
+- **`createTheme` / the global knobs** — re-skin a subtree by overriding token
+  values (see [Theming](#theming)).
 
 ```tsx
 import * as stylex from "@stylexjs/stylex"
@@ -94,3 +100,41 @@ const styles = stylex.create({
 > [!TIP]
 > Because `Box` emits atomic StyleX classes, repeated token combinations are
 > deduplicated across your whole app.
+
+## Theming
+
+Every token is a CSS variable, so re-theming is global and requires **no changes
+to component code**. The two scale knobs match shadcn's:
+
+- **`--radius`** — the base radius. Every `borderRadius` step derives from it
+  (`m = calc(var(--radius) - 2px)`, `l = var(--radius)`, …), so changing it
+  re-scales all corners at once.
+- **`--spacing`** — the base spacing unit. Every spacing step is a multiple
+  (`l = calc(var(--spacing) * 4)`, …), so padding/gap/margin re-scale together.
+
+The simplest override is plain CSS (also how a shadcn theme would set it):
+
+```css title="globals.css"
+:root {
+  --radius: 0.5rem; /* tighter corners everywhere */
+  --spacing: 0.2rem; /* denser layout everywhere */
+}
+```
+
+For a scoped, type-safe override use `stylex.createTheme` on a token group and
+apply it to a subtree — colors work the same way:
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const brand = stylex.createTheme(colors, {
+  accent: "light-dark(oklch(0.55 0.2 145), oklch(0.7 0.2 145))",
+})
+
+<Box sx={brand}>{/* everything inside uses the new accent */}</Box>
+```
+
+> [!NOTE]
+> Because Box (and every shadcn-x component) only reads tokens, one variable
+> change re-themes the whole tree — no hardcoded values to hunt down.
