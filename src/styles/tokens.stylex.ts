@@ -36,12 +36,18 @@ export const colors = stylex.defineVars({
   "destructive-foreground": "light-dark(oklch(0.985 0 0), oklch(0.985 0 0))",
 })
 
+// Radius is a single-source, derived scale — matching shadcn's `--radius` system.
+// `--radius` is a custom-named CSS variable (so it's literally `--radius`, the
+// same knob shadcn themes expose); the named steps are computed from it at
+// compile time. Override `--radius` once (via createTheme or :root) and every
+// radius in the app re-scales — no hardcoded values to chase.
 export const borderRadius = stylex.defineVars({
+  "--radius": "0.625rem", // 10px — the single knob (CSS custom property `--radius`)
   none: "0",
-  s: "4px",
-  m: "8px",
-  l: "12px",
-  xl: "16px",
+  s: "calc(var(--radius) - 4px)", //  6px  (shadcn rounded-sm)
+  m: "calc(var(--radius) - 2px)", //  8px  (shadcn rounded-md)
+  l: "var(--radius)", //             10px  (shadcn rounded-lg)
+  xl: "calc(var(--radius) + 4px)", // 14px (shadcn rounded-xl)
   full: "9999px",
 })
 

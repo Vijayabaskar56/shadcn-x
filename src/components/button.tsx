@@ -3,7 +3,12 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import * as stylex from "@stylexjs/stylex"
 
-import { colors, fontSize, fontWeight } from "../styles/tokens.stylex"
+import {
+  borderRadius,
+  colors,
+  fontSize,
+  fontWeight,
+} from "../styles/tokens.stylex"
 
 type Variant =
   | "default"
@@ -121,7 +126,7 @@ const styles = stylex.create({
       default: "0.625rem",
       [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
     },
-    borderRadius: "0.625rem", // rounded-lg
+    borderRadius: borderRadius.l, // rounded-lg (var(--radius))
   },
   sizeXs: {
     height: "1.5rem", // h-6
@@ -135,7 +140,7 @@ const styles = stylex.create({
       [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
     },
     fontSize: "0.75rem", // text-xs
-    borderRadius: "0.5rem", // rounded-md
+    borderRadius: borderRadius.m, // rounded-md
   },
   sizeSm: {
     height: "1.75rem", // h-7
@@ -149,7 +154,7 @@ const styles = stylex.create({
       [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
     },
     fontSize: "0.8rem", // text-[0.8rem]
-    borderRadius: "0.5rem", // rounded-md
+    borderRadius: borderRadius.m, // rounded-md
   },
   sizeLg: {
     height: "2.25rem", // h-9
@@ -162,27 +167,27 @@ const styles = stylex.create({
       default: "0.625rem",
       [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
     },
-    borderRadius: "0.625rem", // rounded-lg
+    borderRadius: borderRadius.l, // rounded-lg (var(--radius))
   },
   sizeIcon: {
     width: "2rem",
     height: "2rem",
-    borderRadius: "0.625rem",
+    borderRadius: borderRadius.l,
   },
   sizeIconXs: {
     width: "1.5rem",
     height: "1.5rem",
-    borderRadius: "0.5rem",
+    borderRadius: borderRadius.m,
   },
   sizeIconSm: {
     width: "1.75rem",
     height: "1.75rem",
-    borderRadius: "0.5rem",
+    borderRadius: borderRadius.m,
   },
   sizeIconLg: {
     width: "2.25rem",
     height: "2.25rem",
-    borderRadius: "0.625rem",
+    borderRadius: borderRadius.l,
   },
 })
 
