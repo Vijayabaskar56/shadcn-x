@@ -3,13 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import * as stylex from "@stylexjs/stylex"
 
-import {
-  borderRadius,
-  colors,
-  fontSize,
-  fontWeight,
-  spacing,
-} from "../styles/tokens.stylex"
+import { colors, fontSize, fontWeight } from "../styles/tokens.stylex"
 
 type Variant =
   | "default"
@@ -111,55 +105,55 @@ const styles = stylex.create({
     },
   },
 
-  // sizes (radius follows shadcn's rounded-lg for standard sizes, rounded-md for
-  // the compact xs/sm sizes)
+  // sizes — pixel-exact to shadcn's Base UI "nova" style. These concrete values
+  // live in the primitive (the decision lives here, like shadcn's own button.tsx);
+  // the public variant/size props stay the closed surface.
+  // base radius is rounded-lg (0.625rem); compact xs/sm use rounded-md (0.5rem).
   sizeDefault: {
-    height: "2rem",
-    gap: spacing.xs,
-    paddingInline: spacing.m,
-    fontSize: fontSize.s,
-    borderRadius: borderRadius.l,
+    height: "2rem", // h-8
+    gap: "0.375rem", // gap-1.5
+    paddingInline: "0.625rem", // px-2.5
+    borderRadius: "0.625rem", // rounded-lg
   },
   sizeXs: {
-    height: "1.5rem",
-    gap: spacing.xs,
-    paddingInline: spacing.s,
-    fontSize: fontSize.xs,
-    borderRadius: borderRadius.m,
+    height: "1.5rem", // h-6
+    gap: "0.25rem", // gap-1
+    paddingInline: "0.5rem", // px-2
+    fontSize: "0.75rem", // text-xs
+    borderRadius: "0.5rem", // rounded-md
   },
   sizeSm: {
-    height: "1.75rem",
-    gap: spacing.xs,
-    paddingInline: spacing.m,
-    fontSize: fontSize.s,
-    borderRadius: borderRadius.m,
+    height: "1.75rem", // h-7
+    gap: "0.25rem", // gap-1
+    paddingInline: "0.625rem", // px-2.5
+    fontSize: "0.8rem", // text-[0.8rem]
+    borderRadius: "0.5rem", // rounded-md
   },
   sizeLg: {
-    height: "2.25rem",
-    gap: spacing.xs,
-    paddingInline: spacing.l,
-    fontSize: fontSize.s,
-    borderRadius: borderRadius.l,
+    height: "2.25rem", // h-9
+    gap: "0.375rem", // gap-1.5
+    paddingInline: "0.625rem", // px-2.5
+    borderRadius: "0.625rem", // rounded-lg
   },
   sizeIcon: {
     width: "2rem",
     height: "2rem",
-    borderRadius: borderRadius.l,
+    borderRadius: "0.625rem",
   },
   sizeIconXs: {
     width: "1.5rem",
     height: "1.5rem",
-    borderRadius: borderRadius.m,
+    borderRadius: "0.5rem",
   },
   sizeIconSm: {
     width: "1.75rem",
     height: "1.75rem",
-    borderRadius: borderRadius.m,
+    borderRadius: "0.5rem",
   },
   sizeIconLg: {
     width: "2.25rem",
     height: "2.25rem",
-    borderRadius: borderRadius.l,
+    borderRadius: "0.625rem",
   },
 })
 
