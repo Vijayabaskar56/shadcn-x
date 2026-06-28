@@ -112,27 +112,56 @@ const styles = stylex.create({
   sizeDefault: {
     height: "2rem", // h-8
     gap: "0.375rem", // gap-1.5
-    paddingInline: "0.625rem", // px-2.5
+    // px-2.5, tightened to px-2 on the side that holds an icon (has-data-[icon])
+    paddingInlineStart: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.5rem",
+    },
+    paddingInlineEnd: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
+    },
     borderRadius: "0.625rem", // rounded-lg
   },
   sizeXs: {
     height: "1.5rem", // h-6
     gap: "0.25rem", // gap-1
-    paddingInline: "0.5rem", // px-2
+    paddingInlineStart: {
+      default: "0.5rem",
+      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.375rem",
+    },
+    paddingInlineEnd: {
+      default: "0.5rem",
+      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
+    },
     fontSize: "0.75rem", // text-xs
     borderRadius: "0.5rem", // rounded-md
   },
   sizeSm: {
     height: "1.75rem", // h-7
     gap: "0.25rem", // gap-1
-    paddingInline: "0.625rem", // px-2.5
+    paddingInlineStart: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.375rem",
+    },
+    paddingInlineEnd: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
+    },
     fontSize: "0.8rem", // text-[0.8rem]
     borderRadius: "0.5rem", // rounded-md
   },
   sizeLg: {
     height: "2.25rem", // h-9
     gap: "0.375rem", // gap-1.5
-    paddingInline: "0.625rem", // px-2.5
+    paddingInlineStart: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.5rem",
+    },
+    paddingInlineEnd: {
+      default: "0.625rem",
+      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
+    },
     borderRadius: "0.625rem", // rounded-lg
   },
   sizeIcon: {
@@ -192,10 +221,15 @@ function Button({
   return (
     <ButtonPrimitive
       data-slot="button"
+      // data-size + the marker let an <Icon> child observe the button via
+      // stylex.when.ancestor (auto-shrink in xs); the marker also lets the
+      // button observe an <Icon> descendant via stylex.when.descendant (padding).
+      data-size={size}
       {...stylex.props(
         styles.base,
         variantStyles[variant],
         sizeStyles[size],
+        stylex.defaultMarker(),
         sx
       )}
       {...props}
