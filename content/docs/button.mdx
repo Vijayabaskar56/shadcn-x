@@ -1,6 +1,6 @@
 ---
 title: Button
-description: A themeable button built on the Base UI button primitive and styled with StyleX design tokens. Variants and sizes are typed props — no className, no Tailwind.
+description: Displays a button or a component that looks like a button.
 ---
 
 # Button
@@ -22,47 +22,18 @@ token re-theming.
 
 ```tsx
 import { Button } from "@/components/button"
-
-export function Example() {
-  return <Button variant="secondary">Click me</Button>
-}
 ```
-
-## Variants
-
-Six variants cover the common emphasis levels. `variant` defaults to `default`.
-
-<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
-  <Button variant="default">Default</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="outline">Outline</Button>
-  <Button variant="ghost">Ghost</Button>
-  <Button variant="destructive">Destructive</Button>
-  <Button variant="link">Link</Button>
-</Box>
 
 ```tsx
-<Button variant="default">Default</Button>
-<Button variant="secondary">Secondary</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="destructive">Destructive</Button>
-<Button variant="link">Link</Button>
+<Button variant="outline">Button</Button>
 ```
 
-| Variant       | Use for                              |
-| ------------- | ------------------------------------ |
-| `default`     | Primary actions                      |
-| `secondary`   | Secondary actions                    |
-| `outline`     | Lower-emphasis actions with a border |
-| `ghost`       | Toolbar / inline actions             |
-| `destructive` | Dangerous actions like delete        |
-| `link`        | Inline, link-styled actions          |
+## Examples
 
-## Sizes
+### Size
 
-Text sizes range from `xs` to `lg`, plus square `icon` sizes for icon-only
-buttons. `size` defaults to `default`.
+Use the `size` prop to change the size of the button. Sizes range from `xs` to
+`lg`, plus square `icon` sizes for icon-only buttons.
 
 <Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
   <Button size="xs">Extra small</Button>
@@ -70,13 +41,88 @@ buttons. `size` defaults to `default`.
   <Button size="default">Default</Button>
   <Button size="lg">Large</Button>
   <Button size="icon" aria-label="Settings">⚙️</Button>
-  <Button size="icon-sm" aria-label="Settings">⚙️</Button>
 </Box>
 
 ```tsx
 <Button size="xs">Extra small</Button>
 <Button size="lg">Large</Button>
 <Button size="icon" aria-label="Settings">⚙️</Button>
+```
+
+### Default
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button>Button</Button>
+</Box>
+
+```tsx
+<Button>Button</Button>
+```
+
+### Outline
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="outline">Button</Button>
+</Box>
+
+```tsx
+<Button variant="outline">Button</Button>
+```
+
+### Secondary
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="secondary">Button</Button>
+</Box>
+
+```tsx
+<Button variant="secondary">Button</Button>
+```
+
+### Ghost
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="ghost">Button</Button>
+</Box>
+
+```tsx
+<Button variant="ghost">Button</Button>
+```
+
+### Destructive
+
+The destructive variant uses a tinted surface with destructive-colored text.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="destructive">Delete</Button>
+</Box>
+
+```tsx
+<Button variant="destructive">Delete</Button>
+```
+
+### Link
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="link">Button</Button>
+</Box>
+
+```tsx
+<Button variant="link">Button</Button>
+```
+
+### As Link
+
+Use Base UI's `render` prop to give button styling to a router link. Note that
+Base UI's `Button` applies `role="button"`, so prefer this for in-app navigation
+controls rather than primary document links.
+
+```tsx
+import { Link } from "@tanstack/react-router"
+
+<Button variant="ghost" render={<Link to="/docs/$" params={{ _splat: "box" }} />}>
+  Docs
+</Button>
 ```
 
 ## Customization
@@ -99,26 +145,13 @@ const styles = stylex.create({
 <Button sx={styles.wide}>Full width</Button>
 ```
 
-## Styling a link as a button
+## API Reference
 
-Use Base UI's `render` prop to give button styling to another element (e.g. a
-router link) without reaching for `className`:
-
-```tsx
-import { Link } from "@tanstack/react-router"
-
-<Button variant="ghost" render={<Link to="/docs/$" params={{ _splat: "box" }} />}>
-  Docs
-</Button>
-```
-
-## Props
-
-| Prop      | Type                                                                          | Default     |
-| --------- | ----------------------------------------------------------------------------- | ----------- |
-| `variant` | `default \| secondary \| outline \| ghost \| destructive \| link`             | `default`   |
-| `size`    | `default \| xs \| sm \| lg \| icon \| icon-xs \| icon-sm \| icon-lg`          | `default`   |
-| `sx`      | `StyleXStyles`                                                                 | —           |
+| Prop      | Type                                                                                 | Default     |
+| --------- | ------------------------------------------------------------------------------------ | ----------- |
+| `variant` | `"default" \| "secondary" \| "outline" \| "ghost" \| "destructive" \| "link"`        | `"default"` |
+| `size`    | `"default" \| "xs" \| "sm" \| "lg" \| "icon" \| "icon-xs" \| "icon-sm" \| "icon-lg"` | `"default"` |
+| `sx`      | `StyleXStyles`                                                                        | —           |
 
 All other [Base UI button props](https://base-ui.com/react/components/button)
 (`disabled`, `onClick`, `render`, …) are forwarded.

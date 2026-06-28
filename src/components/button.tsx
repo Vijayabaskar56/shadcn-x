@@ -3,7 +3,13 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import * as stylex from "@stylexjs/stylex"
 
-import { colors, fontSize, fontWeight, spacing } from "../styles/tokens.stylex"
+import {
+  borderRadius,
+  colors,
+  fontSize,
+  fontWeight,
+  spacing,
+} from "../styles/tokens.stylex"
 
 type Variant =
   | "default"
@@ -30,6 +36,7 @@ const styles = stylex.create({
     alignItems: "center",
     justifyContent: "center",
     whiteSpace: "nowrap",
+    fontSize: fontSize.s,
     fontWeight: fontWeight.medium,
     transitionProperty: "color, background-color, border-color, box-shadow",
     transitionDuration: "150ms",
@@ -39,9 +46,11 @@ const styles = stylex.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "transparent",
+    // Subtle press feedback, matching shadcn's active:translate-y-px.
+    transform: { default: null, ":active": "translateY(1px)" },
     boxShadow: {
       default: null,
-      ":focus-visible": `0 0 0 3px ${colors.ring}`,
+      ":focus-visible": `0 0 0 3px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
     },
     opacity: {
       default: 1,
@@ -83,12 +92,14 @@ const styles = stylex.create({
     },
     color: colors["text-primary"],
   },
+  // shadcn's Base UI flavor uses a subtle destructive: tinted surface + colored
+  // text (bg-destructive/10, text-destructive, hover bg-destructive/20).
   destructive: {
     backgroundColor: {
-      default: colors.destructive,
-      ":hover": `color-mix(in oklch, ${colors.destructive}, transparent 15%)`,
+      default: `color-mix(in oklch, ${colors.destructive}, transparent 90%)`,
+      ":hover": `color-mix(in oklch, ${colors.destructive}, transparent 80%)`,
     },
-    color: colors["destructive-foreground"],
+    color: colors.destructive,
   },
   link: {
     backgroundColor: "transparent",
@@ -100,54 +111,55 @@ const styles = stylex.create({
     },
   },
 
-  // sizes
+  // sizes (radius follows shadcn's rounded-lg for standard sizes, rounded-md for
+  // the compact xs/sm sizes)
   sizeDefault: {
     height: "2rem",
     gap: spacing.xs,
     paddingInline: spacing.m,
     fontSize: fontSize.s,
-    borderRadius: "1rem",
+    borderRadius: borderRadius.l,
   },
   sizeXs: {
     height: "1.5rem",
     gap: spacing.xs,
     paddingInline: spacing.s,
     fontSize: fontSize.xs,
-    borderRadius: "1rem",
+    borderRadius: borderRadius.m,
   },
   sizeSm: {
     height: "1.75rem",
     gap: spacing.xs,
     paddingInline: spacing.m,
     fontSize: fontSize.s,
-    borderRadius: "1rem",
+    borderRadius: borderRadius.m,
   },
   sizeLg: {
     height: "2.25rem",
     gap: spacing.xs,
     paddingInline: spacing.l,
     fontSize: fontSize.s,
-    borderRadius: "1rem",
+    borderRadius: borderRadius.l,
   },
   sizeIcon: {
     width: "2rem",
     height: "2rem",
-    borderRadius: "1rem",
+    borderRadius: borderRadius.l,
   },
   sizeIconXs: {
     width: "1.5rem",
     height: "1.5rem",
-    borderRadius: "1rem",
+    borderRadius: borderRadius.m,
   },
   sizeIconSm: {
     width: "1.75rem",
     height: "1.75rem",
-    borderRadius: "1rem",
+    borderRadius: borderRadius.m,
   },
   sizeIconLg: {
     width: "2.25rem",
     height: "2.25rem",
-    borderRadius: "1rem",
+    borderRadius: borderRadius.l,
   },
 })
 
