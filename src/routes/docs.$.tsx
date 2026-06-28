@@ -1,7 +1,7 @@
 import { Link, createFileRoute, notFound } from "@tanstack/react-router"
 import { allDocs } from "content-collections"
 
-import { DocContent } from "@/components/docs/doc-content"
+import { DocContent, DocMdxContent } from "@/components/docs/doc-content"
 import { DocToc } from "@/components/docs/doc-toc"
 import { docsNavFlat } from "@/docs/docs-config"
 
@@ -40,7 +40,11 @@ function DocPage() {
   return (
     <div className="flex gap-10">
       <article className="min-w-0 flex-1">
-        <DocContent html={doc.html} />
+        {doc.mdx ? (
+          <DocMdxContent code={doc.mdx} />
+        ) : (
+          <DocContent html={doc.html} />
+        )}
         <nav className="mt-12 flex justify-between border-t border-border pt-6 text-sm">
           {prev ? (
             <Link

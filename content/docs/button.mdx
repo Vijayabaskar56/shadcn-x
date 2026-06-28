@@ -1,0 +1,128 @@
+---
+title: Button
+description: A themeable button built on the Base UI button primitive and styled with StyleX design tokens. Variants and sizes are typed props — no className, no Tailwind.
+---
+
+# Button
+
+A themeable button built on the [Base UI](https://base-ui.com) button primitive
+and styled with StyleX design tokens. Behavior and accessibility come from Base
+UI; appearance comes from a closed set of typed `variant` and `size` props.
+There is no `className` — customization happens through `variant`, `sx`, and
+token re-theming.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button>Default</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="destructive">Delete</Button>
+</Box>
+
+## Usage
+
+```tsx
+import { Button } from "@/components/button"
+
+export function Example() {
+  return <Button variant="secondary">Click me</Button>
+}
+```
+
+## Variants
+
+Six variants cover the common emphasis levels. `variant` defaults to `default`.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button variant="default">Default</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="destructive">Destructive</Button>
+  <Button variant="link">Link</Button>
+</Box>
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="link">Link</Button>
+```
+
+| Variant       | Use for                              |
+| ------------- | ------------------------------------ |
+| `default`     | Primary actions                      |
+| `secondary`   | Secondary actions                    |
+| `outline`     | Lower-emphasis actions with a border |
+| `ghost`       | Toolbar / inline actions             |
+| `destructive` | Dangerous actions like delete        |
+| `link`        | Inline, link-styled actions          |
+
+## Sizes
+
+Text sizes range from `xs` to `lg`, plus square `icon` sizes for icon-only
+buttons. `size` defaults to `default`.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button size="xs">Extra small</Button>
+  <Button size="sm">Small</Button>
+  <Button size="default">Default</Button>
+  <Button size="lg">Large</Button>
+  <Button size="icon" aria-label="Settings">⚙️</Button>
+  <Button size="icon-sm" aria-label="Settings">⚙️</Button>
+</Box>
+
+```tsx
+<Button size="xs">Extra small</Button>
+<Button size="lg">Large</Button>
+<Button size="icon" aria-label="Settings">⚙️</Button>
+```
+
+## Customization
+
+`Button` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`variant` / `size` props** — the first-choice knobs (above).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins. A raw utility string cannot enter it.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*,
+   without touching the component.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "100%" },
+})
+
+;<Button sx={styles.wide}>Full width</Button>
+```
+
+## Styling a link as a button
+
+Use Base UI's `render` prop to give button styling to another element (e.g. a
+router link) without reaching for `className`:
+
+```tsx
+import { Link } from "@tanstack/react-router"
+
+;<Button variant="ghost" render={<Link to="/docs/$" params={{ _splat: "box" }} />}>
+  Docs
+</Button>
+```
+
+## Props
+
+| Prop      | Type                                                                          | Default     |
+| --------- | ----------------------------------------------------------------------------- | ----------- |
+| `variant` | `default \| secondary \| outline \| ghost \| destructive \| link`             | `default`   |
+| `size`    | `default \| xs \| sm \| lg \| icon \| icon-xs \| icon-sm \| icon-lg`          | `default`   |
+| `sx`      | `StyleXStyles`                                                                 | —           |
+
+All other [Base UI button props](https://base-ui.com/react/components/button)
+(`disabled`, `onClick`, `render`, …) are forwarded.
+
+> [!NOTE]
+> Because `Button` has no `className`, an agent can only express on-system
+> styling — the type system rejects everything else.

@@ -24,6 +24,16 @@ export const colors = stylex.defineVars({
   accent: "light-dark(oklch(0.546 0.245 262.881), oklch(0.546 0.245 262.881))",
   danger: "light-dark(oklch(0.577 0.245 27.325), oklch(0.577 0.245 27.325))",
   success: "light-dark(oklch(0.596 0.145 163.225), oklch(0.596 0.145 163.225))",
+  // Role-based action/control tokens (used by Button and other controls).
+  primary: "light-dark(oklch(0.205 0 0), oklch(0.922 0 0))",
+  "primary-foreground": "light-dark(oklch(0.985 0 0), oklch(0.205 0 0))",
+  secondary: "light-dark(oklch(0.97 0 0), oklch(0.269 0 0))",
+  "secondary-foreground": "light-dark(oklch(0.205 0 0), oklch(0.985 0 0))",
+  "muted-foreground": "light-dark(oklch(0.556 0 0), oklch(0.708 0 0))",
+  ring: "light-dark(oklch(0.708 0 0), oklch(0.556 0 0))",
+  destructive:
+    "light-dark(oklch(0.577 0.245 27.325), oklch(0.704 0.191 22.216))",
+  "destructive-foreground": "light-dark(oklch(0.985 0 0), oklch(0.985 0 0))",
 })
 
 export const borderRadius = stylex.defineVars({

@@ -1,11 +1,17 @@
+import * as stylex from "@stylexjs/stylex"
 import { Link, createFileRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
-import { Button, buttonVariants } from "@/components/button"
+import { Button } from "@/components/button"
 import { useTheme } from "@/hooks/use-theme"
-import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/")({ component: App })
+
+const styles = stylex.create({
+  exampleGrid: {
+    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+  },
+})
 
 function App() {
   const { theme, setTheme } = useTheme()
@@ -26,13 +32,12 @@ function App() {
           shadcn-x
         </Box>
         <Box display="flex" alignItems="center" gap="m">
-          <Link
-            to="/docs/$"
-            params={{ _splat: "introduction" }}
-            className={cn(buttonVariants({ variant: "ghost" }))}
+          <Button
+            variant="ghost"
+            render={<Link to="/docs/$" params={{ _splat: "introduction" }} />}
           >
             Docs
-          </Link>
+          </Button>
           <Button onClick={() => setTheme(nextTheme)}>
             {theme === "dark" ? "☀️" : theme === "light" ? "🌙" : "🖥️"}{" "}
             {theme.charAt(0).toUpperCase() + theme.slice(1)}
@@ -68,11 +73,7 @@ function App() {
         Examples
       </Box>
 
-      <Box
-        display="grid"
-        gap="m"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
-      >
+      <Box display="grid" gap="m" sx={styles.exampleGrid}>
         <Box
           display="flex"
           flexDirection="column"

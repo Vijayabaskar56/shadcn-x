@@ -40,6 +40,7 @@
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@content-collections/core": "^0.15.2",
+    "@content-collections/mdx": "^0.2.2",
     "@content-collections/vite": "^0.3.0",
     "@oxlint/plugins": "^1.71.0",
     "@rolldown/plugin-babel": "^0.2.3",

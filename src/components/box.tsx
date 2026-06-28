@@ -1,3 +1,5 @@
+import type { StyleXStyles } from "@stylexjs/stylex"
+
 import * as stylex from "@stylexjs/stylex"
 
 import {
@@ -260,8 +262,7 @@ type AllowedElement =
 type BoxProps<E extends AllowedElement = "div"> = {
   as?: E
   children?: React.ReactNode
-  className?: string
-  style?: React.CSSProperties & Record<string, string | number>
+  sx?: StyleXStyles
   display?: Display
   flexDirection?: FlexDirection
   flexWrap?: FlexWrap
@@ -532,8 +533,7 @@ const heightSizingMap = {
 export function Box<E extends AllowedElement = "div">({
   as,
   children,
-  className,
-  style,
+  sx,
   display,
   flexDirection,
   flexWrap,
@@ -598,12 +598,14 @@ export function Box<E extends AllowedElement = "div">({
     borderTop !== undefined && styles.borderTop,
     borderBottom !== undefined && styles.borderBottom,
     borderLeft !== undefined && styles.borderLeft,
-    borderRight !== undefined && styles.borderRight
+    borderRight !== undefined && styles.borderRight,
+    // sx is merged last so per-instance overrides win (StyleX atomic last-wins).
+    sx
   )
 
   const combinedStyle: React.CSSProperties &
     Record<string, string | number | undefined> = {
-    ...style,
+    ...xstyle.style,
     ...(flexGrow !== undefined ? { flexGrow } : {}),
     ...(flexShrink !== undefined ? { flexShrink } : {}),
     ...(order !== undefined ? { order } : {}),
@@ -612,9 +614,8 @@ export function Box<E extends AllowedElement = "div">({
 
   return (
     <Tag
-      className={className}
+      className={xstyle.className}
       style={Object.keys(combinedStyle).length > 0 ? combinedStyle : undefined}
-      {...xstyle}
       {...rest}
     >
       {children}

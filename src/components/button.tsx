@@ -1,58 +1,201 @@
-import type { VariantProps } from "class-variance-authority"
+import type { StyleXStyles } from "@stylexjs/stylex"
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { cva } from "class-variance-authority"
+import * as stylex from "@stylexjs/stylex"
 
-import { cn } from "@/lib/utils"
+import { colors, fontSize, fontWeight, spacing } from "../styles/tokens.stylex"
 
-const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-2xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
-        outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-transparent dark:hover:bg-input/30",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
-        ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default:
-          "h-8 gap-1.5 px-3 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5",
-        xs: "h-6 gap-1 px-2.5 text-xs has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 px-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
-        lg: "h-9 gap-1.5 px-4 has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3",
-        icon: "size-8",
-        "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-7",
-        "icon-lg": "size-9",
-      },
+type Variant =
+  | "default"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "destructive"
+  | "link"
+
+type Size =
+  | "default"
+  | "xs"
+  | "sm"
+  | "lg"
+  | "icon"
+  | "icon-xs"
+  | "icon-sm"
+  | "icon-lg"
+
+const styles = stylex.create({
+  base: {
+    display: "inline-flex",
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+    fontWeight: fontWeight.medium,
+    transitionProperty: "color, background-color, border-color, box-shadow",
+    transitionDuration: "150ms",
+    outline: "none",
+    userSelect: "none",
+    cursor: "pointer",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "transparent",
+    boxShadow: {
+      default: null,
+      ":focus-visible": `0 0 0 3px ${colors.ring}`,
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
+    opacity: {
+      default: 1,
+      ":disabled": 0.5,
     },
-  }
-)
+    pointerEvents: {
+      default: null,
+      ":disabled": "none",
+    },
+  },
+
+  // variants
+  default: {
+    backgroundColor: {
+      default: colors.primary,
+      ":hover": `color-mix(in oklch, ${colors.primary}, transparent 20%)`,
+    },
+    color: colors["primary-foreground"],
+  },
+  secondary: {
+    backgroundColor: {
+      default: colors.secondary,
+      ":hover": `color-mix(in oklch, ${colors.secondary}, ${colors["text-primary"]} 5%)`,
+    },
+    color: colors["secondary-foreground"],
+  },
+  outline: {
+    backgroundColor: {
+      default: colors["background-primary"],
+      ":hover": colors["background-muted"],
+    },
+    borderColor: colors["border-primary"],
+    color: colors["text-primary"],
+  },
+  ghost: {
+    backgroundColor: {
+      default: "transparent",
+      ":hover": colors["background-muted"],
+    },
+    color: colors["text-primary"],
+  },
+  destructive: {
+    backgroundColor: {
+      default: colors.destructive,
+      ":hover": `color-mix(in oklch, ${colors.destructive}, transparent 15%)`,
+    },
+    color: colors["destructive-foreground"],
+  },
+  link: {
+    backgroundColor: "transparent",
+    color: colors.primary,
+    textUnderlineOffset: "4px",
+    textDecorationLine: {
+      default: "none",
+      ":hover": "underline",
+    },
+  },
+
+  // sizes
+  sizeDefault: {
+    height: "2rem",
+    gap: spacing.xs,
+    paddingInline: spacing.m,
+    fontSize: fontSize.s,
+    borderRadius: "1rem",
+  },
+  sizeXs: {
+    height: "1.5rem",
+    gap: spacing.xs,
+    paddingInline: spacing.s,
+    fontSize: fontSize.xs,
+    borderRadius: "1rem",
+  },
+  sizeSm: {
+    height: "1.75rem",
+    gap: spacing.xs,
+    paddingInline: spacing.m,
+    fontSize: fontSize.s,
+    borderRadius: "1rem",
+  },
+  sizeLg: {
+    height: "2.25rem",
+    gap: spacing.xs,
+    paddingInline: spacing.l,
+    fontSize: fontSize.s,
+    borderRadius: "1rem",
+  },
+  sizeIcon: {
+    width: "2rem",
+    height: "2rem",
+    borderRadius: "1rem",
+  },
+  sizeIconXs: {
+    width: "1.5rem",
+    height: "1.5rem",
+    borderRadius: "1rem",
+  },
+  sizeIconSm: {
+    width: "1.75rem",
+    height: "1.75rem",
+    borderRadius: "1rem",
+  },
+  sizeIconLg: {
+    width: "2.25rem",
+    height: "2.25rem",
+    borderRadius: "1rem",
+  },
+})
+
+const variantStyles = {
+  default: styles.default,
+  secondary: styles.secondary,
+  outline: styles.outline,
+  ghost: styles.ghost,
+  destructive: styles.destructive,
+  link: styles.link,
+} satisfies Record<Variant, unknown>
+
+const sizeStyles = {
+  default: styles.sizeDefault,
+  xs: styles.sizeXs,
+  sm: styles.sizeSm,
+  lg: styles.sizeLg,
+  icon: styles.sizeIcon,
+  "icon-xs": styles.sizeIconXs,
+  "icon-sm": styles.sizeIconSm,
+  "icon-lg": styles.sizeIconLg,
+} satisfies Record<Size, unknown>
+
+type ButtonProps = Omit<ButtonPrimitive.Props, "className"> & {
+  variant?: Variant
+  size?: Size
+  sx?: StyleXStyles
+}
 
 function Button({
-  className,
   variant = "default",
   size = "default",
+  sx,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      {...stylex.props(
+        styles.base,
+        variantStyles[variant],
+        sizeStyles[size],
+        sx
+      )}
       {...props}
     />
   )
 }
 
-export { Button, buttonVariants }
+export { Button }
+export type { ButtonProps, Variant as ButtonVariant, Size as ButtonSize }

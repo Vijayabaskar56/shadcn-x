@@ -1,0 +1,96 @@
+---
+title: Box
+description: A polymorphic layout primitive powered by StyleX design tokens. Its props accept token names — decisions — not raw CSS values.
+---
+
+# Box
+
+`Box` is the lowest-level layout primitive. It is the on-system replacement for a
+raw `<div>`: same DOM output, but its styling props accept only **design tokens**
+(decisions), never raw values. Dark mode is automatic via `light-dark()`, and
+there is no `className` — per-instance overrides go through the typed `sx` prop.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Box fontSize="l" fontWeight="semibold" color="text-primary">Card title</Box>
+  <Box color="text-secondary" fontSize="s">A card surface composed entirely from Box tokens.</Box>
+</Box>
+
+## Usage
+
+```tsx
+import { Box } from "@/components/box"
+
+export function Example() {
+  return (
+    <Box display="flex" flexDirection="column" gap="xl" padding="xl">
+      <Box as="h1" fontSize="xl" fontWeight="bold" color="text-primary">
+        Hello
+      </Box>
+    </Box>
+  )
+}
+```
+
+## Polymorphism
+
+Use the `as` prop to render a real semantic element while keeping the same typed
+styling props. The DOM gets a real `<nav>` / `<ul>` / `<section>`; you only lose
+the open `className` surface.
+
+<Box as="nav" display="flex" gap="m" padding="s" backgroundColor="background-muted" borderRadius="s">
+  <Box as="a" href="#" color="accent" fontSize="s">Home</Box>
+  <Box as="a" href="#" color="accent" fontSize="s">About</Box>
+  <Box as="a" href="#" color="accent" fontSize="s">Contact</Box>
+</Box>
+
+```tsx
+<Box as="nav" display="flex" gap="m">
+  <Box as="a" href="#" color="accent">Home</Box>
+</Box>
+```
+
+## Tokens are decisions
+
+Spacing, color, radius, and typography props accept token names, not pixels or
+hex. Two elements with `padding="l"` declare the *same decision*, not a
+coincidence — and a typo is a type error, not a silent visual drift.
+
+| Prop              | Token scale                                                            |
+| ----------------- | --------------------------------------------------------------------- |
+| `padding` / `gap` | `none` `xs` `s` `m` `l` `xl` `2xl` `3xl` `4xl` `5xl`                   |
+| `fontSize`        | `xs` `s` `m` `l` `xl` `2xl` `3xl`                                      |
+| `fontWeight`      | `regular` `medium` `semibold` `bold`                                   |
+| `backgroundColor` | `background-primary` `background-card` `background-muted` `accent` …   |
+| `color`           | `text-primary` `text-secondary` `text-disabled` `accent` `danger` …   |
+| `borderRadius`    | `none` `s` `m` `l` `xl` `full`                                         |
+| `boxShadow`       | `none` `s` `m` `l` `xl`                                                |
+
+<Box display="flex" gap="s" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Box padding="s" backgroundColor="accent" borderRadius="s" color="text-primary" fontSize="s">accent</Box>
+  <Box padding="s" backgroundColor="success" borderRadius="s" color="text-primary" fontSize="s">success</Box>
+  <Box padding="s" backgroundColor="danger" borderRadius="s" color="text-primary" fontSize="s">danger</Box>
+</Box>
+
+## Customization
+
+`Box` never accepts `className` or `style`. Override on-system via:
+
+- **`sx`** — a typed StyleX style merged last (for the rare property Box doesn't
+  expose, e.g. `gridTemplateColumns`).
+- **`createTheme`** — re-skin a subtree by overriding token values.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  grid: { gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" },
+})
+
+;<Box display="grid" gap="m" sx={styles.grid}>
+  …
+</Box>
+```
+
+> [!TIP]
+> Because `Box` emits atomic StyleX classes, repeated token combinations are
+> deduplicated across your whole app.

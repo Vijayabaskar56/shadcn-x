@@ -1,5 +1,5 @@
 import type { Element, Root } from "hast"
-import type { Plugin } from "unified"
+import type { Plugin, Pluggable } from "unified"
 
 import rehypeShiki from "@shikijs/rehype"
 import { toText } from "hast-util-to-text"
@@ -42,6 +42,30 @@ const rehypeCollectToc: Plugin<[], Root> = () => (tree, file) => {
   file.data.toc = toc
 }
 
+/** Shiki options shared by the HTML and MDX pipelines. */
+const shikiOptions = {
+  themes: { light: "github-light", dark: "github-dark" },
+  defaultColor: false,
+} as const
+
+/**
+ * Remark plugins shared with the MDX compiler (`@content-collections/mdx`).
+ * MDX understands JSX/HTML natively, so `rehype-raw` is intentionally omitted.
+ */
+export const docRemarkPlugins: Array<Pluggable> = [remarkGfm]
+
+/**
+ * Rehype plugins shared with the MDX compiler. Note: TOC for MDX is collected
+ * separately via `extractToc` because the MDX compiler only returns a code
+ * string and does not expose the unified `file.data`.
+ */
+export const docRehypePlugins: Array<Pluggable> = [
+  rehypeSlug,
+  [rehypeCallouts, { theme: "github" }],
+  [rehypeAutolinkHeadings, { behavior: "wrap" }],
+  [rehypeShiki, shikiOptions],
+]
+
 const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
@@ -51,10 +75,20 @@ const processor = unified()
   .use(rehypeCallouts, { theme: "github" })
   .use(rehypeAutolinkHeadings, { behavior: "wrap" })
   .use(rehypeCollectToc)
-  .use(rehypeShiki, {
-    themes: { light: "github-light", dark: "github-dark" },
-    defaultColor: false,
-  })
+  .use(rehypeShiki, shikiOptions)
+  .use(rehypeStringify, { allowDangerousHtml: true })
+
+/**
+ * Lightweight pipeline that only assigns slug ids and collects the TOC. Used
+ * for MDX docs (and reused by `compileDoc`) so headings get stable anchors
+ * regardless of whether the doc is rendered as HTML or as compiled MDX.
+ */
+const tocProcessor = unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkRehype, { allowDangerousHtml: true })
+  .use(rehypeSlug)
+  .use(rehypeCollectToc)
   .use(rehypeStringify, { allowDangerousHtml: true })
 
 export type CompiledMarkdown = {
@@ -71,4 +105,14 @@ export async function compileDoc(markdown: string): Promise<CompiledMarkdown> {
     html: String(file),
     toc: (file.data.toc as Array<TocEntry> | undefined) ?? [],
   }
+}
+
+/**
+ * Extract the h2/h3 table of contents from markdown or MDX source. Headings use
+ * the same slug ids that `rehype-slug` produces in the rendered output, so TOC
+ * anchors line up for both `.md` (HTML) and `.mdx` (compiled component) docs.
+ */
+export async function extractToc(source: string): Promise<Array<TocEntry>> {
+  const file = await tocProcessor.process(source)
+  return (file.data.toc as Array<TocEntry> | undefined) ?? []
 }
