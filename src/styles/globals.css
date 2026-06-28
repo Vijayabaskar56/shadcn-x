@@ -48,19 +48,22 @@ button:not(:disabled),
   padding: 1rem;
   font-size: 0.8125rem;
   line-height: 1.6;
+  /* Background on the CONTAINER only. Setting it on every span (incl. each
+     .line) makes the inline backgrounds butt together and renders faint
+     horizontal seams between lines. */
+  background-color: var(--shiki-light-bg);
 }
 .dark .shiki {
   border-color: oklch(1 0 0 / 10%);
+  background-color: var(--shiki-dark-bg);
 }
 .shiki,
 .shiki span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
 }
 .dark .shiki,
 .dark .shiki span {
   color: var(--shiki-dark);
-  background-color: var(--shiki-dark-bg);
 }
 
 /* Prose typography for the `.md` html path (DocContent renders [data-prose]).
