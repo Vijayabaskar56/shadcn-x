@@ -1,4 +1,10 @@
+import { fileURLToPath } from "node:url"
+
 import { defineConfig } from "oxlint"
+
+// Absolute path to our local lint plugin, derived from this config's location so
+// it resolves regardless of cwd (oxlint loads JS plugins via Node ESM).
+const shadcnXPlugin = fileURLToPath(new URL("./src/lint/index.ts", import.meta.url))
 
 export default defineConfig({
   plugins: [
@@ -14,6 +20,7 @@ export default defineConfig({
   ],
   jsPlugins: [
     { name: "react-hooks-js", specifier: "eslint-plugin-react-hooks" },
+    { name: "shadcn-x", specifier: shadcnXPlugin },
   ],
   rules: {
     "no-unused-vars": [
@@ -65,6 +72,13 @@ export default defineConfig({
     // Base UI's render-prop pattern composes links — both trip these rules.
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/anchor-has-content": "off",
+
+    // shadcn-x guardrails (ADR-0001/0002/0003). "warn" while the migration is in
+    // flight; each flips to "error" as the matching primitive ships and the app
+    // layer is ported off raw HTML / className.
+    "shadcn-x/no-raw-html": "warn",
+    "shadcn-x/no-className-style": "warn",
+    "shadcn-x/no-raw-design-values": "warn",
   },
   settings: {
     "jsx-a11y": {
@@ -101,6 +115,13 @@ export default defineConfig({
       rules: {
         "unicorn/filename-case": "off",
         "unicorn/no-abusive-eslint-disable": "off",
+      },
+    },
+    {
+      // Lint rules interface with untyped AST nodes; `any` is idiomatic here.
+      files: ["src/lint/**/*.ts"],
+      rules: {
+        "typescript/no-explicit-any": "off",
       },
     },
   ],
