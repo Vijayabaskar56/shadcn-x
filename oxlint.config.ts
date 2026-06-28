@@ -60,6 +60,11 @@ export default defineConfig({
     "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
     "promise/no-nesting": "warn",
     "promise/no-return-wrap": "error",
+
+    // TanStack Router's <Link> renders real client-side anchors via `to`, and
+    // Base UI's render-prop pattern composes links — both trip these rules.
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/anchor-has-content": "off",
   },
   settings: {
     "jsx-a11y": {

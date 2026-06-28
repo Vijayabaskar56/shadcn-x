@@ -1,3 +1,4 @@
+import contentCollections from "@content-collections/vite"
 import babel from "@rolldown/plugin-babel"
 import stylex from "@stylexjs/unplugin"
 import tailwindcss from "@tailwindcss/vite"
@@ -9,6 +10,7 @@ import { defineConfig } from "vite"
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
   plugins: [
+    contentCollections(),
     stylex.vite({ useCSSLayers: true }),
     devtools(),
     tailwindcss(),

@@ -4,6 +4,8 @@ export default {
   entry: [
     "src/routes/**/*.{ts,tsx}", // TanStack Router file-based routes
     "src/router.tsx", // router factory (framework convention)
+    "content-collections.ts", // content-collections config (default export consumed by the build)
+    "scripts/build-content.mjs", // standalone content generation
   ],
   project: ["src/**/*.{ts,tsx}"],
   ignoreDependencies: [

@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
-import { Button } from "@/components/button"
+import { Button, buttonVariants } from "@/components/button"
 import { useTheme } from "@/hooks/use-theme"
+import { cn } from "@/lib/utils"
 
 export const Route = createFileRoute("/")({ component: App })
 
@@ -24,10 +25,19 @@ function App() {
         <Box as="h1" fontSize="xl" fontWeight="bold" color="text-primary">
           shadcn-x
         </Box>
-        <Button onClick={() => setTheme(nextTheme)}>
-          {theme === "dark" ? "☀️" : theme === "light" ? "🌙" : "🖥️"}{" "}
-          {theme.charAt(0).toUpperCase() + theme.slice(1)}
-        </Button>
+        <Box display="flex" alignItems="center" gap="m">
+          <Link
+            to="/docs/$"
+            params={{ _splat: "introduction" }}
+            className={cn(buttonVariants({ variant: "ghost" }))}
+          >
+            Docs
+          </Link>
+          <Button onClick={() => setTheme(nextTheme)}>
+            {theme === "dark" ? "☀️" : theme === "light" ? "🌙" : "🖥️"}{" "}
+            {theme.charAt(0).toUpperCase() + theme.slice(1)}
+          </Button>
+        </Box>
       </Box>
 
       <Box
