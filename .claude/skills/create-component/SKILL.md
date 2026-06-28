@@ -34,8 +34,8 @@ Read first (once per session): `CONTEXT.md`, `docs/adr/0001`–`0003`,
 - **Variants/sizes = typed union props** mapped to styles, with defaults.
 - **`sx?: StyleXStyles<...>` merged LAST** in `stylex.props(...)` (last-wins) — the only per-instance override. (`import type { StyleXStyles } from "@stylexjs/stylex"`.)
 - **Dark mode by construction**: colors come from `light-dark()` tokens; never write a dark variant.
-- **Concrete values belong in the primitive.** Pixel-exact literals (`height: "2rem"`, `borderRadius: "0.625rem"`) are fine inside the component's `stylex.create` when matching a reference exactly — that's where the decision lives, like shadcn's own `button.tsx`. The PUBLIC surface (`variant`/`size` props) stays the closed token-like menu. Prefer tokens for shared values; literals for one-offs the token scale doesn't carry.
-- If you need a new shared color/space value, add a **semantically-named** token to `tokens.stylex.ts` with `light-dark(oklch(...))`.
+- **Theme values MUST go through tokens — never hardcode them.** Radius, color, font size/weight, shadow, spacing are theme knobs in `tokens.stylex.ts` (StyleX `defineVars`). Use `borderRadius.l`, `colors.primary`, etc. — NOT `"0.625rem"` / `"#…"`. Hardcoding breaks the single-knob customization (e.g. radius derives from `--radius`: change it once, everything re-scales; verified by overriding `--radius` live). If a shared value is missing, add a **semantically-named** token (colors via `light-dark(oklch(...))`; radius via the derived `--radius` scale).
+- **Literals are only for per-size component dimensions** the token scale genuinely doesn't carry — e.g. a button size's `height: "2rem"`, `gap: "0.375rem"`, `paddingInline: "0.625rem"`. shadcn hardcodes these per-size too (fixed utilities in the size variant); they're the size *decision*, not a cross-cutting theme variable. The PUBLIC surface (`variant`/`size` props) stays the closed menu.
 - To style a link/other element as this component, use Base UI's `render` prop — never expose className.
 
 #### Cross-element styling → `stylex.when.*` (NOT distance selectors)
