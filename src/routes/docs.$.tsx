@@ -95,7 +95,7 @@ function DocPage() {
               </Link>
             </Box>
           ) : (
-            <span />
+            <Box as="span" />
           )}
           {next ? (
             <Box as="span" sx={styles.navLink}>
@@ -104,7 +104,7 @@ function DocPage() {
               </Link>
             </Box>
           ) : (
-            <span />
+            <Box as="span" />
           )}
         </Box>
       </Box>

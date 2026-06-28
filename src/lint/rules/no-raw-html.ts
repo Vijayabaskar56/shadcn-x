@@ -36,6 +36,15 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   pre: "Box",
   code: "Box",
   time: "Box",
+  table: "Box",
+  thead: "Box",
+  tbody: "Box",
+  tr: "Box",
+  th: "Box",
+  td: "Box",
+  caption: "Box",
+  hr: "Box",
+  img: "Box",
   button: "Button",
 }
 

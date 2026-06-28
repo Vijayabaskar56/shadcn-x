@@ -258,6 +258,15 @@ type AllowedElement =
   | "blockquote"
   | "pre"
   | "code"
+  | "table"
+  | "thead"
+  | "tbody"
+  | "tr"
+  | "th"
+  | "td"
+  | "caption"
+  | "hr"
+  | "img"
 
 type BoxProps<E extends AllowedElement = "div"> = {
   as?: E

@@ -124,5 +124,15 @@ export default defineConfig({
         "typescript/no-explicit-any": "off",
       },
     },
+    {
+      // Docs MDX infra: the renderer map's heading functions receive content via
+      // props.children (heading-has-content can't see it), and content-collections'
+      // useMDXComponent legitimately derives a component in render.
+      files: ["src/components/docs/mdx-components.tsx", "src/components/docs/doc-content.tsx"],
+      rules: {
+        "jsx-a11y/heading-has-content": "off",
+        "react-hooks-js/static-components": "off",
+      },
+    },
   ],
 })

@@ -37,8 +37,12 @@ export const Route = createRootRoute({
   }),
   notFoundComponent: () => (
     <Box as="main" padding="l" sx={styles.notFound}>
-      <h1>404</h1>
-      <p>The requested page could not be found.</p>
+      <Box as="h1" fontSize="2xl" fontWeight="bold" color="text-primary">
+        404
+      </Box>
+      <Box as="p" color="text-secondary">
+        The requested page could not be found.
+      </Box>
     </Box>
   ),
   shellComponent: RootDocument,

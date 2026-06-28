@@ -5,23 +5,24 @@ import * as stylex from "@stylexjs/stylex"
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
 
+import { borderRadius, colors } from "../../styles/tokens.stylex"
+
 /**
  * Component map handed to compiled MDX docs. It exposes our primitives so docs
  * can render live previews (e.g. `<Button variant="secondary">`) and overrides
  * the intrinsic HTML elements with styled renderers that match the look of the
  * `.md` (prose) pipeline.
  *
- * This file is docs/library infrastructure, so raw HTML elements are expected.
- * Tags that `Box` does not expose (`table`, `th`, `td`, `hr`, `img`) are styled
- * with `stylex.props(...)` — the StyleX idiom for raw elements — never with a
- * hand-authored `className`.
+ * Every renderer maps to the `Box` primitive (`Box` covers the full prose tag
+ * set, including the table family / hr / img), styled via token props + `sx`.
+ * No raw HTML, no `className`.
  */
 
-// `Box` exposes a typed `color` prop, so we drop the (deprecated) HTML `color`
-// attribute from the spread props to avoid a type clash.
+// `Box` exposes typed `color`/`width`/`height` props, so we drop the matching
+// HTML attributes from the spread props to avoid type clashes.
 type Without<E extends keyof React.JSX.IntrinsicElements> = Omit<
   ComponentPropsWithoutRef<E>,
-  "color"
+  "color" | "width" | "height" | "border"
 >
 
 type AnchorProps = Without<"a">
@@ -116,7 +117,7 @@ const styles = stylex.create({
   th: {
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: "var(--border)",
+    borderColor: colors["border-primary"],
     paddingLeft: "1rem",
     paddingRight: "1rem",
     paddingTop: "0.5rem",
@@ -127,7 +128,7 @@ const styles = stylex.create({
   td: {
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: "var(--border)",
+    borderColor: colors["border-primary"],
     paddingLeft: "1rem",
     paddingRight: "1rem",
     paddingTop: "0.5rem",
@@ -139,13 +140,13 @@ const styles = stylex.create({
     borderWidth: "0",
     borderTopWidth: "1px",
     borderTopStyle: "solid",
-    borderTopColor: "var(--border)",
+    borderTopColor: colors["border-primary"],
   },
   img: {
-    borderRadius: "var(--radius-md)",
+    borderRadius: borderRadius.m,
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: "var(--border)",
+    borderColor: colors["border-primary"],
   },
 })
 
@@ -219,21 +220,15 @@ export const mdxComponents = {
   ),
   code: MdxCode,
   pre: (props: Without<"pre">) => <Box as="pre" sx={styles.pre} {...props} />,
-  table: (props: ComponentPropsWithoutRef<"table">) => (
-    <div {...stylex.props(styles.tableWrap)}>
-      <table {...stylex.props(styles.table)} {...props} />
-    </div>
+  table: (props: Without<"table">) => (
+    <Box as="div" sx={styles.tableWrap}>
+      <Box as="table" sx={styles.table} {...props} />
+    </Box>
   ),
-  th: (props: ComponentPropsWithoutRef<"th">) => (
-    <th {...stylex.props(styles.th)} {...props} />
-  ),
-  td: (props: ComponentPropsWithoutRef<"td">) => (
-    <td {...stylex.props(styles.td)} {...props} />
-  ),
-  hr: (props: ComponentPropsWithoutRef<"hr">) => (
-    <hr {...stylex.props(styles.hr)} {...props} />
-  ),
-  img: (props: ComponentPropsWithoutRef<"img">) => (
-    <img {...stylex.props(styles.img)} {...props} />
+  th: (props: Without<"th">) => <Box as="th" sx={styles.th} {...props} />,
+  td: (props: Without<"td">) => <Box as="td" sx={styles.td} {...props} />,
+  hr: (props: Without<"hr">) => <Box as="hr" sx={styles.hr} {...props} />,
+  img: ({ alt, ...props }: Without<"img">) => (
+    <Box as="img" alt={alt ?? ""} sx={styles.img} {...props} />
   ),
 }
