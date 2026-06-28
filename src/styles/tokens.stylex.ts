@@ -1,16 +1,21 @@
 import * as stylex from "@stylexjs/stylex"
 
+// Spacing is a single-source, derived scale — matching Tailwind v4 / shadcn's
+// `--spacing` model. `--spacing` is a custom-named CSS variable; every step is a
+// multiple of it. Override `--spacing` once and the whole scale (and anything
+// built from it, e.g. button dimensions) re-scales together.
 export const spacing = stylex.defineVars({
+  "--spacing": "0.25rem", // 4px — the single knob
   none: "0",
-  xs: "4px",
-  s: "8px",
-  m: "12px",
-  l: "16px",
-  xl: "24px",
-  "2xl": "32px",
-  "3xl": "48px",
-  "4xl": "64px",
-  "5xl": "96px",
+  xs: "calc(var(--spacing) * 1)", //   4px
+  s: "calc(var(--spacing) * 2)", //    8px
+  m: "calc(var(--spacing) * 3)", //   12px
+  l: "calc(var(--spacing) * 4)", //   16px
+  xl: "calc(var(--spacing) * 6)", //  24px
+  "2xl": "calc(var(--spacing) * 8)", //  32px
+  "3xl": "calc(var(--spacing) * 12)", // 48px
+  "4xl": "calc(var(--spacing) * 16)", // 64px
+  "5xl": "calc(var(--spacing) * 24)", // 96px
 })
 
 export const colors = stylex.defineVars({

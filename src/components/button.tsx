@@ -8,7 +8,12 @@ import {
   colors,
   fontSize,
   fontWeight,
+  spacing,
 } from "../styles/tokens.stylex"
+
+// The single spacing knob (CSS `--spacing`); button dimensions are multiples of
+// it, so they re-scale with the spacing token — matching Tailwind/shadcn sizing.
+const u = spacing["--spacing"]
 
 type Variant =
   | "default"
@@ -110,83 +115,85 @@ const styles = stylex.create({
     },
   },
 
-  // sizes — pixel-exact to shadcn's Base UI "nova" style. These concrete values
-  // live in the primitive (the decision lives here, like shadcn's own button.tsx);
-  // the public variant/size props stay the closed surface.
-  // base radius is rounded-lg (0.625rem); compact xs/sm use rounded-md (0.5rem).
+  // sizes — dimensions are multiples of `--spacing` (re-scale with the spacing
+  // knob, like shadcn's Tailwind utilities). Radius uses the `--radius` scale;
+  // compact sizes CAP it via min(..., Npx) — shadcn's rounded-[min(--radius-md,Npx)]
+  // — so small buttons stay harmonious even when --radius is large.
   sizeDefault: {
-    height: "2rem", // h-8
-    gap: "0.375rem", // gap-1.5
+    height: `calc(${u} * 8)`, // h-8 (2rem)
+    gap: `calc(${u} * 1.5)`, // gap-1.5
     // px-2.5, tightened to px-2 on the side that holds an icon (has-data-[icon])
     paddingInlineStart: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.5rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 2)`,
     },
     paddingInlineEnd: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 2)`,
     },
-    borderRadius: borderRadius.l, // rounded-lg (var(--radius))
+    borderRadius: borderRadius.l, // rounded-lg = var(--radius)
   },
   sizeXs: {
-    height: "1.5rem", // h-6
-    gap: "0.25rem", // gap-1
+    height: `calc(${u} * 6)`, // h-6
+    gap: `calc(${u} * 1)`, // gap-1
     paddingInlineStart: {
-      default: "0.5rem",
-      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.375rem",
+      default: `calc(${u} * 2)`,
+      [stylex.when.descendant('[data-icon="inline-start"]')]:
+        `calc(${u} * 1.5)`,
     },
     paddingInlineEnd: {
-      default: "0.5rem",
-      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
+      default: `calc(${u} * 2)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 1.5)`,
     },
-    fontSize: "0.75rem", // text-xs
-    borderRadius: borderRadius.m, // rounded-md
+    fontSize: fontSize.xs, // text-xs
+    borderRadius: `min(${borderRadius.m}, 10px)`, // rounded-[min(--radius-md,10px)]
   },
   sizeSm: {
-    height: "1.75rem", // h-7
-    gap: "0.25rem", // gap-1
+    height: `calc(${u} * 7)`, // h-7
+    gap: `calc(${u} * 1)`, // gap-1
     paddingInlineStart: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.375rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-start"]')]:
+        `calc(${u} * 1.5)`,
     },
     paddingInlineEnd: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.375rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 1.5)`,
     },
-    fontSize: "0.8rem", // text-[0.8rem]
-    borderRadius: borderRadius.m, // rounded-md
+    fontSize: "0.8rem", // text-[0.8rem] — off the type scale, per shadcn
+    borderRadius: `min(${borderRadius.m}, 12px)`, // rounded-[min(--radius-md,12px)]
   },
   sizeLg: {
-    height: "2.25rem", // h-9
-    gap: "0.375rem", // gap-1.5
+    height: `calc(${u} * 9)`, // h-9
+    gap: `calc(${u} * 1.5)`, // gap-1.5
     paddingInlineStart: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-start"]')]: "0.5rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 2)`,
     },
     paddingInlineEnd: {
-      default: "0.625rem",
-      [stylex.when.descendant('[data-icon="inline-end"]')]: "0.5rem",
+      default: `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 2)`,
     },
-    borderRadius: borderRadius.l, // rounded-lg (var(--radius))
+    borderRadius: borderRadius.l, // rounded-lg = var(--radius)
   },
   sizeIcon: {
-    width: "2rem",
-    height: "2rem",
+    width: `calc(${u} * 8)`,
+    height: `calc(${u} * 8)`,
     borderRadius: borderRadius.l,
   },
   sizeIconXs: {
-    width: "1.5rem",
-    height: "1.5rem",
-    borderRadius: borderRadius.m,
+    width: `calc(${u} * 6)`,
+    height: `calc(${u} * 6)`,
+    borderRadius: `min(${borderRadius.m}, 10px)`,
   },
   sizeIconSm: {
-    width: "1.75rem",
-    height: "1.75rem",
-    borderRadius: borderRadius.m,
+    width: `calc(${u} * 7)`,
+    height: `calc(${u} * 7)`,
+    borderRadius: `min(${borderRadius.m}, 12px)`,
   },
   sizeIconLg: {
-    width: "2.25rem",
-    height: "2.25rem",
+    width: `calc(${u} * 9)`,
+    height: `calc(${u} * 9)`,
     borderRadius: borderRadius.l,
   },
 })
