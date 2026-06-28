@@ -1,6 +1,7 @@
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router"
 
 import { DocsSidebar } from "@/components/docs/docs-sidebar"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export const Route = createFileRoute("/docs")({ component: DocsLayout })
 
@@ -19,6 +20,9 @@ function DocsLayout() {
         >
           docs
         </Link>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </header>
       <div className="flex flex-1 gap-10 py-8">
         <aside className="hidden w-56 shrink-0 md:block">

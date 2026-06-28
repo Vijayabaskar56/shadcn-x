@@ -3,7 +3,7 @@ import { Link, createFileRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
-import { useTheme } from "@/hooks/use-theme"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export const Route = createFileRoute("/")({ component: App })
 
@@ -14,11 +14,6 @@ const styles = stylex.create({
 })
 
 function App() {
-  const { theme, setTheme } = useTheme()
-
-  const themes = ["light", "dark", "system"] as const
-  const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length]
-
   return (
     <Box
       display="flex"
@@ -38,10 +33,7 @@ function App() {
           >
             Docs
           </Button>
-          <Button onClick={() => setTheme(nextTheme)}>
-            {theme === "dark" ? "☀️" : theme === "light" ? "🌙" : "🖥️"}{" "}
-            {theme.charAt(0).toUpperCase() + theme.slice(1)}
-          </Button>
+          <ThemeToggle />
         </Box>
       </Box>
 

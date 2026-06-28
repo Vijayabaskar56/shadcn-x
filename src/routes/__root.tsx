@@ -42,7 +42,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <DevStyleXInject cssHref="/stylex.css" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('vite-ui-theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark'}else{document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light'}}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('vite-ui-theme');var d=t==='dark'||((t==='system'||!t)&&matchMedia('(prefers-color-scheme:dark)').matches);var m=d?'dark':'light';document.documentElement.classList.add(m);document.documentElement.style.colorScheme=m}catch(e){}`,
           }}
         />
       </head>
