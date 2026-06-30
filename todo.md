@@ -1,14 +1,18 @@
 # shadcn-x — Component Build Checklist
 
 Port of the shadcn/ui component surface to **StyleX + Base UI** with a closed,
+
 token-typed prop surface. Reference (read-only, never linted):
 
 - Base UI variant (primary): `/Users/vijayabaskar/work/references/ui/apps/v4/registry/bases/base/ui`
 - Canonical full set (for variants/API parity): `/Users/vijayabaskar/work/references/ui/apps/v4/registry/new-york-v4/ui`
 
 Each component must follow the per-component build system (see the
+
 `create-component` skill): match shadcn's API + variants exactly, customize via
+
 `sx`/variants/`createTheme` (no raw `className`/`style`), update `no-raw-html` if
+
 it retires a host tag, and ship a per-component docs page. Nothing undocumented.
 
 Legend: `[x]` done · `[ ]` todo · ⬛ retires a raw HTML tag (add to `no-raw-html`)
@@ -19,18 +23,22 @@ Legend: `[x]` done · `[ ]` todo · ⬛ retires a raw HTML tag (add to `no-raw-h
 
 These drive raw-HTML usage toward zero. Build first.
 
-- [x] Box ⬛ `div`/`span`/`section`/`nav`/`article`/`main`/`aside`/`header`/`footer`/`ul`/`ol`/`li`
-- [x] Button ⬛ `button`
-- [ ] Text (shadcn-x) ⬛ `p`/`h1`–`h6` (typography primitive; shadcn uses utility classes)
-- [ ] Link (shadcn-x) ⬛ `a` (wraps TanStack Router `Link`)
-- [ ] Input ⬛ `input`
-- [ ] Textarea ⬛ `textarea`
-- [ ] Label ⬛ `label`
-- [ ] Image (shadcn-x) ⬛ `img`
-- [ ] Icon (shadcn-x) ⬛ `svg` (lucide wrapper)
-- [ ] Table ⬛ `table`/`thead`/`tbody`/`tr`/`th`/`td`
+- [x] Box ⬛ `div`/`span`/`section`/`nav`/`article`/`main`/`aside`/`header`/`footer`
 
-## Phase 1 — Core form & input
+  — layout containers only; everything else moves to Primitive or dedicated
+
+  components (see § Box AllowedElement retirement below).
+- [x] Button ⬛ `button`
+- [x] Text (shadcn-x) ⬛ `p`/`h1`–`h6` (typography primitive; shadcn uses utility classes)
+- [x] Link (shadcn-x) ⬛ `a` (wraps TanStack Router `Link`)
+- [x] Input ⬛ `input`
+- [x] Textarea ⬛ `textarea`
+- [x] Label ⬛ `label`
+- [ ] Image (shadcn-x) ⬛ `img`
+- [x] Icon (shadcn-x) ⬛ `svg` (library-agnostic: lucide default, createIcon for BYO)
+- [ ] Table ⬛ `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption`
+
+## Phase 1 — Core form &amp; input
 
 - [ ] Field
 - [ ] Form
@@ -42,12 +50,12 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Native Select
 - [ ] Toggle
 - [ ] Toggle Group
-- [ ] Button Group
+- [x] Button Group
 - [ ] Input OTP
 - [ ] Input Group
 - [ ] Combobox
 
-## Phase 2 — Overlays & menus (Base UI behavior)
+## Phase 2 — Overlays &amp; menus (Base UI behavior)
 
 - [ ] Dialog
 - [ ] Alert Dialog
@@ -62,7 +70,7 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Navigation Menu
 - [ ] Command
 
-## Phase 3 — Layout & containers
+## Phase 3 — Layout &amp; containers
 
 - [ ] Card
 - [ ] Separator
@@ -76,7 +84,7 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Item
 - [ ] Empty
 
-## Phase 4 — Display & feedback
+## Phase 4 — Display &amp; feedback
 
 - [ ] Alert
 - [ ] Badge
@@ -104,6 +112,43 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Attachment
 - [ ] Marker
 
+## Box AllowedElement retirement
+
+When Primitive ships, Box loses these elements from its `AllowedElement` type
+
+and `no-raw-html` remaps them from `Box` → `Primitive`:
+
+
+| Element(s)                                                                        | Moves to                                              | When            |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------- |
+| `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`, `code`, `hr` | **Primitive** (new)                                   | Primitive [ ]   |
+| `form`, `fieldset`                                                                | **Form** (Phase 1)                                    | Phase 1         |
+| `p`, `h1`–`h6`                                                                    | **Text** (already exists — needs `no-raw-html` remap) | Primitive ships |
+| `button`                                                                          | **Button** (already mapped)                           | Already done    |
+| `a`                                                                               | **Link** (already mapped)                             | Already done    |
+| `label`                                                                           | **Label** (already mapped)                            | Already done    |
+| `img`                                                                             | **Image** (Phase 0)                                   | Image [ ]       |
+| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                            | **Table** (Phase 0)                                   | Table [ ]       |
+
+
+---
+
+## Non-component cleanup
+
+These tasks fire when the corresponding component above ships (check the When
+
+column). Update both the `AllowedElement` type in `src/components/box.tsx` and
+
+the `DEFAULT_ELEMENTS` map in `src/lint/rules/no-raw-html.ts`.
+
+- [ ] **Primitive ships → strip Box** — remove `ul`/`ol`/`li`/`time`/`figure`/`figcaption`/`blockquote`/`pre`/`code`/`hr` from `AllowedElement` in Box
+- [ ] **Primitive ships → remap `no-raw-html`** — change those 10 tags from `"Box"` to `"Primitive"` in `DEFAULT_ELEMENTS`
+- [ ] **Primitive ships → fix `p`/`h1`–`h6` mapping** — remap from `"Box"` to `"Text"` in `DEFAULT_ELEMENTS` (should have been done when Text shipped)
+- [ ] **Primitive ships → update mdx-components** — change `<Box as="ul">` (etc.) to `<Primitive as="ul">` in `src/components/docs/mdx-components.tsx`
+- [ ] **Image ships** — remove `img` from Box's `AllowedElement`; remap `no-raw-html` to `"Image"`
+- [ ] **Table ships** — remove `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption` from Box's `AllowedElement`; remap `no-raw-html` to `"Table"`
+- [ ] **Form ships (Phase 1)** — remove `form`/`fieldset` from Box's `AllowedElement`; remap `no-raw-html` to `"Form"`
+
 ---
 
 ## Per-component Definition of Done
@@ -114,18 +159,12 @@ These drive raw-HTML usage toward zero. Build first.
 4. **StyleX + tokens** — styled only via `defineVars` tokens; `light-dark()` theming.
 5. **Customizable** — `sx` (typed `StyleXStyles`) + variants; re-theme via `createTheme`.
 6. **No escape hatches** — no raw `className`/`style`; if it retires a host tag,
-   add that tag to `no-raw-html`.
+
+  add that tag to `no-raw-html`.
 7. **Docs** — a per-component docs page in shadcn-styled format (usage, props,
-   variants, examples). Nothing undocumented.
+
+  variants, examples). Nothing undocumented.
 8. **Verify** — typecheck + oxlint + test pass.
 
 ---
 
-## Guardrail hardening (lint plugin backlog)
-
-- [ ] **`no-stylex-atoms`** — ban `@stylexjs/atoms` imports in the consumer app
-  layer. Atoms (`x.padding._16px`, `x.color(color)`, `x.width['calc(...)']`) are
-  an open arbitrary-value inline surface — the same off-system escape hatch as
-  raw `className` (ADR-0002). Either a standalone rule or a banned-import check
-  folded into `no-className-style`. (StyleX in app code must go through tokens +
-  the closed prop surface, not atoms.)

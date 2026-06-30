@@ -4,6 +4,17 @@ import * as stylex from "@stylexjs/stylex"
 
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "@/components/button-group"
+import { Icon } from "@/components/icon"
+import { Input } from "@/components/input"
+import { Label } from "@/components/label"
+import { Link } from "@/components/link"
+import { Text } from "@/components/text"
+import { Textarea } from "@/components/textarea"
 
 import { borderRadius, colors } from "../../styles/tokens.stylex"
 
@@ -179,6 +190,15 @@ export const mdxComponents = {
   // Live primitives usable directly in MDX.
   Box,
   Button,
+  Text,
+  Link,
+  Label,
+  Icon,
+  Input,
+  Textarea,
+  ButtonGroup,
+  ButtonGroupText,
+  ButtonGroupSeparator,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (

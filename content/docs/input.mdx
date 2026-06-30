@@ -1,0 +1,135 @@
+---
+title: Input
+description: A single-line text field — shadcn's input, ported to StyleX tokens.
+---
+
+# Input
+
+A single-line text field. Behavior and a11y come from Base UI's `Input`
+primitive (Field integration, a typed `onValueChange`), styled 1:1 like shadcn's
+input — same look, sizing, focus ring, selection, and disabled/invalid states —
+built from StyleX tokens instead of Tailwind classes. It accepts every native
+`<input>` prop (including `type`). No `className`, no raw `<input>`.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Label htmlFor="email">Email</Label>
+
+  <Input id="email" type="email" placeholder="Email" />
+
+</Box>
+
+## Usage
+
+```tsx
+import { Input } from "@/components/input"
+```
+
+```tsx
+<Input type="email" placeholder="Email" />
+```
+
+Pair it with a `Label` (matching `htmlFor`/`id`) for an accessible field.
+
+## With a label
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Label htmlFor="name">Full name</Label>
+
+  <Input id="name" placeholder="Ada Lovelace" />
+
+</Box>
+
+```tsx
+<Label htmlFor="name">Full name</Label>
+<Input id="name" placeholder="Ada Lovelace" />
+```
+
+## Types
+
+Forward any native `type` — `text` by default. All types share the same styling.
+`type="number"` hides the browser's up/down spinners (so you can pair it with a
+custom stepper, or use it as a plain numeric field). `type="file"` styles the
+native file-picker button to match the field (inline, transparent, sized).
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Input type="email" placeholder="you@example.com" />
+
+  <Input type="password" placeholder="Password" defaultValue="secret" />
+
+  <Input type="number" placeholder="42" />
+
+</Box>
+
+```tsx
+<Input type="email" placeholder="you@example.com" />
+<Input type="password" placeholder="Password" />
+<Input type="number" placeholder="42" />
+```
+
+## Disabled
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Input placeholder="Can't type here" disabled />
+
+</Box>
+
+```tsx
+<Input placeholder="Can't type here" disabled />
+```
+
+## Invalid
+
+Set `aria-invalid` to flag a validation error. The border and focus ring turn
+destructive — and assistive tech is informed, because it is a real ARIA
+attribute, not just a style.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Input placeholder="Something's off" aria-invalid defaultValue="no-domain@" />
+
+</Box>
+
+```tsx
+<Input aria-invalid />
+```
+
+## Customization
+
+`Input` accepts no `className`. Customize it on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token *values* (radius,
+   border color, ring, font size, height).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tall: { height: "3rem" },
+})
+
+<Input sx={styles.tall} placeholder="Roomier" />
+```
+
+## API Reference
+
+### Input
+
+| Prop             | Type                                                              | Default  |
+| ---------------- | ----------------------------------------------------------------- | -------- |
+| `type`           | `React.ComponentProps<"input">["type"]`                           | `"text"` |
+| `onValueChange`  | `(value: string, details: Input.ChangeEventDetails) => void`      | —        |
+| `aria-invalid`   | `boolean`                                                         | `false`  |
+| `disabled`       | `boolean`                                                         | `false`  |
+| `sx`             | `StyleXStyles`                                                    | —        |
+
+All native `<input>` props (`value`, `placeholder`, `onChange`, `autoFocus`, …)
+are forwarded. Renders an `<input>` with `data-slot="input"`.
+
+> [!NOTE]
+> `Input` retires the raw `<input>` element — the `no-raw-html` guardrail now
+> points `<input>` at `Input`.

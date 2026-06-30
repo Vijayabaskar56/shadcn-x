@@ -12,6 +12,8 @@ pre-commit:
         - "**/*.jsonc"
         - "**/*.css"
       stage_fixed: true
+    - name: test
+      run: bunx vitest run --changed
     - name: lint
       run: bunx oxlint --type-aware --fix {staged_files}
       glob:

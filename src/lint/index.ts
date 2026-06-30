@@ -3,6 +3,7 @@ import { definePlugin, eslintCompatPlugin } from "@oxlint/plugins"
 import { noClassNameStyle } from "./rules/no-className-style.ts"
 import { noRawDesignValues } from "./rules/no-raw-design-values.ts"
 import { noRawHtml } from "./rules/no-raw-html.ts"
+import { noStylexAtoms } from "./rules/no-stylex-atoms.ts"
 
 /**
  * shadcn-x lint plugin — the escape-hatch fence (ADR-0001).
@@ -19,6 +20,7 @@ export const plugin = eslintCompatPlugin(
       "no-raw-html": noRawHtml,
       "no-className-style": noClassNameStyle,
       "no-raw-design-values": noRawDesignValues,
+      "no-stylex-atoms": noStylexAtoms,
     },
   })
 )
@@ -30,6 +32,7 @@ export const recommended = {
     "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "error",
     "shadcn-x/no-raw-design-values": "error",
+    "shadcn-x/no-stylex-atoms": "error",
   },
 } as const
 

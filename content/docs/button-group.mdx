@@ -1,0 +1,197 @@
+---
+title: Button Group
+description: Groups related buttons and controls into a single, flush-edged unit.
+---
+
+# Button Group
+
+Groups a set of related buttons (and other controls) into one flush-edged unit:
+adjacent items share a border and only the outer corners stay rounded. It is the
+showcase for two of the library's core ideas — **composition** (small
+subcomponents you assemble) and **polymorphism** (re-target the host element via
+Base UI's `render` prop) — built entirely on-system, with no `className`.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <ButtonGroup>
+    <Button variant="outline">Cut</Button>
+    <Button variant="outline">Copy</Button>
+    <Button variant="outline">Paste</Button>
+  </ButtonGroup>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "@/components/button-group"
+import { Button } from "@/components/button"
+```
+
+```tsx
+<ButtonGroup>
+  <Button variant="outline">One</Button>
+  <Button variant="outline">Two</Button>
+  <Button variant="outline">Three</Button>
+</ButtonGroup>
+```
+
+## Composition
+
+A button group is assembled from focused subcomponents rather than configured
+through a single overloaded prop. `ButtonGroupText` is a non-interactive
+label/affordance that sits flush in the group, and `ButtonGroupSeparator` draws a
+divider that orients itself to the group.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <ButtonGroup>
+    <ButtonGroupText>Sort by</ButtonGroupText>
+    <Button variant="outline">Name</Button>
+    <Button variant="outline">Date</Button>
+  </ButtonGroup>
+
+  <ButtonGroup>
+    <Button variant="outline">Archive</Button>
+    <ButtonGroupSeparator />
+    <Button variant="outline">Report</Button>
+  </ButtonGroup>
+
+</Box>
+
+```tsx
+<ButtonGroup>
+  <ButtonGroupText>Sort by</ButtonGroupText>
+  <Button variant="outline">Name</Button>
+  <Button variant="outline">Date</Button>
+</ButtonGroup>
+
+<ButtonGroup>
+  <Button variant="outline">Archive</Button>
+  <ButtonGroupSeparator />
+  <Button variant="outline">Report</Button>
+</ButtonGroup>
+```
+
+## Orientation
+
+Set `orientation="vertical"` to stack the group. Each child reads the group's
+orientation and flattens the correct edges — the horizontal/vertical switch needs
+no extra props on the buttons themselves.
+
+<Box display="flex" alignItems="flex-start" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <ButtonGroup orientation="vertical">
+    <Button variant="outline">Top</Button>
+    <Button variant="outline">Middle</Button>
+    <Button variant="outline">Bottom</Button>
+  </ButtonGroup>
+
+</Box>
+
+```tsx
+<ButtonGroup orientation="vertical">
+  <Button variant="outline">Top</Button>
+  <Button variant="outline">Middle</Button>
+  <Button variant="outline">Bottom</Button>
+</ButtonGroup>
+```
+
+## Polymorphism
+
+`ButtonGroupText` is polymorphic through Base UI's `render` prop: by default it is
+a `<div>`, but you can re-target the host element — say to a `<label>` so the text
+becomes a real form label — while keeping its styling, `data-slot`, and flush
+edges. The element changes; the system stays intact.
+
+```tsx
+<ButtonGroup>
+  <ButtonGroupText render={<label htmlFor="qty" />}>Qty</ButtonGroupText>
+  <Button variant="outline" id="qty">12</Button>
+</ButtonGroup>
+```
+
+## How the flush look stays on-system
+
+shadcn's button group flattens its children with distance selectors
+(`[&>*:not(:first-child)]:rounded-l-none`). That is exactly the off-system pattern
+this library forbids — a parent reaching down to style children it doesn't own.
+
+Instead, each on-system child styles **itself**. A `Button` reads its surrounding
+group with `stylex.when.ancestor` and zeroes only its inner corners and shared
+border — the same mechanism the `Icon` uses to shrink inside a small `Button`:
+
+```tsx
+borderStartStartRadius: {
+  default: null,
+  [stylex.when.ancestor('[data-orientation="horizontal"]')]: {
+    default: null,
+    ":not(:first-child)": 0, // flatten the inner (left) edge
+  },
+}
+```
+
+The trade-off is deliberate: only on-system components (which opt into this) go
+flush — a raw element does not get the polish for free.
+
+## Customization
+
+None of these components accept `className`. Customize them on-system, in order of
+reach:
+
+1. **`orientation`** — the layout knob on `ButtonGroup`.
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  full: { width: "100%" },
+})
+
+<ButtonGroup sx={styles.full}>
+  <Button variant="outline">Stretch</Button>
+  <Button variant="outline">To fit</Button>
+</ButtonGroup>
+```
+
+## API Reference
+
+### ButtonGroup
+
+| Prop          | Type                         | Default        |
+| ------------- | ---------------------------- | -------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `sx`          | `StyleXStyles`               | —              |
+
+Renders a `Box` with `role="group"`; other `Box` props are forwarded.
+
+### ButtonGroupText
+
+| Prop     | Type            | Default |
+| -------- | --------------- | ------- |
+| `render` | `ReactElement`  | `<div>` |
+| `sx`     | `StyleXStyles`  | —       |
+
+A non-interactive label that sits flush in the group. Polymorphic via `render`.
+
+### ButtonGroupSeparator
+
+| Prop          | Type                         | Default      |
+| ------------- | ---------------------------- | ------------ |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` |
+| `sx`          | `StyleXStyles`               | —            |
+
+Wraps the [Base UI separator](https://base-ui.com/react/components/separator);
+its other props are forwarded.
+
+> [!NOTE]
+> The flush look is produced by each child reacting to the group with
+> `stylex.when.ancestor` — no distance selectors, no `className`. Off-system
+> styling is not expressible here.

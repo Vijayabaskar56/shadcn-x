@@ -26,7 +26,14 @@ export const docsNav: Array<DocsNavSection> = [
     label: "Components",
     items: [
       { label: "Button", slug: "button" },
+      { label: "Button Group", slug: "button-group" },
       { label: "Box", slug: "box" },
+      { label: "Text", slug: "text" },
+      { label: "Link", slug: "link" },
+      { label: "Label", slug: "label" },
+      { label: "Icon", slug: "icon" },
+      { label: "Input", slug: "input" },
+      { label: "Textarea", slug: "textarea" },
     ],
   },
 ]

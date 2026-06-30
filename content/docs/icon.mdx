@@ -1,0 +1,188 @@
+---
+title: Icon
+description: A library-agnostic icon primitive — pick Lucide/Tabler/Phosphor, or bring your own, with full type safety.
+---
+
+# Icon
+
+`Icon` is not a wrapper around one icon set. It is a thin, on-system primitive
+that sizes, marks, and labels an icon from **any** library — Lucide (the
+default), Tabler, Phosphor, Remix, Hugeicons, or your own components — and styles
+it with StyleX tokens. No `className`, no raw `<svg>`.
+
+<Box display="flex" alignItems="center" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Icon name="Search" />
+
+  <Icon name="Heart" />
+
+  <Icon name="Settings" />
+
+  <Icon name="ChevronRight" />
+
+</Box>
+
+## Two ways to use it
+
+### Name mode (type-safe to the bound library)
+
+The default `Icon` is bound to **lucide-react**, so `name` autocompletes to real
+Lucide icon names and a typo is a compile error.
+
+```tsx
+import { Icon } from "@/components/icon"
+
+<Icon name="Search" />
+<Icon name="ChevronRight" size="s" />
+```
+
+### Element mode (bring your own, full variant typing)
+
+Pass any icon element as children. You import the icon yourself, so the source
+library's own variant props (Phosphor's `weight`, Lucide's `strokeWidth`, …) stay
+fully typed. This is the easiest way to mix libraries or use a one-off icon.
+
+```tsx
+import { Icon } from "@/components/icon"
+import { Star } from "@phosphor-icons/react"
+
+<Icon><Star weight="fill" /></Icon>
+```
+
+## Picking a different library
+
+The icon library is a **design-system decision**, like the radius token — set it
+once, in source, and the whole app follows. `createIcon` binds an `Icon` to a
+library; swapping the argument re-types every `name` to that library.
+
+```tsx
+// src/components/icon.ts (you own this)
+import { createIcon } from "@/components/icon"
+import * as TablerIcons from "@tabler/icons-react"
+
+export const Icon = createIcon(TablerIcons)
+// now <Icon name="IconSearch" /> — typed to Tabler's names
+```
+
+Because this is plain source — **not** a React context/provider — switching the
+library re-renders nothing at runtime and adds no provider to your tree. (If you
+genuinely need to switch icon sets at runtime, render two bound `Icon`s and
+choose between them; the common case stays zero-cost.)
+
+## Bring your own library
+
+Any record of `{ Name: Component }` is a library — including hand-rolled SVGs.
+
+```tsx
+import type { SVGProps } from "react"
+import { createIcon } from "@/components/icon"
+
+const brand = {
+  Logo: (props: SVGProps<SVGSVGElement>) => <svg {...props}>{/* … */}</svg>,
+}
+
+export const BrandIcon = createIcon(brand)
+
+<BrandIcon name="Logo" />
+```
+
+## Sizes
+
+`size` accepts `s` (0.75rem), `m` (1rem), `l` (1.25rem). With no `size`, icons are
+1rem and **auto-shrink to 0.75rem inside an `xs` Button** (via `stylex.when.ancestor`
+— the button observes nothing; the icon reacts to it).
+
+<Box display="flex" alignItems="center" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Icon name="Star" size="s" />
+
+  <Icon name="Star" size="m" />
+
+  <Icon name="Star" size="l" />
+
+</Box>
+
+```tsx
+<Icon name="Star" size="s" />
+<Icon name="Star" size="m" />
+<Icon name="Star" size="l" />
+```
+
+## Accessibility
+
+By default an icon is decorative — rendered `aria-hidden`. Pass `label` to expose
+it to assistive tech (`role="img"` + `aria-label`).
+
+```tsx
+<Icon name="Trash2" label="Delete" />
+```
+
+## In a Button
+
+`position="inline-start" | "inline-end"` marks the icon (`data-icon`) so a Button
+tightens the padding on that side — the button reacts to the icon via
+`stylex.when.descendant`, with no distance selectors.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Button>
+    <Icon name="Plus" position="inline-start" />
+    New
+  </Button>
+
+  <Button variant="outline" size="xs">
+    <Icon name="Download" position="inline-start" />
+    Export
+  </Button>
+
+</Box>
+
+```tsx
+<Button>
+  <Icon name="Plus" position="inline-start" />
+  New
+</Button>
+```
+
+## Customization
+
+`Icon` accepts no `className`. Customize it on-system:
+
+1. **`size`** — the closed size menu.
+2. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  danger: { color: "currentColor" },
+})
+
+<Icon name="Heart" sx={styles.danger} />
+```
+
+## API Reference
+
+### Icon
+
+| Prop       | Type                            | Default |
+| ---------- | ------------------------------- | ------- |
+| `name`     | `IconName` of the bound library | —       |
+| `children` | `ReactElement` (element mode)   | —       |
+| `size`     | `"s" \| "m" \| "l"`             | 1rem    |
+| `position` | `"inline-start" \| "inline-end"`| —       |
+| `label`    | `string`                        | — (decorative) |
+| `sx`       | `StyleXStyles`                  | —       |
+
+`name` and `children` are mutually exclusive. Renders the icon with
+`data-slot="icon"`; other SVG props are forwarded.
+
+### createIcon(library)
+
+Returns an `Icon` bound to `library` (a `{ Name: Component }` record), with `name`
+typed to that library's icon names.
+
+> [!NOTE]
+> `Icon` retires the raw `<svg>` element — the `no-raw-html` guardrail now points
+> `<svg>` at `Icon`. Use a library icon or wrap your own SVG component with
+> `createIcon`.

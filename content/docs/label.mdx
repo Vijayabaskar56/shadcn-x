@@ -1,0 +1,96 @@
+---
+title: Label
+description: An accessible caption for a form control — token-styled, with on-system disabled reactivity.
+---
+
+# Label
+
+A caption for a form control. `Label` is a standalone styled `<label>` carrying
+`data-slot="label"`, associated with its control via the native `htmlFor`
+attribute. It is styled entirely with StyleX tokens — no `className`, no raw
+`<label>`.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Label htmlFor="email">Email address</Label>
+
+</Box>
+
+## Usage
+
+```tsx
+import { Label } from "@/components/label"
+```
+
+```tsx
+<Label htmlFor="email">Email address</Label>
+<input id="email" type="email" />
+```
+
+Match the `htmlFor` to the control's `id` so clicking the label focuses the
+control and assistive tech announces them together. (`Input` is on the roadmap;
+until then pair `Label` with a native control.)
+
+## The `data-slot` attribute
+
+Every `Label` renders with `data-slot="label"`. This is the stable hook
+consumers, global CSS, devtools, and tests target — it is never affected by
+styling and survives any `sx`/theme override.
+
+```html
+<label data-slot="label" for="email">Email address</label>
+```
+
+## Disabled reactivity (on-system)
+
+shadcn dims a label when its surrounding field is disabled, using the distance
+selector `group-data-[disabled=true]:opacity-50`. That is exactly the off-system
+pattern this library forbids — a child reaching up to a parent it doesn't own.
+
+Instead, `Label` styles **itself**: it reacts to a marked ancestor carrying
+`data-disabled="true"` via `stylex.when.ancestor`, dropping to 50% opacity and
+disabling pointer events. When the `Field` primitive lands (it sets the marker
+and `data-disabled`), labels inside a disabled field dim automatically — no prop
+threading, no selectors reaching across components.
+
+```tsx
+opacity: {
+  default: 1,
+  [stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
+}
+```
+
+## Customization
+
+`Label` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values* (font
+   size/weight, text color).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  muted: { color: "inherit" },
+})
+
+<Label htmlFor="email" sx={styles.muted}>Email address</Label>
+```
+
+## API Reference
+
+### Label
+
+| Prop      | Type            | Default |
+| --------- | --------------- | ------- |
+| `htmlFor` | `string`        | —       |
+| `sx`      | `StyleXStyles`  | —       |
+
+All other native `<label>` props are forwarded. Renders a `<label>` with
+`data-slot="label"`.
+
+> [!NOTE]
+> `Label` retires the raw `<label>` element — the `no-raw-html` guardrail now
+> points `<label>` at `Label`.

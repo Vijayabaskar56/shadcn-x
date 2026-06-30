@@ -26,6 +26,10 @@ export const colors = stylex.defineVars({
   "text-secondary": "light-dark(oklch(0.556 0 0), oklch(0.708 0 0))",
   "text-disabled": "light-dark(oklch(0.708 0 0), oklch(0.556 0 0))",
   "border-primary": "light-dark(oklch(0.922 0 0), oklch(0.269 0 0))",
+  // shadcn's `--input`: the surface token for form controls (their border + the
+  // dark-mode filled look). Equal to border-primary in this theme; kept as its
+  // own semantic so controls can diverge from layout borders later.
+  input: "light-dark(oklch(0.922 0 0), oklch(0.269 0 0))",
   accent: "light-dark(oklch(0.546 0.245 262.881), oklch(0.546 0.245 262.881))",
   danger: "light-dark(oklch(0.577 0.245 27.325), oklch(0.577 0.245 27.325))",
   success: "light-dark(oklch(0.596 0.145 163.225), oklch(0.596 0.145 163.225))",
@@ -64,6 +68,7 @@ export const fontSize = stylex.defineVars({
   xl: "1.25rem",
   "2xl": "1.5rem",
   "3xl": "1.875rem",
+  "4xl": "2.25rem",
 })
 
 export const fontWeight = stylex.defineVars({
@@ -71,6 +76,7 @@ export const fontWeight = stylex.defineVars({
   medium: "500",
   semibold: "600",
   bold: "700",
+  extrabold: "800",
 })
 
 export const boxShadow = stylex.defineVars({
@@ -79,4 +85,19 @@ export const boxShadow = stylex.defineVars({
   m: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
   l: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
   xl: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+})
+
+// The transition-speed scale — a single themable knob for animation duration,
+// consumed wherever a control transitions. Override via createTheme to re-speed a
+// subtree. (`transitionProperty` legitimately differs per component; only the
+// duration is the shared decision.)
+export const duration = stylex.defineVars({
+  fast: "150ms",
+})
+
+// The shared focus ring (shadcn's focus-visible:ring-[3px] focus-visible:ring-ring/50),
+// DERIVED from the `ring` token so re-theming `ring` re-skins every focus ring
+// from one place. Consumed inside boxShadow conditionals by Button/Input/Textarea.
+export const focusRing = stylex.defineVars({
+  ring: `0 0 0 3px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
 })

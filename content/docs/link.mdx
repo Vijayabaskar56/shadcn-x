@@ -1,0 +1,107 @@
+---
+title: Link
+description: Type-safe, on-system navigation — TanStack Router's Link, styled with tokens.
+---
+
+# Link
+
+shadcn has no link component; its examples drop to a raw `<a>` or the framework's
+own link. `Link` is the on-system primitive: it wraps
+[TanStack Router's `Link`](https://tanstack.com/router/latest/docs/framework/react/guide/custom-link)
+through `createLink`, so `to`, `params`, `search`, and `hash` keep their **full
+type safety** — and it is styled entirely with StyleX tokens. No `className`, no
+raw `<a>`.
+
+<Box display="flex" alignItems="center" gap="l" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Link to="/docs/button">Go to Button</Link>
+
+  <Link to="/docs/text" variant="subtle">Go to Text</Link>
+
+</Box>
+
+## Usage
+
+```tsx
+import { Link } from "@/components/link"
+```
+
+```tsx
+<Link to="/docs/$" params={{ _splat: "button" }}>
+  Button docs
+</Link>
+```
+
+`to` (and `params`/`search`) are type-checked against your route tree — an unknown
+route is a compile error, not a runtime 404. Links default to `preload="intent"`,
+so the target route prefetches on hover or focus.
+
+## Variants
+
+`default` is the inline/prose link — accent-colored and underlined. `subtle`
+inherits its surrounding text color and only underlines on hover, for links that
+sit inside already-styled context (nav, cards).
+
+<Box display="flex" alignItems="center" gap="xl" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Link to="/docs/box">Default link</Link>
+
+  <Link to="/docs/box" variant="subtle">Subtle link</Link>
+
+</Box>
+
+```tsx
+<Link to="/docs/box">Default link</Link>
+<Link to="/docs/box" variant="subtle">Subtle link</Link>
+```
+
+## External links
+
+For destinations outside the app, pass `href` instead of `to` — the same styled
+anchor renders, with no routing applied.
+
+```tsx
+<Link href="https://tanstack.com/router" target="_blank" rel="noreferrer">
+  TanStack Router
+</Link>
+```
+
+## Customization
+
+`Link` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`variant`** — the closed style menu (`default` | `subtle`).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values* (e.g.
+   the link color via `colors.accent`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  bold: { fontWeight: 700 },
+})
+
+<Link to="/docs/button" sx={styles.bold}>Emphasized link</Link>
+```
+
+## API Reference
+
+### Link
+
+Accepts every [TanStack Router `Link`](https://tanstack.com/router/latest/docs/framework/react/api/router/linkComponent)
+prop (`to`, `params`, `search`, `hash`, `preload`, `activeProps`, …) plus:
+
+| Prop      | Type                     | Default     |
+| --------- | ------------------------ | ----------- |
+| `variant` | `"default" \| "subtle"`  | `"default"` |
+| `sx`      | `StyleXStyles`           | —           |
+
+Renders an `<a>` with `data-slot="link"` and `data-variant` for targeting.
+Defaults `preload="intent"`.
+
+> [!NOTE]
+> `Link` retires the raw `<a>` element — the `no-raw-html` guardrail now points
+> `<a>` at `Link`. Reach for `Link` for navigation; for a non-navigational anchor
+> in prose, `<Box as="a">` remains available.

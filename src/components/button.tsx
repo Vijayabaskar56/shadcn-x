@@ -6,10 +6,13 @@ import * as stylex from "@stylexjs/stylex"
 import {
   borderRadius,
   colors,
+  duration,
+  focusRing,
   fontSize,
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { groupItemEdges } from "./group-item-edges"
 
 // The single spacing knob (CSS `--spacing`); button dimensions are multiples of
 // it, so they re-scale with the spacing token — matching Tailwind/shadcn sizing.
@@ -43,18 +46,21 @@ const styles = stylex.create({
     fontSize: fontSize.s,
     fontWeight: fontWeight.medium,
     transitionProperty: "color, background-color, border-color, box-shadow",
-    transitionDuration: "150ms",
+    transitionDuration: duration.fast,
     outline: "none",
     userSelect: "none",
     cursor: "pointer",
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "transparent",
+    // shadcn's base carries gap-2 + rounded-md; sizes only override what differs.
+    gap: `calc(${u} * 2)`, // gap-2
+    borderRadius: borderRadius.m, // rounded-md
     // Subtle press feedback, matching shadcn's active:translate-y-px.
     transform: { default: null, ":active": "translateY(1px)" },
     boxShadow: {
       default: null,
-      ":focus-visible": `0 0 0 3px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
+      ":focus-visible": focusRing.ring,
     },
     opacity: {
       default: 1,
@@ -115,86 +121,104 @@ const styles = stylex.create({
     },
   },
 
-  // sizes — dimensions are multiples of `--spacing` (re-scale with the spacing
-  // knob, like shadcn's Tailwind utilities). Radius uses the `--radius` scale;
-  // compact sizes CAP it via min(..., Npx) — shadcn's rounded-[min(--radius-md,Npx)]
-  // — so small buttons stay harmonious even when --radius is large.
+  // Sizes ported from shadcn new-york-v4. Heights/paddings/gap are multiples of
+  // `--spacing` (re-scale with the spacing knob, like shadcn's utilities). The
+  // side holding an icon tightens its padding (has-[>svg]:px-N) via
+  // stylex.when.descendant on [data-icon]. Radius + gap come from `base`
+  // (shadcn base = rounded-md gap-2); a size only overrides what differs. Icon
+  // auto-shrink in xs/icon-xs is handled by <Icon> reacting to data-size="xs".
   sizeDefault: {
-    height: `calc(${u} * 8)`, // h-8 (2rem)
-    gap: `calc(${u} * 1.5)`, // gap-1.5
-    // px-2.5, tightened to px-2 on the side that holds an icon (has-data-[icon])
+    height: `calc(${u} * 9)`, // h-9
+    // px-4, tightened to px-3 on the side that holds an icon (has-[>svg]:px-3)
     paddingInlineStart: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 2)`,
+      default: `calc(${u} * 4)`,
+      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 3)`,
     },
     paddingInlineEnd: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 2)`,
+      default: `calc(${u} * 4)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 3)`,
     },
-    borderRadius: borderRadius.l, // rounded-lg = var(--radius)
   },
   sizeXs: {
     height: `calc(${u} * 6)`, // h-6
     gap: `calc(${u} * 1)`, // gap-1
     paddingInlineStart: {
-      default: `calc(${u} * 2)`,
+      default: `calc(${u} * 2)`, // px-2
       [stylex.when.descendant('[data-icon="inline-start"]')]:
-        `calc(${u} * 1.5)`,
+        `calc(${u} * 1.5)`, // has-[>svg]:px-1.5
     },
     paddingInlineEnd: {
       default: `calc(${u} * 2)`,
       [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 1.5)`,
     },
     fontSize: fontSize.xs, // text-xs
-    borderRadius: `min(${borderRadius.m}, 10px)`, // rounded-[min(--radius-md,10px)]
   },
   sizeSm: {
-    height: `calc(${u} * 7)`, // h-7
-    gap: `calc(${u} * 1)`, // gap-1
-    paddingInlineStart: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-start"]')]:
-        `calc(${u} * 1.5)`,
-    },
-    paddingInlineEnd: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 1.5)`,
-    },
-    fontSize: "0.8rem", // text-[0.8rem] — off the type scale, per shadcn
-    borderRadius: `min(${borderRadius.m}, 12px)`, // rounded-[min(--radius-md,12px)]
-  },
-  sizeLg: {
-    height: `calc(${u} * 9)`, // h-9
+    height: `calc(${u} * 8)`, // h-8
     gap: `calc(${u} * 1.5)`, // gap-1.5
     paddingInlineStart: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 2)`,
+      default: `calc(${u} * 3)`, // px-3
+      [stylex.when.descendant('[data-icon="inline-start"]')]:
+        `calc(${u} * 2.5)`, // has-[>svg]:px-2.5
     },
     paddingInlineEnd: {
-      default: `calc(${u} * 2.5)`,
-      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 2)`,
+      default: `calc(${u} * 3)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 2.5)`,
     },
-    borderRadius: borderRadius.l, // rounded-lg = var(--radius)
+  },
+  sizeLg: {
+    height: `calc(${u} * 10)`, // h-10
+    paddingInlineStart: {
+      default: `calc(${u} * 6)`, // px-6
+      [stylex.when.descendant('[data-icon="inline-start"]')]: `calc(${u} * 4)`, // has-[>svg]:px-4
+    },
+    paddingInlineEnd: {
+      default: `calc(${u} * 6)`,
+      [stylex.when.descendant('[data-icon="inline-end"]')]: `calc(${u} * 4)`,
+    },
   },
   sizeIcon: {
-    width: `calc(${u} * 8)`,
-    height: `calc(${u} * 8)`,
-    borderRadius: borderRadius.l,
+    width: `calc(${u} * 9)`, // size-9
+    height: `calc(${u} * 9)`,
   },
   sizeIconXs: {
-    width: `calc(${u} * 6)`,
+    width: `calc(${u} * 6)`, // size-6
     height: `calc(${u} * 6)`,
-    borderRadius: `min(${borderRadius.m}, 10px)`,
   },
   sizeIconSm: {
-    width: `calc(${u} * 7)`,
-    height: `calc(${u} * 7)`,
-    borderRadius: `min(${borderRadius.m}, 12px)`,
+    width: `calc(${u} * 8)`, // size-8
+    height: `calc(${u} * 8)`,
   },
   sizeIconLg: {
-    width: `calc(${u} * 9)`,
-    height: `calc(${u} * 9)`,
-    borderRadius: borderRadius.l,
+    width: `calc(${u} * 10)`, // size-10
+    height: `calc(${u} * 10)`,
+  },
+
+  // Group focus-raise: lift a focused button above its neighbors so its focus
+  // ring isn't clipped by the adjacent (overlapping) borders. The edge math
+  // (radius flattening + inner-border collapse) is shared with ButtonGroupText —
+  // see `groupItemEdges` (imported). A Button raises on `:focus-visible`
+  // (it is itself focusable); a non-focusable text chip raises on `:focus-within`.
+  groupFocus: {
+    position: {
+      default: null,
+      ":focus-visible": "relative",
+    },
+    zIndex: {
+      default: null,
+      ":focus-visible": 1,
+    },
+  },
+
+  // aria-invalid:border-destructive + aria-invalid:ring-destructive/20. Self
+  // attribute selectors don't compile in StyleX, so the component reads
+  // aria-invalid and applies this conditionally (the attribute is still set).
+  invalid: {
+    borderColor: colors.destructive,
+    boxShadow: {
+      default: null,
+      ":focus-visible": `0 0 0 3px color-mix(in oklch, ${colors.destructive}, transparent 80%)`,
+    },
   },
 })
 
@@ -205,7 +229,7 @@ const variantStyles = {
   ghost: styles.ghost,
   destructive: styles.destructive,
   link: styles.link,
-} satisfies Record<Variant, unknown>
+} satisfies Record<Variant, StyleXStyles>
 
 const sizeStyles = {
   default: styles.sizeDefault,
@@ -216,9 +240,12 @@ const sizeStyles = {
   "icon-xs": styles.sizeIconXs,
   "icon-sm": styles.sizeIconSm,
   "icon-lg": styles.sizeIconLg,
-} satisfies Record<Size, unknown>
+} satisfies Record<Size, StyleXStyles>
 
-type ButtonProps = Omit<ButtonPrimitive.Props, "className"> & {
+type ButtonProps = Omit<
+  ButtonPrimitive.Props,
+  "className" | "style" | "color"
+> & {
   variant?: Variant
   size?: Size
   sx?: StyleXStyles
@@ -230,18 +257,25 @@ function Button({
   sx,
   ...props
 }: ButtonProps) {
+  const ariaInvalid = props["aria-invalid"]
+  const invalid = ariaInvalid === true || ariaInvalid === "true"
   return (
     <ButtonPrimitive
       data-slot="button"
-      // data-size + the marker let an <Icon> child observe the button via
-      // stylex.when.ancestor (auto-shrink in xs); the marker also lets the
-      // button observe an <Icon> descendant via stylex.when.descendant (padding).
+      // data-size + data-variant let consumers/tests target a button's state,
+      // and let an <Icon> child observe the button via stylex.when.ancestor
+      // (auto-shrink in xs); the marker lets the button observe an <Icon>
+      // descendant via stylex.when.descendant (padding).
       data-size={size}
+      data-variant={variant}
       {...stylex.props(
         styles.base,
         variantStyles[variant],
         sizeStyles[size],
+        groupItemEdges,
+        styles.groupFocus,
         stylex.defaultMarker(),
+        invalid && styles.invalid,
         sx
       )}
       {...props}

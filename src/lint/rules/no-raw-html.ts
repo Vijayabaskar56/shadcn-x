@@ -7,8 +7,8 @@ import { defineRule } from "@oxlint/plugins"
  *
  * The list is curated, not exhaustive (ADR-0003): we ban only the host elements
  * a primitive already replaces, so raw HTML shrinks toward zero as primitives
- * ship. Elements with no primitive yet (input, svg, img, textarea, …) are
- * intentionally absent and stay allowed until their primitive lands.
+ * ship. Elements with no primitive yet (e.g. img) are intentionally absent and
+ * stay allowed until their primitive lands.
  */
 const DEFAULT_ELEMENTS: Record<string, string> = {
   div: "Box",
@@ -46,6 +46,11 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   hr: "Box",
   img: "Box",
   button: "Button",
+  a: "Link",
+  label: "Label",
+  svg: "Icon",
+  textarea: "Textarea",
+  input: "Input",
 }
 
 export const noRawHtml = defineRule({

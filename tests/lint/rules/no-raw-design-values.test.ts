@@ -1,7 +1,7 @@
 import tsParser from "@typescript-eslint/parser"
 import { RuleTester } from "eslint"
 
-import { plugin } from "../index"
+import { plugin } from "@/lint/index"
 
 const ruleTester = new RuleTester({
   languageOptions: {

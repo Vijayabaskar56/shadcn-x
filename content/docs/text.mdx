@@ -1,0 +1,134 @@
+---
+title: Text
+description: The typography primitive — semantic text styles as a closed variant menu.
+---
+
+# Text
+
+shadcn ships typography as a page of utility classes you copy by hand. `Text` is
+the on-system equivalent: every heading and body style is a named `variant`, so
+an agent reaches for `<Text variant="lead">` instead of guessing at
+`text-xl text-muted-foreground`. The decision goes in as a name; design tokens
+come out. No `className`, no raw `<h1>`.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Text variant="h1">The Joke Tax</Text>
+
+  <Text variant="lead">A modal dialog that interrupts the user with important content.</Text>
+
+  <Text variant="p">The king thought long and hard, and finally came up with a brilliant plan: he would tax the jokes in the kingdom.</Text>
+
+  <Text variant="blockquote">"After all," he said, "everyone enjoys a good joke."</Text>
+
+</Box>
+
+## Usage
+
+```tsx
+import { Text } from "@/components/text"
+```
+
+```tsx
+<Text>The default is a paragraph.</Text>
+<Text variant="h2">A section heading</Text>
+```
+
+`Text` defaults to the `p` variant rendered as a `<p>`. Each variant maps to a
+sensible semantic element by default (headings render as `<h1>`–`<h4>`, `small`
+as `<small>`, `blockquote` as `<blockquote>`).
+
+## Variants
+
+Every variant from shadcn's typography surface is present.
+
+<Box display="flex" flexDirection="column" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Text variant="h1">Heading 1</Text>
+
+  <Text variant="h2">Heading 2</Text>
+
+  <Text variant="h3">Heading 3</Text>
+
+  <Text variant="h4">Heading 4</Text>
+
+  <Text variant="p">Paragraph — the comfortable reading default with relaxed line height.</Text>
+
+  <Text variant="lead">Lead — a larger, muted intro line.</Text>
+
+  <Text variant="large">Large — emphasized but not a heading.</Text>
+
+  <Text variant="small">Small — fine print and labels.</Text>
+
+  <Text variant="muted">Muted — secondary, lower-emphasis text.</Text>
+
+  <Text variant="blockquote">Blockquote — an italic, bordered aside.</Text>
+
+</Box>
+
+```tsx
+<Text variant="h1">Heading 1</Text>
+<Text variant="h2">Heading 2</Text>
+<Text variant="h3">Heading 3</Text>
+<Text variant="h4">Heading 4</Text>
+<Text variant="p">Paragraph</Text>
+<Text variant="lead">Lead</Text>
+<Text variant="large">Large</Text>
+<Text variant="small">Small</Text>
+<Text variant="muted">Muted</Text>
+<Text variant="blockquote">Blockquote</Text>
+```
+
+## Retargeting the element
+
+A variant carries the *style*; `as` chooses the *element*. Use it when the
+semantic tag should differ from the default — e.g. an `h1`-styled marketing line
+that is really a `<span>`, or a `small`-styled `<label>`.
+
+```tsx
+<Text variant="h1" as="span">Big, but not a heading</Text>
+<Text variant="small" as="label">Email address</Text>
+```
+
+The tag changes; the styling, `data-slot`, and `data-variant` stay intact.
+(`Box` already retires the bare `<h1>`–`<h6>`/`<p>` tags, so reaching for `Text`
+or `Box` — never raw HTML — is the on-system path either way.)
+
+## Customization
+
+`Text` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`variant`** — the closed style menu (the first choice for any text).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (font sizes, weights, colors).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  centered: { textAlign: "center" },
+})
+
+<Text variant="lead" sx={styles.centered}>Centered lead text</Text>
+```
+
+## API Reference
+
+### Text
+
+| Prop      | Type                                                                                   | Default |
+| --------- | -------------------------------------------------------------------------------------- | ------- |
+| `variant` | `"h1" \| "h2" \| "h3" \| "h4" \| "p" \| "blockquote" \| "lead" \| "large" \| "small" \| "muted"` | `"p"`   |
+| `as`      | `"p" \| "span" \| "div" \| "h1"`–`"h6"` \| `"small" \| "strong" \| "em" \| "label" \| "blockquote"` | per variant |
+| `sx`      | `StyleXStyles`                                                                          | —       |
+
+Props of the rendered host element are forwarded. Sets `data-slot="text"` and
+`data-variant` for consumer targeting and devtools.
+
+> [!NOTE]
+> Font size, weight, and color come from tokens (`fontSize`, `fontWeight`,
+> `colors`); line-height and letter-spacing are per-variant typographic
+> measurements, baked into the variant the same way `Button` bakes in per-size
+> dimensions. The public surface stays the closed `variant` menu.

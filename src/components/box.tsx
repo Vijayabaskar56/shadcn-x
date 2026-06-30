@@ -196,11 +196,40 @@ const styles = stylex.create({
   heightFull: { height: "100%" },
   heightAuto: { height: "auto" },
 
-  border: { borderWidth: 1, borderStyle: "solid" },
-  borderTop: { borderTopWidth: 1, borderTopStyle: "solid" },
-  borderBottom: { borderBottomWidth: 1, borderBottomStyle: "solid" },
-  borderLeft: { borderLeftWidth: 1, borderLeftStyle: "solid" },
-  borderRight: { borderRightWidth: 1, borderRightStyle: "solid" },
+  border: {
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: colors["border-primary"],
+  },
+  borderTop: {
+    borderTopWidth: 1,
+    borderTopStyle: "solid",
+    borderColor: colors["border-primary"],
+  },
+  borderBottom: {
+    borderBottomWidth: 1,
+    borderBottomStyle: "solid",
+    borderColor: colors["border-primary"],
+  },
+  borderLeft: {
+    borderLeftWidth: 1,
+    borderLeftStyle: "solid",
+    borderColor: colors["border-primary"],
+  },
+  borderRight: {
+    borderRightWidth: 1,
+    borderRightStyle: "solid",
+    borderColor: colors["border-primary"],
+  },
+
+  // Dynamic styles for runtime numeric/string values. Keeping these inside the
+  // StyleX pipeline (a CSS-var atomic class + the var set inline) means `sx`
+  // (merged last) can still override them — the previous raw inline `style`
+  // bypass meant the props always beat `sx`, violating the "sx wins" contract.
+  flexGrow: (value) => ({ flexGrow: value }),
+  flexShrink: (value) => ({ flexShrink: value }),
+  order: (value) => ({ order: value }),
+  minHeight: (value) => ({ minHeight: value }),
 })
 
 type Display =
@@ -603,30 +632,21 @@ export function Box<E extends AllowedElement = "div">({
     overflow && overflowMap[overflow],
     textAlign && textAlignMap[textAlign],
     flex && flexMap[flex],
-    border !== undefined && styles.border,
-    borderTop !== undefined && styles.borderTop,
-    borderBottom !== undefined && styles.borderBottom,
-    borderLeft !== undefined && styles.borderLeft,
-    borderRight !== undefined && styles.borderRight,
+    border && styles.border,
+    borderTop && styles.borderTop,
+    borderBottom && styles.borderBottom,
+    borderLeft && styles.borderLeft,
+    borderRight && styles.borderRight,
+    flexGrow !== undefined && styles.flexGrow(flexGrow),
+    flexShrink !== undefined && styles.flexShrink(flexShrink),
+    order !== undefined && styles.order(order),
+    minHeight !== undefined && styles.minHeight(minHeight),
     // sx is merged last so per-instance overrides win (StyleX atomic last-wins).
     sx
   )
 
-  const combinedStyle: React.CSSProperties &
-    Record<string, string | number | undefined> = {
-    ...xstyle.style,
-    ...(flexGrow !== undefined ? { flexGrow } : {}),
-    ...(flexShrink !== undefined ? { flexShrink } : {}),
-    ...(order !== undefined ? { order } : {}),
-    ...(minHeight !== undefined ? { minHeight } : {}),
-  }
-
   return (
-    <Tag
-      className={xstyle.className}
-      style={Object.keys(combinedStyle).length > 0 ? combinedStyle : undefined}
-      {...rest}
-    >
+    <Tag className={xstyle.className} style={xstyle.style} {...rest}>
       {children}
     </Tag>
   )

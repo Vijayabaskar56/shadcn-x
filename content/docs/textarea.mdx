@@ -1,0 +1,109 @@
+---
+title: Textarea
+description: A multi-line text input — shadcn's textarea, ported to StyleX tokens.
+---
+
+# Textarea
+
+A multi-line text field. This is shadcn's textarea ported 1:1 to our model: the
+same look, sizing, focus ring, and disabled/invalid states — built from StyleX
+tokens instead of Tailwind classes. It auto-grows with its content
+(`field-sizing: content`). No `className`, no raw `<textarea>`.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Label htmlFor="message">Your message</Label>
+
+  <Textarea id="message" placeholder="Type your message here…" />
+
+</Box>
+
+## Usage
+
+```tsx
+import { Textarea } from "@/components/textarea"
+```
+
+```tsx
+<Textarea placeholder="Type your message here…" />
+```
+
+Pair it with a `Label` (matching `htmlFor`/`id`) for an accessible field.
+
+## With a label
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Label htmlFor="bio">Bio</Label>
+
+  <Textarea id="bio" placeholder="Tell us about yourself" />
+
+</Box>
+
+```tsx
+<Label htmlFor="bio">Bio</Label>
+<Textarea id="bio" placeholder="Tell us about yourself" />
+```
+
+## Disabled
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Textarea placeholder="Can't type here" disabled />
+
+</Box>
+
+```tsx
+<Textarea placeholder="Can't type here" disabled />
+```
+
+## Invalid
+
+Set `aria-invalid` to flag a validation error. The border and focus ring turn
+destructive — and assistive tech is informed, because it is a real ARIA
+attribute, not just a style.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Textarea placeholder="Something's off" aria-invalid defaultValue="too short" />
+
+</Box>
+
+```tsx
+<Textarea aria-invalid />
+```
+
+## Customization
+
+`Textarea` accepts no `className`. Customize it on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token *values* (radius,
+   border color, ring, font size).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tall: { minHeight: "12rem" },
+})
+
+<Textarea sx={styles.tall} placeholder="Roomier" />
+```
+
+## API Reference
+
+### Textarea
+
+| Prop           | Type            | Default |
+| -------------- | --------------- | ------- |
+| `aria-invalid` | `boolean`       | `false` |
+| `disabled`     | `boolean`       | `false` |
+| `sx`           | `StyleXStyles`  | —       |
+
+All native `<textarea>` props (`value`, `placeholder`, `rows`, `onChange`, …) are
+forwarded. Renders a `<textarea>` with `data-slot="textarea"`.
+
+> [!NOTE]
+> `Textarea` retires the raw `<textarea>` element — the `no-raw-html` guardrail
+> now points `<textarea>` at `Textarea`.
