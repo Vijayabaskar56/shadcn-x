@@ -1,0 +1,139 @@
+---
+title: Table
+description: A compound table primitive set — shadcn's table, ported to StyleX tokens.
+---
+
+# Table
+
+A compound primitive set for tabular data, ported from shadcn. Each part maps to
+its native element (`table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption`) but is
+styled via StyleX tokens — and retires the raw tag in the `no-raw-html`
+guardrail. Wide tables scroll horizontally inside a container.
+
+<Box overflow="auto" width="full" borderRadius="m" border borderColor="border-primary">
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ada Lovelace</TableCell>
+      <TableCell>ada@example.com</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Alan Turing</TableCell>
+      <TableCell>alan@example.com</TableCell>
+      <TableCell>Engineer</TableCell>
+    </TableRow>
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell colSpan={2}>Total</TableCell>
+      <TableCell>2</TableCell>
+    </TableRow>
+  </TableFooter>
+</Table>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/table"
+```
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ada Lovelace</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+## Anatomy
+
+| Component       | Renders    | `data-slot`        |
+| --------------- | ---------- | ------------------ |
+| `Table`         | `table` (in a scroll container) | `table` / `table-container` |
+| `TableHeader`   | `thead`    | `table-header`     |
+| `TableBody`     | `tbody`    | `table-body`       |
+| `TableFooter`   | `tfoot`    | `table-footer`     |
+| `TableRow`      | `tr`       | `table-row`        |
+| `TableHead`     | `th`       | `table-head`       |
+| `TableCell`     | `td`       | `table-cell`       |
+| `TableCaption`  | `caption`  | `table-caption`    |
+
+The last row of a `TableBody`/`TableFooter` drops its bottom border so the table
+doesn't end on a doubled line. Rows highlight on hover.
+
+## Caption
+
+A caption renders below the table (`caption-side: bottom`):
+
+<Table>
+  <TableCaption>A list of recent users.</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Grace Hopper</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+## Customization
+
+Each part accepts a typed `sx` override (StyleX styles only), merged last. For
+whole-table re-theming (border color, row hover), override the token *values*
+via `createTheme`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tight: { padding: "0.25rem" },
+})
+
+<TableCell sx={styles.tight}>Ada</TableCell>
+```
+
+## API Reference
+
+Each part forwards all native props for its element (`colSpan`, `rowSpan`,
+`headers`, `scope`, …) and accepts:
+
+| Prop | Type          | Default |
+| ---- | ------------- | ------- |
+| `sx` | `StyleXStyles` | —       |
+
+> [!NOTE]
+> The `Table` family retires the raw `table`/`thead`/`tbody`/`tfoot`/`tr`/`th`/
+> `td`/`caption` elements — the `no-raw-html` guardrail now points each at its
+> `Table*` primitive.

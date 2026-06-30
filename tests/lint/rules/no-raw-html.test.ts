@@ -64,5 +64,29 @@ ruleTester.run("no-raw-html", plugin.rules["no-raw-html"] as never, {
         { messageId: "rawHtml", data: { tag: "input", primitive: "Input" } },
       ],
     },
+    {
+      code: "const a = <img src='x' alt='a' />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "img", primitive: "Image" } },
+      ],
+    },
+    {
+      code: "const a = <table />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "table", primitive: "Table" } },
+      ],
+    },
+    {
+      code: "const a = <tr />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "tr", primitive: "TableRow" } },
+      ],
+    },
+    {
+      code: "const a = <td />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "td", primitive: "TableCell" } },
+      ],
+    },
   ],
 })

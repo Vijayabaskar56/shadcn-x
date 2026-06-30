@@ -33,6 +33,8 @@ export const docsNav: Array<DocsNavSection> = [
       { label: "Label", slug: "label" },
       { label: "Icon", slug: "icon" },
       { label: "Input", slug: "input" },
+      { label: "Image", slug: "image" },
+      { label: "Table", slug: "table" },
       { label: "Textarea", slug: "textarea" },
     ],
   },

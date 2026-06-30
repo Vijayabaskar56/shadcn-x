@@ -10,9 +10,20 @@ import {
   ButtonGroupText,
 } from "@/components/button-group"
 import { Icon } from "@/components/icon"
+import { Image } from "@/components/image"
 import { Input } from "@/components/input"
 import { Label } from "@/components/label"
 import { Link } from "@/components/link"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/table"
 import { Text } from "@/components/text"
 import { Textarea } from "@/components/textarea"
 
@@ -194,11 +205,20 @@ export const mdxComponents = {
   Link,
   Label,
   Icon,
+  Image,
   Input,
   Textarea,
   ButtonGroup,
   ButtonGroupText,
   ButtonGroupSeparator,
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (

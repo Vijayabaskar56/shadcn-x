@@ -34,9 +34,9 @@ These drive raw-HTML usage toward zero. Build first.
 - [x] Input ⬛ `input`
 - [x] Textarea ⬛ `textarea`
 - [x] Label ⬛ `label`
-- [ ] Image (shadcn-x) ⬛ `img`
+- [x] Image (shadcn-x) ⬛ `img`
 - [x] Icon (shadcn-x) ⬛ `svg` (library-agnostic: lucide default, createIcon for BYO)
-- [ ] Table ⬛ `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption`
+- [x] Table ⬛ `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption`
 
 ## Phase 1 — Core form &amp; input
 
@@ -100,9 +100,19 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Carousel
 - [ ] Chart
 
-## Phase 5 — Providers / utilities
+## Phase 5 — RTL / Direction
 
-- [ ] Direction (provider)
+Plan: `docs/plans/2026-06-30-rtl-support.md`
+
+- [ ] `enableLTRRTLComments` config
+- [ ] Direction (provider) + `useDirection` hook
+- [ ] RTL: migrate Box physical → logical (`paddingX`, `borderLeft/Right`, `textAlign`)
+- [ ] RTL: migrate Text (`borderLeft` → `borderInlineStart`)
+- [ ] RTL: migrate docs components (mdx-components, doc-toc)
+- [ ] RTL: Icon auto-flip (`stylex.when.ancestor('[dir="rtl"]')`)
+- [ ] RTL: overlay animation directions (Phases 2-4)
+- [ ] RTL: lint rule (`preferInline` equivalent for oxlint)
+- [ ] RTL: test suite
 
 ## Phase 6 — AI / chat (Base UI variant extras; optional, only if needed)
 
@@ -130,24 +140,6 @@ and `no-raw-html` remaps them from `Box` → `Primitive`:
 | `img`                                                                             | **Image** (Phase 0)                                   | Image [ ]       |
 | `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                            | **Table** (Phase 0)                                   | Table [ ]       |
 
-
----
-
-## Non-component cleanup
-
-These tasks fire when the corresponding component above ships (check the When
-
-column). Update both the `AllowedElement` type in `src/components/box.tsx` and
-
-the `DEFAULT_ELEMENTS` map in `src/lint/rules/no-raw-html.ts`.
-
-- [ ] **Primitive ships → strip Box** — remove `ul`/`ol`/`li`/`time`/`figure`/`figcaption`/`blockquote`/`pre`/`code`/`hr` from `AllowedElement` in Box
-- [ ] **Primitive ships → remap `no-raw-html`** — change those 10 tags from `"Box"` to `"Primitive"` in `DEFAULT_ELEMENTS`
-- [ ] **Primitive ships → fix `p`/`h1`–`h6` mapping** — remap from `"Box"` to `"Text"` in `DEFAULT_ELEMENTS` (should have been done when Text shipped)
-- [ ] **Primitive ships → update mdx-components** — change `<Box as="ul">` (etc.) to `<Primitive as="ul">` in `src/components/docs/mdx-components.tsx`
-- [ ] **Image ships** — remove `img` from Box's `AllowedElement`; remap `no-raw-html` to `"Image"`
-- [ ] **Table ships** — remove `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption` from Box's `AllowedElement`; remap `no-raw-html` to `"Table"`
-- [ ] **Form ships (Phase 1)** — remove `form`/`fieldset` from Box's `AllowedElement`; remap `no-raw-html` to `"Form"`
 
 ---
 

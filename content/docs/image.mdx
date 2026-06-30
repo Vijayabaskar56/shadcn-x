@@ -1,0 +1,107 @@
+---
+title: Image
+description: An accessible image primitive — required alt, aspect ratios, and sensible defaults.
+---
+
+# Image
+
+A styled `<img>` that makes accessible, well-sized images the default. `alt` is
+**required** (pass `alt=""` for decorative images), `loading="lazy"` and
+`object-fit: cover` are the defaults, and an optional `aspect` crops the image to
+a fixed ratio. Built from StyleX tokens; no `className`, no raw `<img>`.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Image src="https://picsum.photos/seed/shadcn-x-hero/640/360" alt="A hilly landscape at golden hour" />
+
+</Box>
+
+## Usage
+
+```tsx
+import { Image } from "@/components/image"
+```
+
+```tsx
+<Image src="/hero.jpg" alt="Hero" />
+```
+
+## Aspect ratio
+
+`aspect` boxes the image to a fixed ratio and crops to fit (the default
+`object-fit: cover`):
+
+<Box display="grid" gap="m" sx={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+
+  <Image aspect="square" src="https://picsum.photos/seed/sq/320/320" alt="Square crop" />
+
+  <Image aspect="video" src="https://picsum.photos/seed/vid/640/360" alt="16:9 crop" />
+
+</Box>
+
+```tsx
+<Image aspect="square" src="/avatar.jpg" alt="Avatar" />
+<Image aspect="video" src="/trailer.jpg" alt="Trailer thumbnail" />
+```
+
+Available ratios: `square` (1:1), `video` (16:9), `wide` (3:2), `portrait` (3:4).
+
+## Fit
+
+`fit` maps to CSS `object-fit`. The default is `cover` (fill the box, crop
+overflow); use `contain` to letterbox instead.
+
+<Box display="flex" flexDirection="column" gap="s" padding="l" backgroundColor="background-muted" borderRadius="m">
+
+  <Image aspect="video" fit="contain" src="https://picsum.photos/seed/contain/320/320" alt="A square image letterboxed inside a 16:9 box" />
+
+</Box>
+
+```tsx
+<Image aspect="video" fit="contain" src="/logo.svg" alt="Logo" />
+```
+
+## Accessibility
+
+`alt` is **required** — omitting it is a type error. Pass an empty string for a
+purely decorative image (screen readers ignore it, and the `role` stays implicit):
+
+```tsx
+<Image src="/divider.svg" alt="" />
+```
+
+## Customization
+
+`Image` accepts no `className`. Customize it on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token *values* (radius).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  rounded: { borderRadius: "9999px" },
+})
+
+<Image aspect="square" sx={styles.rounded} src="/avatar.jpg" alt="Avatar" />
+```
+
+## API Reference
+
+### Image
+
+| Prop      | Type                                                       | Default  |
+| --------- | ---------------------------------------------------------- | -------- |
+| `alt`     | `string`                                                   | required |
+| `aspect`  | `"square" \| "video" \| "wide" \| "portrait"`             | —        |
+| `fit`     | `"cover" \| "contain" \| "fill" \| "none"`                 | `"cover"`|
+| `loading` | `"lazy" \| "eager"`                                        | `"lazy"` |
+| `sx`      | `StyleXStyles`                                             | —        |
+
+All native `<img>` props (`src`, `width`, `height`, `srcSet`, `sizes`, …) are
+forwarded. Renders an `<img>` with `data-slot="image"`.
+
+> [!NOTE]
+> `Image` retires the raw `<img>` element — the `no-raw-html` guardrail now
+> points `<img>` at `Image`.
