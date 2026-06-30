@@ -74,7 +74,7 @@ const styles = stylex.create({
     borderColor: colors.destructive,
     boxShadow: {
       default: boxShadow.s,
-      ":focus-visible": `${boxShadow.s}, 0 0 0 3px color-mix(in oklch, ${colors.destructive}, transparent 80%)`,
+      ":focus-visible": `${boxShadow.s}, ${focusRing.invalidRing}`,
     },
   },
   // Hide the native up/down spinners Chrome/Safari render on <input type="number">

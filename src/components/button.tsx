@@ -217,7 +217,7 @@ const styles = stylex.create({
     borderColor: colors.destructive,
     boxShadow: {
       default: null,
-      ":focus-visible": `0 0 0 3px color-mix(in oklch, ${colors.destructive}, transparent 80%)`,
+      ":focus-visible": focusRing.invalidRing,
     },
   },
 })

@@ -98,6 +98,8 @@ export const duration = stylex.defineVars({
 // The shared focus ring (shadcn's focus-visible:ring-[3px] focus-visible:ring-ring/50),
 // DERIVED from the `ring` token so re-theming `ring` re-skins every focus ring
 // from one place. Consumed inside boxShadow conditionals by Button/Input/Textarea.
+// `invalidRing` is the destructive variant (aria-invalid:ring-destructive/20).
 export const focusRing = stylex.defineVars({
   ring: `0 0 0 3px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
+  invalidRing: `0 0 0 3px color-mix(in oklch, ${colors.destructive}, transparent 80%)`,
 })
