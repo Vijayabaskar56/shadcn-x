@@ -1,15 +1,27 @@
 import * as stylex from "@stylexjs/stylex"
-import { Link, createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
+import { Link } from "@/components/link"
+import { Text } from "@/components/text"
 import { ThemeToggle } from "@/components/theme-toggle"
+
+import { colors, fontSize, fontWeight } from "../styles/tokens.stylex"
 
 export const Route = createFileRoute("/")({ component: App })
 
 const styles = stylex.create({
   exampleGrid: {
     gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+  },
+  heading: { color: colors["text-primary"] },
+  textPrimary: { color: colors["text-primary"] },
+  demoLink: {
+    color: colors.accent,
+    fontSize: fontSize.s,
+    textDecorationLine: { default: "underline", ":hover": "none" },
+    fontWeight: fontWeight.medium,
   },
 })
 
@@ -23,9 +35,9 @@ function App() {
       gap="xl"
     >
       <Box display="flex" justifyContent="between" alignItems="center">
-        <Box as="h1" fontSize="xl" fontWeight="bold" color="text-primary">
+        <Text variant="h1" sx={styles.heading}>
           shadcn-x
-        </Box>
+        </Text>
         <Box display="flex" alignItems="center" gap="m">
           <Button
             variant="ghost"
@@ -83,13 +95,13 @@ function App() {
             A basic card surface with border, rounded corners, and card
             background.
           </Box>
-          <Box as="p" color="text-primary" fontSize="s">
+          <Text variant="small" sx={styles.textPrimary}>
             Use{" "}
             <Box as="code" color="accent">
               backgroundColor="background-card"
             </Box>{" "}
             for card surfaces.
-          </Box>
+          </Text>
         </Box>
 
         <Box
@@ -164,15 +176,15 @@ function App() {
             backgroundColor="background-muted"
             borderRadius="s"
           >
-            <Box as="a" color="accent" fontSize="s" href="#">
+            <a href="#" {...stylex.props(styles.demoLink)}>
               Home
-            </Box>
-            <Box as="a" color="accent" fontSize="s" href="#">
+            </a>
+            <a href="#" {...stylex.props(styles.demoLink)}>
               About
-            </Box>
-            <Box as="a" color="accent" fontSize="s" href="#">
+            </a>
+            <a href="#" {...stylex.props(styles.demoLink)}>
               Contact
-            </Box>
+            </a>
           </Box>
           <Box color="text-secondary" fontSize="s">
             Use{" "}

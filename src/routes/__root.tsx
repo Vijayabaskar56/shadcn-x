@@ -2,9 +2,11 @@ import * as stylex from "@stylexjs/stylex"
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
+import { Text } from "@/components/text"
 import appCss from "@/styles/globals.css?url"
 
 import { DevStyleXInject } from "../DevStyleXInject"
+import { colors } from "../styles/tokens.stylex"
 
 const styles = stylex.create({
   notFound: {
@@ -12,6 +14,8 @@ const styles = stylex.create({
     maxWidth: "80rem",
     paddingTop: "4rem",
   },
+  heading: { color: colors["text-primary"] },
+  paragraph: { color: colors["text-secondary"] },
 })
 
 export const Route = createRootRoute({
@@ -37,12 +41,12 @@ export const Route = createRootRoute({
   }),
   notFoundComponent: () => (
     <Box as="main" padding="l" sx={styles.notFound}>
-      <Box as="h1" fontSize="2xl" fontWeight="bold" color="text-primary">
+      <Text variant="h1" sx={styles.heading}>
         404
-      </Box>
-      <Box as="p" color="text-secondary">
+      </Text>
+      <Text variant="p" sx={styles.paragraph}>
         The requested page could not be found.
-      </Box>
+      </Text>
     </Box>
   ),
   shellComponent: RootDocument,

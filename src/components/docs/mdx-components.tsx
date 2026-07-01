@@ -27,7 +27,7 @@ import {
 import { Text } from "@/components/text"
 import { Textarea } from "@/components/textarea"
 
-import { borderRadius, colors } from "../../styles/tokens.stylex"
+import { borderRadius, colors, fontWeight } from "../../styles/tokens.stylex"
 
 /**
  * Component map handed to compiled MDX docs. It exposes our primitives so docs
@@ -56,6 +56,8 @@ type CodeProps = Without<"code">
 // (line-height, letter-spacing, em-based padding, list markers, anchors, etc.).
 const styles = stylex.create({
   anchor: {
+    color: colors.accent,
+    fontWeight: fontWeight.medium,
     textDecoration: { default: "underline", ":hover": "none" },
     textUnderlineOffset: "4px",
   },
@@ -82,6 +84,9 @@ const styles = stylex.create({
     scrollMarginTop: "5rem",
     letterSpacing: "-0.025em",
     lineHeight: 1.2,
+    borderBottomWidth: 1,
+    borderBottomStyle: "solid",
+    borderBottomColor: colors["border-primary"],
   },
   h3: {
     marginTop: "2rem",
@@ -173,15 +178,7 @@ const styles = stylex.create({
 })
 
 function MdxAnchor(props: AnchorProps) {
-  return (
-    <Box
-      as="a"
-      color="accent"
-      fontWeight="medium"
-      sx={styles.anchor}
-      {...props}
-    />
-  )
+  return <a {...stylex.props(styles.anchor)} {...props} />
 }
 
 function MdxCode(props: CodeProps) {
@@ -222,29 +219,15 @@ export const mdxComponents = {
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (
-    <Box as="h1" fontSize="3xl" fontWeight="bold" sx={styles.h1} {...props} />
+    <Text variant="h1" as="h1" sx={styles.h1} {...props} />
   ),
   h2: (props: HeadingProps) => (
-    <Box
-      as="h2"
-      fontSize="2xl"
-      fontWeight="semibold"
-      borderBottom
-      borderColor="border-primary"
-      sx={styles.h2}
-      {...props}
-    />
+    <Text variant="h2" as="h2" sx={styles.h2} {...props} />
   ),
   h3: (props: HeadingProps) => (
-    <Box
-      as="h3"
-      fontSize="xl"
-      fontWeight="semibold"
-      sx={styles.h3}
-      {...props}
-    />
+    <Text variant="h3" as="h3" sx={styles.h3} {...props} />
   ),
-  p: (props: Without<"p">) => <Box as="p" sx={styles.p} {...props} />,
+  p: (props: Without<"p">) => <Text variant="p" sx={styles.p} {...props} />,
   a: MdxAnchor,
   ul: (props: Without<"ul">) => <Box as="ul" sx={styles.ul} {...props} />,
   ol: (props: Without<"ol">) => <Box as="ol" sx={styles.ol} {...props} />,
@@ -269,6 +252,6 @@ export const mdxComponents = {
   td: (props: Without<"td">) => <Box as="td" sx={styles.td} {...props} />,
   hr: (props: Without<"hr">) => <Box as="hr" sx={styles.hr} {...props} />,
   img: ({ alt, ...props }: Without<"img">) => (
-    <Box as="img" alt={alt ?? ""} sx={styles.img} {...props} />
+    <Image alt={alt ?? ""} sx={styles.img} {...props} />
   ),
 }

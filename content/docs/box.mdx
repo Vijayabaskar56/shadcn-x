@@ -38,14 +38,14 @@ styling props. The DOM gets a real `<nav>` / `<ul>` / `<section>`; you only lose
 the open `className` surface.
 
 <Box as="nav" display="flex" gap="m" padding="s" backgroundColor="background-muted" borderRadius="s">
-  <Box as="a" href="#" color="accent" fontSize="s">Home</Box>
-  <Box as="a" href="#" color="accent" fontSize="s">About</Box>
-  <Box as="a" href="#" color="accent" fontSize="s">Contact</Box>
+  <Link variant="default" href="#">Home</Link>
+  <Link variant="default" href="#">About</Link>
+  <Link variant="default" href="#">Contact</Link>
 </Box>
 
 ```tsx
 <Box as="nav" display="flex" gap="m">
-  <Box as="a" href="#" color="accent">Home</Box>
+  <Link variant="default" href="#">Home</Link>
 </Box>
 ```
 

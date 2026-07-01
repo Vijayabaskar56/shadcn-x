@@ -2,10 +2,12 @@ import * as stylex from "@stylexjs/stylex"
 import { Link } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
+import { Text } from "@/components/text"
 import { docsNav } from "@/docs/docs-config"
 
 import {
   colors,
+  fontSize,
   spacing,
   borderRadius,
   fontWeight,
@@ -32,6 +34,15 @@ const styles = stylex.create({
     transitionProperty: "color, background-color",
     transitionDuration: "150ms",
   },
+  sectionLabel: {
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.semibold,
+    color: colors["text-secondary"],
+    paddingLeft: spacing.s,
+    paddingRight: spacing.s,
+    letterSpacing: "0.05em",
+    textTransform: "uppercase",
+  },
   linkActive: {
     backgroundColor: colors["background-muted"],
     color: colors["text-primary"],
@@ -56,16 +67,9 @@ export function DocsSidebar() {
           flexDirection="column"
           gap="xs"
         >
-          <Box
-            as="p"
-            paddingX="s"
-            fontSize="xs"
-            fontWeight="semibold"
-            color="text-secondary"
-            sx={styles.label}
-          >
+          <Text variant="small" sx={styles.sectionLabel}>
             {section.label}
-          </Box>
+          </Text>
           {section.items.map((item) => (
             <Link key={item.slug} to="/docs/$" params={{ _splat: item.slug }}>
               {({ isActive }) => (

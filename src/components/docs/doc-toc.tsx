@@ -3,13 +3,21 @@ import * as stylex from "@stylexjs/stylex"
 import type { TocEntry } from "@/lib/markdown"
 
 import { Box } from "@/components/box"
+import { Text } from "@/components/text"
 
-import { colors, spacing } from "../../styles/tokens.stylex"
+import {
+  colors,
+  fontSize,
+  fontWeight,
+  spacing,
+} from "../../styles/tokens.stylex"
 
 const styles = stylex.create({
   label: {
     letterSpacing: "0.05em",
     textTransform: "uppercase",
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.semibold,
   },
   link: {
     display: "block",
@@ -37,15 +45,9 @@ export function DocToc({ toc }: { toc: Array<TocEntry> }) {
       fontSize="s"
       aria-label="On this page"
     >
-      <Box
-        as="p"
-        fontSize="xs"
-        fontWeight="semibold"
-        color="text-secondary"
-        sx={styles.label}
-      >
+      <Text variant="small" sx={styles.label}>
         On this page
-      </Box>
+      </Text>
       <Box as="ul" display="flex" flexDirection="column" gap="xs">
         {toc.map((entry) => (
           <Box as="li" key={entry.id}>

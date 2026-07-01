@@ -133,12 +133,12 @@ and `no-raw-html` remaps them from `Box` → `Primitive`:
 | --------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------- |
 | `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`, `code`, `hr` | **Primitive** (new)                                   | Primitive [ ]   |
 | `form`, `fieldset`                                                                | **Form** (Phase 1)                                    | Phase 1         |
-| `p`, `h1`–`h6`                                                                    | **Text** (already exists — needs `no-raw-html` remap) | Primitive ships |
-| `button`                                                                          | **Button** (already mapped)                           | Already done    |
-| `a`                                                                               | **Link** (already mapped)                             | Already done    |
-| `label`                                                                           | **Label** (already mapped)                            | Already done    |
-| `img`                                                                             | **Image** (Phase 0)                                   | Image [ ]       |
-| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                            | **Table** (Phase 0)                                   | Table [ ]       |
+| `p`, `h1`–`h6`                                                                    | **Text**                                              | Done ✓          |
+| `button`                                                                          | **Button**                                            | Done ✓          |
+| `a`                                                                               | **Link**                                              | Done ✓          |
+| `label`                                                                           | **Label**                                             | Done ✓          |
+| `img`                                                                             | **Image**                                             | Done ✓          |
+| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                            | **Table** (th/td kept for MDX prose)                  | Done ✓          |
 
 
 ---
