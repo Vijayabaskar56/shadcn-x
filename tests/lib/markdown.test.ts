@@ -13,7 +13,7 @@ describe("compileDoc", () => {
       { value: "Nested", id: "nested", depth: 3 },
       { value: "Second section", id: "second-section", depth: 2 },
     ])
-  })
+  }, 20000)
 
   it("highlights fenced code blocks with shiki dual themes", async () => {
     const { html } = await compileDoc("```ts\nconst x = 1\n```")

@@ -1,0 +1,273 @@
+---
+title: Combobox
+description: An autocomplete input with a list of suggestions.
+---
+
+# Combobox
+
+An autocomplete combobox built on the [Base UI](https://base-ui.com) combobox primitive
+and styled with StyleX design tokens. Behavior and accessibility come from Base
+UI; appearance comes from typed `sx` props.
+
+### Trigger mode
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Combobox>
+    <ComboboxTrigger aria-label="Country">
+      <ComboboxValue placeholder="Select a country" />
+    </ComboboxTrigger>
+    <ComboboxContent>
+      <ComboboxItem value="us">United States</ComboboxItem>
+      <ComboboxItem value="ca">Canada</ComboboxItem>
+      <ComboboxItem value="mx">Mexico</ComboboxItem>
+    </ComboboxContent>
+  </Combobox>
+</Box>
+
+### Input mode
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Combobox>
+    <ComboboxInput aria-label="Search countries" placeholder="Search countries..." />
+    <ComboboxContent>
+      <ComboboxItem value="us">United States</ComboboxItem>
+      <ComboboxItem value="ca">Canada</ComboboxItem>
+      <ComboboxItem value="mx">Mexico</ComboboxItem>
+    </ComboboxContent>
+  </Combobox>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "@/components/combobox"
+```
+
+### Trigger mode
+
+```tsx
+<Combobox>
+  <ComboboxTrigger aria-label="Country">
+    <ComboboxValue placeholder="Select a country" />
+  </ComboboxTrigger>
+  <ComboboxContent>
+    <ComboboxItem value="us">United States</ComboboxItem>
+    <ComboboxItem value="ca">Canada</ComboboxItem>
+  </ComboboxContent>
+</Combobox>
+```
+
+### Input mode
+
+```tsx
+<Combobox>
+  <ComboboxInput placeholder="Search countries..." />
+  <ComboboxContent>
+    <ComboboxItem value="us">United States</ComboboxItem>
+    <ComboboxItem value="ca">Canada</ComboboxItem>
+  </ComboboxContent>
+</Combobox>
+```
+
+## Examples
+
+### With filtering
+
+Base UI provides `useFilter` and `useFilteredItems` for client-side filtering.
+
+```tsx
+import { useFilter, useFilteredItems } from "@base-ui/react/combobox"
+
+function FilteredCombobox() {
+  const allItems = [
+    { value: "us", label: "United States" },
+    { value: "ca", label: "Canada" },
+    { value: "mx", label: "Mexico" },
+  ]
+
+  return (
+    <Combobox>
+      <ComboboxInput placeholder="Search..." />
+      <ComboboxContent>
+        <ComboboxList>
+          {allItems.map((item) => (
+            <ComboboxItem key={item.value} value={item.value}>
+              {item.label}
+            </ComboboxItem>
+          ))}
+        </ComboboxList>
+        <ComboboxEmpty>No results found.</ComboboxEmpty>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
+```
+
+### With groups and separator
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Combobox>
+    <ComboboxTrigger aria-label="Food">
+      <ComboboxValue placeholder="Pick a food" />
+    </ComboboxTrigger>
+    <ComboboxContent>
+      <ComboboxGroup>
+        <ComboboxLabel>Fruits</ComboboxLabel>
+        <ComboboxItem value="apple">Apple</ComboboxItem>
+        <ComboboxItem value="banana">Banana</ComboboxItem>
+      </ComboboxGroup>
+      <ComboboxSeparator />
+      <ComboboxGroup>
+        <ComboboxLabel>Vegetables</ComboboxLabel>
+        <ComboboxItem value="carrot">Carrot</ComboboxItem>
+        <ComboboxItem value="broccoli">Broccoli</ComboboxItem>
+      </ComboboxGroup>
+    </ComboboxContent>
+  </Combobox>
+</Box>
+
+```tsx
+<Combobox>
+  <ComboboxTrigger aria-label="Food">
+    <ComboboxValue placeholder="Pick a food" />
+  </ComboboxTrigger>
+  <ComboboxContent>
+    <ComboboxGroup>
+      <ComboboxLabel>Fruits</ComboboxLabel>
+      <ComboboxItem value="apple">Apple</ComboboxItem>
+      <ComboboxItem value="banana">Banana</ComboboxItem>
+    </ComboboxGroup>
+    <ComboboxSeparator />
+    <ComboboxGroup>
+      <ComboboxLabel>Vegetables</ComboboxLabel>
+      <ComboboxItem value="carrot">Carrot</ComboboxItem>
+      <ComboboxItem value="broccoli">Broccoli</ComboboxItem>
+    </ComboboxGroup>
+  </ComboboxContent>
+</Combobox>
+```
+
+### With chips (multi-select)
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Combobox>
+    <ComboboxChips>
+      <ComboboxChip value="apple">Apple</ComboboxChip>
+      <ComboboxChip value="banana">Banana</ComboboxChip>
+      <ComboboxChipsInput placeholder="Add fruit..." />
+    </ComboboxChips>
+    <ComboboxContent>
+      <ComboboxItem value="apple">Apple</ComboboxItem>
+      <ComboboxItem value="banana">Banana</ComboboxItem>
+      <ComboboxItem value="cherry">Cherry</ComboboxItem>
+    </ComboboxContent>
+  </Combobox>
+</Box>
+
+```tsx
+<Combobox>
+  <ComboboxChips>
+    <ComboboxChip value="apple">Apple</ComboboxChip>
+    <ComboboxChip value="banana">Banana</ComboboxChip>
+    <ComboboxChipsInput placeholder="Add fruit..." />
+  </ComboboxChips>
+  <ComboboxContent>
+    <ComboboxItem value="apple">Apple</ComboboxItem>
+    <ComboboxItem value="banana">Banana</ComboboxItem>
+    <ComboboxItem value="cherry">Cherry</ComboboxItem>
+  </ComboboxContent>
+</Combobox>
+```
+
+### With clear button
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Combobox>
+    <ComboboxInput showClear aria-label="Search" placeholder="Type to search..." />
+    <ComboboxContent>
+      <ComboboxItem value="a">Option A</ComboboxItem>
+      <ComboboxItem value="b">Option B</ComboboxItem>
+    </ComboboxContent>
+  </Combobox>
+</Box>
+
+```tsx
+<Combobox>
+  <ComboboxInput showClear placeholder="Type to search..." />
+  <ComboboxContent>
+    <ComboboxItem value="a">Option A</ComboboxItem>
+    <ComboboxItem value="b">Option B</ComboboxItem>
+  </ComboboxContent>
+</Combobox>
+```
+
+## Customization
+
+Combobox never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "100%" },
+})
+
+<Combobox>
+  <ComboboxTrigger aria-label="Full" sx={styles.wide}>
+    <ComboboxValue placeholder="Full width" />
+  </ComboboxTrigger>
+  <ComboboxContent>
+    <ComboboxItem value="a">Option A</ComboboxItem>
+  </ComboboxContent>
+</Combobox>
+```
+
+## API Reference
+
+`Combobox` (aliased from `ComboboxPrimitive.Root`) accepts all [Base UI Combobox
+Root props](https://base-ui.com/react/components/combobox).
+
+| Subcomponent            | Prop              | Type                                    | Default     |
+| ----------------------- | ----------------- | --------------------------------------- | ----------- |
+| `ComboboxTrigger`       | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxValue`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxClear`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxInput`         | `showTrigger`     | `boolean`                               | `true`      |
+|                         | `showClear`       | `boolean`                               | `false`     |
+|                         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxContent`       | `side`            | `"top" \| "bottom"`                     | `"bottom"`  |
+|                         | `sideOffset`      | `number`                                | `4`         |
+|                         | `align`           | `"start" \| "center" \| "end"`          | `"start"`   |
+|                         | `alignOffset`     | `number`                                | `0`         |
+|                         | `anchor`          | `React.RefObject<HTMLElement \| null>`  | —           |
+|                         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxList`          | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxItem`          | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxGroup`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxLabel`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxCollection`    | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxEmpty`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxSeparator`     | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxChips`         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxChip`          | `showRemove`      | `boolean`                               | `true`      |
+|                         | `sx`              | `StyleXStyles`                          | —           |
+| `ComboboxChipsInput`    | `sx`              | `StyleXStyles`                          | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

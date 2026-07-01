@@ -1,0 +1,153 @@
+---
+title: NativeSelect
+description: A native `<select>` element — styled with tokens, no JS-driven menu, with optional optgroup support.
+---
+
+# NativeSelect
+
+A styled native `<select>` element. Unlike the [Select](/docs/select) component
+(which renders a custom popover menu), `NativeSelect` uses the browser's built-in
+select behavior — lightweight, accessible by default, and zero JS for the
+dropdown. It comes with a custom chevron icon and two sizes.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <NativeSelect aria-label="Framework">
+    <NativeSelectOption value="react">React</NativeSelectOption>
+    <NativeSelectOption value="vue">Vue</NativeSelectOption>
+    <NativeSelectOption value="svelte">Svelte</NativeSelectOption>
+  </NativeSelect>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@/components/native-select"
+```
+
+```tsx
+<NativeSelect aria-label="Framework">
+  <NativeSelectOption value="react">React</NativeSelectOption>
+  <NativeSelectOption value="vue">Vue</NativeSelectOption>
+</NativeSelect>
+```
+
+## Examples
+
+### Sizes
+
+Two sizes: `default` and `sm`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <NativeSelect aria-label="Default size">
+    <NativeSelectOption>Default</NativeSelectOption>
+  </NativeSelect>
+  <NativeSelect aria-label="Small size" size="sm">
+    <NativeSelectOption>Small</NativeSelectOption>
+  </NativeSelect>
+</Box>
+
+```tsx
+<NativeSelect aria-label="Size">
+  <NativeSelectOption value="default">Default</NativeSelectOption>
+</NativeSelect>
+<NativeSelect aria-label="Size" size="sm">
+  <NativeSelectOption value="sm">Small</NativeSelectOption>
+</NativeSelect>
+```
+
+### With optgroup
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <NativeSelect aria-label="Food">
+    <NativeSelectOptGroup label="Fruits">
+      <NativeSelectOption value="apple">Apple</NativeSelectOption>
+      <NativeSelectOption value="banana">Banana</NativeSelectOption>
+    </NativeSelectOptGroup>
+    <NativeSelectOptGroup label="Vegetables">
+      <NativeSelectOption value="carrot">Carrot</NativeSelectOption>
+    </NativeSelectOptGroup>
+  </NativeSelect>
+</Box>
+
+```tsx
+<NativeSelect aria-label="Food">
+  <NativeSelectOptGroup label="Fruits">
+    <NativeSelectOption value="apple">Apple</NativeSelectOption>
+  </NativeSelectOptGroup>
+  <NativeSelectOptGroup label="Vegetables">
+    <NativeSelectOption value="carrot">Carrot</NativeSelectOption>
+  </NativeSelectOptGroup>
+</NativeSelect>
+```
+
+### Disabled
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <NativeSelect aria-label="Disabled" disabled>
+    <NativeSelectOption>Can't choose</NativeSelectOption>
+  </NativeSelect>
+</Box>
+
+```tsx
+<NativeSelect aria-label="Disabled" disabled>
+  <NativeSelectOption>Can't choose</NativeSelectOption>
+</NativeSelect>
+```
+
+## Customization
+
+`NativeSelect` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`size` prop** — the first-choice knob (above).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (border, background, ring color).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "16rem" },
+})
+
+<NativeSelect aria-label="Wide" sx={styles.wide}>
+  <NativeSelectOption value="a">Option</NativeSelectOption>
+</NativeSelect>
+```
+
+## API Reference
+
+### NativeSelect
+
+| Prop       | Type                       | Default     |
+| ---------- | -------------------------- | ----------- |
+| `size`     | `"default" \| "sm"`       | `"default"` |
+| `disabled` | `boolean`                  | —           |
+| `sx`       | `StyleXStyles`             | —           |
+
+All native `<select>` props (`value`, `onChange`, `name`, …) are forwarded.
+Renders a `<div data-slot="native-select-wrapper">` containing a
+`<select data-slot="native-select">` and a chevron icon.
+
+### NativeSelectOption
+
+| Prop       | Type       | Default |
+| ---------- | ---------- | ------- |
+| `value`    | `string`   | —       |
+
+All native `<option>` props are forwarded. Renders an
+`<option data-slot="native-select-option">`.
+
+### NativeSelectOptGroup
+
+| Prop    | Type       | Default |
+| ------- | ---------- | ------- |
+| `label` | `string`   | —       |
+
+All native `<optgroup>` props are forwarded. Renders an
+`<optgroup data-slot="native-select-optgroup">`.

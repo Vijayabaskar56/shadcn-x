@@ -9,12 +9,86 @@ import {
   ButtonGroupSeparator,
   ButtonGroupText,
 } from "@/components/button-group"
+import { Checkbox } from "@/components/checkbox"
+import {
+  Combobox,
+  ComboboxClear,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxCollection,
+  ComboboxEmpty,
+  ComboboxSeparator,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxInput,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "@/components/combobox"
 import { DirectionProvider } from "@/components/direction"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/field"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/form"
 import { Icon } from "@/components/icon"
 import { Image } from "@/components/image"
 import { Input } from "@/components/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/input-group"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/input-otp"
 import { Label } from "@/components/label"
 import { Link } from "@/components/link"
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@/components/native-select"
+import { RadioGroup, RadioGroupItem } from "@/components/radio-group"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/select"
+import { Slider } from "@/components/slider"
+import { Switch } from "@/components/switch"
 import {
   Table,
   TableBody,
@@ -27,6 +101,8 @@ import {
 } from "@/components/table"
 import { Text } from "@/components/text"
 import { Textarea } from "@/components/textarea"
+import { Toggle } from "@/components/toggle"
+import { ToggleGroup, ToggleGroupItem } from "@/components/toggle-group"
 
 import { borderRadius, colors, fontWeight } from "../../styles/tokens.stylex"
 
@@ -206,6 +282,68 @@ export const mdxComponents = {
   ButtonGroup,
   ButtonGroupText,
   ButtonGroupSeparator,
+  Checkbox,
+  Combobox,
+  ComboboxClear,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxGroup,
+  ComboboxLabel,
+  ComboboxCollection,
+  ComboboxEmpty,
+  ComboboxSeparator,
+  ComboboxChips,
+  ComboboxChip,
+  ComboboxChipsInput,
+  ComboboxInput,
+  ComboboxTrigger,
+  ComboboxValue,
+  DirectionProvider,
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+  RadioGroup,
+  RadioGroupItem,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  Slider,
+  Switch,
   Table,
   TableHeader,
   TableBody,
@@ -214,7 +352,9 @@ export const mdxComponents = {
   TableHead,
   TableCell,
   TableCaption,
-  DirectionProvider,
+  Toggle,
+  ToggleGroup,
+  ToggleGroupItem,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (

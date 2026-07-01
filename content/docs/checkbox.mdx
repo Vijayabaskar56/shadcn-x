@@ -1,0 +1,117 @@
+---
+title: Checkbox
+description: A control that allows the user to toggle between checked and unchecked states.
+---
+
+# Checkbox
+
+A checkbox built on the [Base UI](https://base-ui.com/react/components/checkbox) `Checkbox` primitive and styled with StyleX design tokens. Behavior and accessibility (including `role="checkbox"`, keyboard navigation, and ARIA attributes) come from Base UI; appearance maps 1:1 to shadcn's checkbox.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms">Accept terms and conditions</Label>
+</Box>
+
+## Usage
+
+```tsx
+import { Checkbox } from "@/components/checkbox"
+```
+
+```tsx
+<Checkbox defaultChecked />
+```
+
+## With label
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Checkbox id="newsletter" defaultChecked />
+  <Label htmlFor="newsletter">Subscribe to newsletter</Label>
+</Box>
+
+```tsx
+<Checkbox id="newsletter" defaultChecked />
+<Label htmlFor="newsletter">Subscribe to newsletter</Label>
+```
+
+## Disabled
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Box display="flex" alignItems="center" gap="m">
+    <Checkbox id="disabled-unchecked" disabled />
+    <Label htmlFor="disabled-unchecked">Unchecked and disabled</Label>
+  </Box>
+  <Box display="flex" alignItems="center" gap="m">
+    <Checkbox id="disabled-checked" disabled defaultChecked />
+    <Label htmlFor="disabled-checked">Checked and disabled</Label>
+  </Box>
+</Box>
+
+```tsx
+<Checkbox disabled />
+<Checkbox disabled defaultChecked />
+```
+
+## Controlled
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Checkbox checked readOnly />
+</Box>
+
+```tsx
+const [checked, setChecked] = React.useState(false)
+
+<Checkbox
+  checked={checked}
+  onCheckedChange={(v) => setChecked(v)}
+/>
+```
+
+## Invalid
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Checkbox id="invalid" aria-invalid />
+  <Label htmlFor="invalid">Required field</Label>
+</Box>
+
+```tsx
+<Checkbox aria-invalid />
+```
+
+## Customization
+
+`Checkbox` accepts no `className`. Customize it on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token *values*.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  large: { width: "1.5rem", height: "1.5rem" },
+})
+
+<Checkbox sx={styles.large} />
+```
+
+## API Reference
+
+### Checkbox
+
+| Prop               | Type                                      | Default   |
+| ------------------ | ----------------------------------------- | --------- |
+| `checked`          | `boolean`                                 | —         |
+| `defaultChecked`   | `boolean`                                 | `false`   |
+| `onCheckedChange`  | `(checked: boolean, details) => void`     | —         |
+| `disabled`         | `boolean`                                 | `false`   |
+| `required`         | `boolean`                                 | `false`   |
+| `name`             | `string`                                  | —         |
+| `aria-invalid`     | `boolean`                                 | `false`   |
+| `sx`               | `StyleXStyles`                            | —         |
+
+All other [Base UI checkbox props](https://base-ui.com/react/components/checkbox) (`readOnly`, `render`, `id`, …) are forwarded.
+
+> [!NOTE]
+> The `checked` visual style (primary background, primary foreground icon) is
+> applied synchronously in both controlled and uncontrolled modes.

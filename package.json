@@ -27,9 +27,11 @@
     "@tanstack/react-router": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "latest",
+    "input-otp": "^1.4.2",
     "lucide-react": "^1.22.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-hook-form": "^7.80.0",
     "shadcn": "^4.11.0"
   },
   "devDependencies": {

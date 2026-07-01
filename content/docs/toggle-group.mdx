@@ -1,0 +1,126 @@
+---
+title: ToggleGroup
+description: A group of toggle buttons — single or multiple selection, with optional spacing and edge-flattening.
+---
+
+# ToggleGroup
+
+A container for a group of toggle buttons. Behaves as a toolbar or segmented
+control — items inherit variant and size from the group, and edges flatten when
+spacing is zero for a contiguous look.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ToggleGroup>
+    <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+    <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+    <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+  </ToggleGroup>
+  <ToggleGroup spacing={2}>
+    <ToggleGroupItem value="left">Left</ToggleGroupItem>
+    <ToggleGroupItem value="center">Center</ToggleGroupItem>
+    <ToggleGroupItem value="right">Right</ToggleGroupItem>
+  </ToggleGroup>
+</Box>
+
+## Usage
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@/components/toggle-group"
+```
+
+```tsx
+<ToggleGroup>
+  <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+  <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## Examples
+
+### With spacing
+
+Setting `spacing` to a value greater than 0 adds gap between items while
+preserving their individual rounded corners.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ToggleGroup spacing={2}>
+    <ToggleGroupItem value="a">A</ToggleGroupItem>
+    <ToggleGroupItem value="b">B</ToggleGroupItem>
+    <ToggleGroupItem value="c">C</ToggleGroupItem>
+  </ToggleGroup>
+</Box>
+
+```tsx
+<ToggleGroup spacing={2}>
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+  <ToggleGroupItem value="c">C</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Outline variant
+
+Pass `variant` to the group to style all items consistently.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ToggleGroup variant="outline" spacing={0}>
+    <ToggleGroupItem value="a">A</ToggleGroupItem>
+    <ToggleGroupItem value="b">B</ToggleGroupItem>
+    <ToggleGroupItem value="c">C</ToggleGroupItem>
+  </ToggleGroup>
+</Box>
+
+```tsx
+<ToggleGroup variant="outline" spacing={0}>
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+  <ToggleGroupItem value="c">C</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Vertical orientation
+
+<Box display="flex" justifyContent="center" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ToggleGroup orientation="vertical">
+    <ToggleGroupItem value="top">Top</ToggleGroupItem>
+    <ToggleGroupItem value="middle">Middle</ToggleGroupItem>
+    <ToggleGroupItem value="bottom">Bottom</ToggleGroupItem>
+  </ToggleGroup>
+</Box>
+
+```tsx
+<ToggleGroup orientation="vertical">
+  <ToggleGroupItem value="top">Top</ToggleGroupItem>
+  <ToggleGroupItem value="middle">Middle</ToggleGroupItem>
+  <ToggleGroupItem value="bottom">Bottom</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## API Reference
+
+### ToggleGroup
+
+| Prop          | Type                                   | Default        |
+| ------------- | -------------------------------------- | -------------- |
+| `variant`     | `"default" \| "outline"`              | — (per-item)  |
+| `size`        | `"default" \| "sm" \| "lg"`           | — (per-item)  |
+| `spacing`     | `number`                               | `0`            |
+| `orientation` | `"horizontal" \| "vertical"`          | `"horizontal"` |
+| `sx`          | `StyleXStyles`                         | —              |
+
+All other [Base UI toggle group props](https://base-ui.com/react/components/toggle-group)
+are forwarded. Renders a `<div>` with `data-slot="toggle-group"`.
+
+### ToggleGroupItem
+
+| Prop               | Type                            | Default     |
+| ------------------ | ------------------------------- | ----------- |
+| `variant`          | `"default" \| "outline"`        | — (inherits) |
+| `size`             | `"default" \| "sm" \| "lg"`     | — (inherits) |
+| `pressed`          | `boolean`                       | —           |
+| `defaultPressed`   | `boolean`                       | `false`     |
+| `onPressedChange`  | `(pressed: boolean) => void`    | —           |
+| `disabled`         | `boolean`                       | —           |
+| `sx`               | `StyleXStyles`                  | —           |
+
+Every item renders a `<button>` with `data-slot="toggle-group-item"`.

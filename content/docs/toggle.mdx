@@ -1,0 +1,124 @@
+---
+title: Toggle
+description: A two-state toggle button — with typographic and variant control, built on Base UI and StyleX tokens.
+---
+
+# Toggle
+
+A toggle button that switches between pressed and unpressed states. Behavior and
+accessibility come from Base UI's `Toggle` primitive; appearance comes from a
+closed set of typed `variant` and `size` props. No `className`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toggle>B</Toggle>
+  <Toggle variant="outline">I</Toggle>
+  <Toggle pressed>U</Toggle>
+</Box>
+
+## Usage
+
+```tsx
+import { Toggle } from "@/components/toggle"
+```
+
+```tsx
+<Toggle>Bold</Toggle>
+```
+
+## Examples
+
+### Variants
+
+Two variants: `default` (transparent background, muted hover) and `outline`
+(bordered, with accent hover).
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toggle>Default</Toggle>
+  <Toggle variant="outline">Outline</Toggle>
+</Box>
+
+```tsx
+<Toggle>Default</Toggle>
+<Toggle variant="outline">Outline</Toggle>
+```
+
+### Sizes
+
+Three sizes: `sm`, `default`, and `lg`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toggle size="sm">Small</Toggle>
+  <Toggle size="default">Default</Toggle>
+  <Toggle size="lg">Large</Toggle>
+</Box>
+
+```tsx
+<Toggle size="sm">Small</Toggle>
+<Toggle size="default">Default</Toggle>
+<Toggle size="lg">Large</Toggle>
+```
+
+### Controlled
+
+Use `pressed` and `onPressedChange` for controlled state.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toggle pressed>Pressed</Toggle>
+</Box>
+
+```tsx
+const [pressed, setPressed] = useState(false)
+
+<Toggle pressed={pressed} onPressedChange={setPressed}>
+  Toggle
+</Toggle>
+```
+
+### Disabled
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toggle disabled>Can't toggle</Toggle>
+</Box>
+
+```tsx
+<Toggle disabled>Can't toggle</Toggle>
+```
+
+## Customization
+
+`Toggle` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`variant` / `size` props** — the first-choice knobs (above).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*,
+   without touching the component.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "6rem" },
+})
+
+<Toggle sx={styles.wide}>Wide toggle</Toggle>
+```
+
+## API Reference
+
+| Prop               | Type                            | Default     |
+| ------------------ | ------------------------------- | ----------- |
+| `variant`          | `"default" \| "outline"`        | `"default"` |
+| `size`             | `"default" \| "sm" \| "lg"`     | `"default"` |
+| `pressed`          | `boolean`                       | —           |
+| `defaultPressed`   | `boolean`                       | `false`     |
+| `onPressedChange`  | `(pressed: boolean) => void`    | —           |
+| `disabled`         | `boolean`                       | —           |
+| `sx`               | `StyleXStyles`                  | —           |
+
+All other [Base UI toggle props](https://base-ui.com/react/components/toggle)
+are forwarded. Renders a `<button>` with `data-slot="toggle"`.
+
+> [!NOTE]
+> `Toggle` retires the raw `<button>` for toggle use — the `no-raw-html`
+> guardrail now points toggle buttons at `Toggle`.

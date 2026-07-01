@@ -1,0 +1,101 @@
+---
+title: Switch
+description: A toggle switch — an on/off control with a movable thumb, built on Base UI and StyleX tokens.
+---
+
+# Switch
+
+A toggle switch for binary settings (on/off). Behavior and accessibility come
+from Base UI's `Switch` primitive; appearance is styled 1:1 like shadcn's
+switch with two sizes and controlled/uncontrolled state. No `className`.
+
+<Box display="flex" alignItems="center" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Switch aria-label="Airplane mode" />
+  <Switch aria-label="Notifications" defaultChecked />
+  <Switch aria-label="Dark mode" size="sm" />
+</Box>
+
+## Usage
+
+```tsx
+import { Switch } from "@/components/switch"
+```
+
+```tsx
+<Switch aria-label="Notifications" />
+```
+
+Pair with a `Label` for an accessible field (associate via `htmlFor`/`id`).
+
+## Examples
+
+### Sizes
+
+Two sizes: `default` and `sm`.
+
+<Box display="flex" alignItems="center" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Switch aria-label="Default" />
+  <Switch aria-label="Small" size="sm" />
+</Box>
+
+```tsx
+<Switch aria-label="Notifications" />
+<Switch aria-label="Small" size="sm" />
+```
+
+### Controlled
+
+Use `checked` and `onCheckedChange` for controlled state.
+
+```tsx
+const [enabled, setEnabled] = useState(false)
+
+<Switch checked={enabled} onCheckedChange={setEnabled} />
+```
+
+### Disabled
+
+<Box display="flex" alignItems="center" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Switch aria-label="Disabled" disabled />
+  <Switch aria-label="Disabled checked" disabled defaultChecked />
+</Box>
+
+```tsx
+<Switch aria-label="Disabled" disabled />
+<Switch aria-label="Disabled checked" disabled defaultChecked />
+```
+
+## Customization
+
+`Switch` accepts no `className`. Customize it on-system, in order of reach:
+
+1. **`size` prop** — the first-choice knob (above).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (radius, background, ring color).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tall: { height: "1.5rem" },
+})
+
+<Switch aria-label="Tall" sx={styles.tall} />
+```
+
+## API Reference
+
+| Prop              | Type                              | Default     |
+| ----------------- | --------------------------------- | ----------- |
+| `size`            | `"default" \| "sm"`              | `"default"` |
+| `checked`         | `boolean`                         | —           |
+| `defaultChecked`  | `boolean`                         | `false`     |
+| `onCheckedChange` | `(checked: boolean) => void`      | —           |
+| `disabled`        | `boolean`                         | —           |
+| `sx`              | `StyleXStyles`                    | —           |
+
+All other [Base UI switch props](https://base-ui.com/react/components/switch)
+are forwarded. Renders a `<button>` with `data-slot="switch"` containing a
+`<span>` with `data-slot="switch-thumb"`.

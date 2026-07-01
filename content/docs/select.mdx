@@ -1,0 +1,228 @@
+---
+title: Select
+description: Displays a list of options for the user to pick from.
+---
+
+# Select
+
+A dropdown select built on the [Base UI](https://base-ui.com) select primitive
+and styled with StyleX design tokens. Behavior and accessibility come from Base
+UI; appearance comes from a closed set of typed `size` and `sx` props.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Select>
+    <SelectTrigger aria-label="Fruit">
+      <SelectValue placeholder="Select a fruit" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectLabel>Fruits</SelectLabel>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+        <SelectItem value="cherry">Cherry</SelectItem>
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/select"
+```
+
+```tsx
+<Select>
+  <SelectTrigger aria-label="Fruit">
+    <SelectValue placeholder="Select a fruit" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Fruits</SelectLabel>
+      <SelectItem value="apple">Apple</SelectItem>
+      <SelectItem value="banana">Banana</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+## Examples
+
+### Sizes
+
+Use the `size` prop on `SelectTrigger` to control the trigger height.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Select>
+    <SelectTrigger aria-label="Default" size="default">
+      <SelectValue placeholder="Default" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="a">Option A</SelectItem>
+    </SelectContent>
+  </Select>
+  <Select>
+    <SelectTrigger aria-label="Small" size="sm">
+      <SelectValue placeholder="Small" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="a">Option A</SelectItem>
+    </SelectContent>
+  </Select>
+</Box>
+
+```tsx
+<Select>
+  <SelectTrigger aria-label="Default" size="default">
+    <SelectValue placeholder="Default" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="a">Option A</SelectItem>
+  </SelectContent>
+</Select>
+<Select>
+  <SelectTrigger aria-label="Small" size="sm">
+    <SelectValue placeholder="Small" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="a">Option A</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+### With groups and separator
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Select>
+    <SelectTrigger aria-label="Grouped">
+      <SelectValue placeholder="Pick a fruit or vegetable" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectLabel>Fruits</SelectLabel>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+      </SelectGroup>
+      <SelectSeparator />
+      <SelectGroup>
+        <SelectLabel>Vegetables</SelectLabel>
+        <SelectItem value="carrot">Carrot</SelectItem>
+        <SelectItem value="broccoli">Broccoli</SelectItem>
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+</Box>
+
+```tsx
+<Select>
+  <SelectTrigger aria-label="Grouped">
+    <SelectValue placeholder="Pick a fruit or vegetable" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Fruits</SelectLabel>
+      <SelectItem value="apple">Apple</SelectItem>
+      <SelectItem value="banana">Banana</SelectItem>
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectGroup>
+      <SelectLabel>Vegetables</SelectLabel>
+      <SelectItem value="carrot">Carrot</SelectItem>
+      <SelectItem value="broccoli">Broccoli</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+### Scroll buttons
+
+Long lists get scroll-up and scroll-down arrow buttons automatically.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Select>
+    <SelectTrigger aria-label="Many options">
+      <SelectValue placeholder="Pick a number" />
+    </SelectTrigger>
+    <SelectContent>
+      {Array.from({ length: 20 }, (_, i) => (
+        <SelectItem key={i} value={String(i + 1)}>
+          Option {i + 1}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</Box>
+
+```tsx
+<Select>
+  <SelectTrigger aria-label="Many options">
+    <SelectValue placeholder="Pick a number" />
+  </SelectTrigger>
+  <SelectContent>
+    {Array.from({ length: 20 }, (_, i) => (
+      <SelectItem key={i} value={String(i + 1)}>
+        Option {i + 1}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+## Customization
+
+`Select` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`size` prop** on `SelectTrigger` — controls trigger height.
+2. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "100%" },
+})
+
+<Select>
+  <SelectTrigger aria-label="Full" sx={styles.wide}>
+    <SelectValue placeholder="Full width" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="a">Option A</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## API Reference
+
+`Select` (aliased from `SelectPrimitive.Root`) accepts all [Base UI Select Root
+props](https://base-ui.com/react/components/select).
+
+| Subcomponent            | Prop              | Type                            | Default     |
+| ----------------------- | ----------------- | ------------------------------- | ----------- |
+| `SelectTrigger`         | `size`            | `"default" \| "sm"`             | `"default"` |
+|                         | `sx`              | `StyleXStyles`                  | —           |
+| `SelectValue`           | `sx`              | `StyleXStyles`                  | —           |
+| `SelectContent`         | `side`            | `"top" \| "bottom"`             | `"bottom"`  |
+|                         | `sideOffset`      | `number`                        | `4`         |
+|                         | `align`           | `"start" \| "center" \| "end"`  | `"center"`  |
+|                         | `alignOffset`     | `number`                        | `0`         |
+|                         | `sx`              | `StyleXStyles`                  | —           |
+| `SelectItem`            | `sx`              | `StyleXStyles`                  | —           |
+| `SelectGroup`           | `sx`              | `StyleXStyles`                  | —           |
+| `SelectLabel`           | `sx`              | `StyleXStyles`                  | —           |
+| `SelectSeparator`       | `sx`              | `StyleXStyles`                  | —           |
+| `SelectScrollUpButton`  | `sx`              | `StyleXStyles`                  | —           |
+| `SelectScrollDownButton`| `sx`              | `StyleXStyles`                  | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

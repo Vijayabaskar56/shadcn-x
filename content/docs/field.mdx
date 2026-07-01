@@ -1,0 +1,184 @@
+---
+title: Field
+description: A set of components for building accessible form fields — label, description, error, grouping, and layout.
+---
+
+# Field
+
+A collection of structural components for building form fields. No Base UI
+primitive — each subcomponent is a semantic HTML element (or reuses an existing
+shadcn-x component like `Label`). Inspired by the Base UI variant's field
+conventions.
+
+## Subcomponents
+
+| Component          | HTML Element     | Slot                          |
+| ------------------ | ---------------- | ----------------------------- |
+| `Field`            | `div`            | `field`                       |
+| `FieldSet`         | `fieldset`       | `field-set`                   |
+| `FieldLegend`      | `legend`         | `field-legend`                |
+| `FieldGroup`       | `div`            | `field-group`                 |
+| `FieldContent`     | `div`            | `field-content`               |
+| `FieldLabel`       | `label`          | `field-label`                 |
+| `FieldTitle`       | `div`            | `field-title`                 |
+| `FieldDescription` | `p`              | `field-description`           |
+| `FieldSeparator`   | `div`            | `field-separator` / `field-separator-content` |
+| `FieldError`       | `div`            | `field-error`                 |
+
+## Usage
+
+```tsx
+import { Field, FieldLabel, FieldContent, FieldDescription, FieldError } from "@/components/field"
+```
+
+### Basic inline field
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Field>
+    <FieldLabel htmlFor="email">Email</FieldLabel>
+    <FieldContent>
+      <Input id="email" type="email" placeholder="you@example.com" />
+      <FieldDescription>We'll never share your email.</FieldDescription>
+    </FieldContent>
+  </Field>
+</Box>
+
+```tsx
+<Field>
+  <FieldLabel htmlFor="email">Email</FieldLabel>
+  <FieldContent>
+    <Input id="email" type="email" placeholder="you@example.com" />
+    <FieldDescription>We'll never share your email.</FieldDescription>
+  </FieldContent>
+</Field>
+```
+
+### Horizontal orientation
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Field orientation="horizontal">
+    <FieldLabel htmlFor="name">Full name</FieldLabel>
+    <FieldContent>
+      <Input id="name" placeholder="Ada Lovelace" />
+    </FieldContent>
+  </Field>
+</Box>
+
+```tsx
+<Field orientation="horizontal">
+  <FieldLabel htmlFor="name">Full name</FieldLabel>
+  <FieldContent>
+    <Input id="name" placeholder="Ada Lovelace" />
+  </FieldContent>
+</Field>
+```
+
+### With error
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Field>
+    <FieldLabel htmlFor="code">Promo code</FieldLabel>
+    <FieldContent>
+      <Input id="code" aria-invalid placeholder="Enter code" />
+      <FieldError>This code is invalid or expired.</FieldError>
+    </FieldContent>
+  </Field>
+</Box>
+
+```tsx
+<Field>
+  <FieldLabel htmlFor="code">Promo code</FieldLabel>
+  <FieldContent>
+    <Input id="code" aria-invalid placeholder="Enter code" />
+    <FieldError>This code is invalid or expired.</FieldError>
+  </FieldContent>
+</Field>
+```
+
+### FieldSet / FieldLegend
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <FieldSet>
+    <FieldLegend>Notifications</FieldLegend>
+    <FieldGroup>
+      <Field orientation="horizontal">
+        <Checkbox id="email-notif" defaultChecked />
+        <FieldLabel htmlFor="email-notif">Email notifications</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="sms-notif" />
+        <FieldLabel htmlFor="sms-notif">SMS notifications</FieldLabel>
+      </Field>
+    </FieldGroup>
+  </FieldSet>
+</Box>
+
+```tsx
+<FieldSet>
+  <FieldLegend>Notifications</FieldLegend>
+  <FieldGroup>
+    <Field orientation="horizontal">
+      <Checkbox id="email-notif" defaultChecked />
+      <FieldLabel htmlFor="email-notif">Email notifications</FieldLabel>
+    </Field>
+    <Field orientation="horizontal">
+      <Checkbox id="sms-notif" />
+      <FieldLabel htmlFor="sms-notif">SMS notifications</FieldLabel>
+    </Field>
+  </FieldGroup>
+</FieldSet>
+```
+
+### Separator
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Field>
+    <FieldLabel htmlFor="email-alt">Alternate email</FieldLabel>
+    <Input id="email-alt" type="email" />
+  </Field>
+  <FieldSeparator>or</FieldSeparator>
+  <Field>
+    <FieldLabel htmlFor="phone">Phone number</FieldLabel>
+    <Input id="phone" type="tel" />
+  </Field>
+</Box>
+
+```tsx
+<FieldSeparator>or</FieldSeparator>
+```
+
+### Error from validation array
+
+```tsx
+<Field errors={[{ message: "Required" }, { message: "Too short" }]} />
+```
+
+Renders deduplicated error messages. Single errors render inline; multiple errors
+render as a list.
+
+## API Reference
+
+### Field
+
+| Prop          | Type                  | Default      |
+| ------------- | --------------------- | ------------ |
+| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` |
+| `sx`          | `StyleXStyles`        | —            |
+
+All forwarded `<div>` props are accepted.
+
+### FieldError
+
+| Prop       | Type                                  | Default |
+| ---------- | ------------------------------------- | ------- |
+| `children` | `React.ReactNode`                     | —       |
+| `errors`   | `Array<{ message?: string } \| undefined>` | —   |
+| `sx`       | `StyleXStyles`                        | —       |
+
+If `children` is provided, it renders as-is. Otherwise renders from `errors`.
+
+### Other subcomponents
+
+`FieldLabel`, `FieldSet`, `FieldLegend`, `FieldGroup`, `FieldContent`,
+`FieldTitle`, `FieldDescription`, and `FieldSeparator` all accept standard HTML
+props and `sx`.

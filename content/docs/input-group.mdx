@@ -1,0 +1,152 @@
+---
+title: InputGroup
+description: Compose Input or Textarea with addons, buttons, and text to form input groups.
+---
+
+# InputGroup
+
+A set of components for composing `Input` or `Textarea` with surrounding addons,
+buttons, and text — commonly used for search bars, currency fields, icon
+prefixes, and compound form controls.
+
+All components use existing shadcn-x primitives (`Input`, `Textarea`, `Button`)
+under the hood.
+
+## Subcomponents
+
+| Component              | Delegates to | Slot                            |
+| ---------------------- | ------------ | ------------------------------- |
+| `InputGroup`           | `div`        | `input-group`                   |
+| `InputGroupAddon`      | `div`        | `input-group-addon`             |
+| `InputGroupButton`     | `Button`     | `button` (inherited)            |
+| `InputGroupText`       | `span`       | `input-group-text`              |
+| `InputGroupInput`      | `Input`      | `input-group-control`           |
+| `InputGroupTextarea`   | `Textarea`   | `input-group-control`           |
+
+## Usage
+
+```tsx
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/input-group"
+```
+
+### With addon
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputGroup>
+    <InputGroupAddon>
+      <InputGroupText>$</InputGroupText>
+    </InputGroupAddon>
+    <InputGroupInput type="number" placeholder="Amount" />
+    <InputGroupAddon align="inline-end">
+      <InputGroupText>USD</InputGroupText>
+    </InputGroupAddon>
+  </InputGroup>
+</Box>
+
+```tsx
+<InputGroup>
+  <InputGroupAddon>
+    <InputGroupText>$</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput type="number" placeholder="Amount" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupText>USD</InputGroupText>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+### With button
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputGroup>
+    <InputGroupInput placeholder="Search…" />
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton>Search</InputGroupButton>
+    </InputGroupAddon>
+  </InputGroup>
+</Box>
+
+```tsx
+<InputGroup>
+  <InputGroupInput placeholder="Search…" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton>Search</InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+### With icon
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputGroup>
+    <InputGroupAddon>
+      <Icon name="Search" />
+    </InputGroupAddon>
+    <InputGroupInput placeholder="Search…" />
+  </InputGroup>
+</Box>
+
+```tsx
+<InputGroup>
+  <InputGroupAddon>
+    <Icon name="Search" />
+  </InputGroupAddon>
+  <InputGroupInput placeholder="Search…" />
+</InputGroup>
+```
+
+### Textarea
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputGroup>
+    <InputGroupTextarea placeholder="Write a comment…" />
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton>Send</InputGroupButton>
+    </InputGroupAddon>
+  </InputGroup>
+</Box>
+
+```tsx
+<InputGroup>
+  <InputGroupTextarea placeholder="Write a comment…" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton>Send</InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+## API Reference
+
+### InputGroup
+
+| Prop | Type         | Default |
+| ---- | ------------ | ------- |
+| `sx` | `StyleXStyles` | —       |
+
+All forwarded `<div>` props accepted.
+
+### InputGroupAddon
+
+| Prop    | Type                                                             | Default          |
+| ------- | ---------------------------------------------------------------- | ---------------- |
+| `align` | `"inline-start" \| "inline-end" \| "block-start" \| "block-end"` | `"inline-start"` |
+| `sx`    | `StyleXStyles`                                                     | —                |
+
+### InputGroupButton
+
+| Prop      | Type                               | Default   |
+| --------- | ---------------------------------- | --------- |
+| `type`    | `"button" \| "submit" \| "reset"`  | `"button"` |
+| `variant` | Button variants                    | `"ghost"` |
+| `size`    | `"xs" \| "sm" \| "icon-xs" \| "icon-sm"` | `"xs"`   |
+| `sx`      | `StyleXStyles`                     | —         |
+
+### InputGroupInput, InputGroupTextarea
+
+Forward all props from `Input` / `Textarea` respectively, plus `sx`.

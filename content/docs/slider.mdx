@@ -1,0 +1,126 @@
+---
+title: Slider
+description: A range slider for numeric input — shadcn's slider, ported to StyleX tokens.
+---
+
+# Slider
+
+A range slider for numeric input, built on Base UI's `Slider` primitive.
+Behavior and a11y come from Base UI (keyboard navigation, touch support, form
+integration), styled 1:1 like shadcn's slider — same track, range indicator,
+thumb, and disabled state — built from StyleX tokens.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Slider defaultValue={40} aria-label="Volume" />
+</Box>
+
+## Usage
+
+```tsx
+import { Slider } from "@/components/slider"
+```
+
+```tsx
+<Slider defaultValue={40} aria-label="Volume" />
+```
+
+## Range
+
+Pass an array of two values to render a range slider with two thumbs.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Slider defaultValue={[25, 75]} aria-label="Price range" />
+</Box>
+
+```tsx
+<Slider defaultValue={[25, 75]} aria-label="Price range" />
+```
+
+## Min / Max
+
+Set `min` and `max` to limit the slider's range. Defaults are `0` and `100`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Slider defaultValue={50} min={0} max={200} aria-label="Custom range" />
+</Box>
+
+```tsx
+<Slider defaultValue={50} min={0} max={200} />
+```
+
+## Step
+
+Use `step` to snap to discrete values.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Slider defaultValue={50} step={10} aria-label="Stepped" />
+</Box>
+
+```tsx
+<Slider defaultValue={50} step={10} />
+```
+
+## Controlled
+
+Use `value` / `onValueChange` for controlled state.
+
+```tsx
+import { useState } from "react"
+
+function Brightness() {
+  const [value, setValue] = useState(50)
+  return (
+    <Slider
+      value={value}
+      onValueChange={(v) => setValue(v)}
+      aria-label="Brightness"
+    />
+  )
+}
+```
+
+## Disabled
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Slider defaultValue={40} disabled aria-label="Locked" />
+</Box>
+
+```tsx
+<Slider defaultValue={40} disabled />
+```
+
+## Customization
+
+`Slider` accepts no `className`. Customize it on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token values.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  thick: { height: "0.75rem" },
+})
+
+<Slider sx={styles.thick} defaultValue={50} />
+```
+
+## API Reference
+
+| Prop               | Type                                                       | Default     |
+| ------------------ | ---------------------------------------------------------- | ----------- |
+| `value`            | `number \| number[]`                                       | —           |
+| `defaultValue`     | `number \| number[]`                                       | —           |
+| `min`              | `number`                                                   | `0`         |
+| `max`              | `number`                                                   | `100`       |
+| `step`             | `number`                                                   | `1`         |
+| `disabled`         | `boolean`                                                  | `false`     |
+| `orientation`      | `"horizontal" \| "vertical"`                               | `"horizontal"` |
+| `thumbAlignment`   | `"center" \| "edge" \| "edge-client-only"`                 | `"edge"`    |
+| `onValueChange`    | `(value, eventDetails) => void`                            | —           |
+| `onValueCommitted` | `(value, eventDetails) => void`                            | —           |
+| `sx`               | `StyleXStyles`                                             | —           |
+
+All other Base UI `Slider.Root` props are forwarded. Renders a `<div>` with
+`data-slot="slider"`, containing sub-slots for control, track, range, and thumb.

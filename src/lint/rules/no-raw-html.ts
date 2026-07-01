@@ -52,6 +52,12 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   svg: "Icon",
   textarea: "Textarea",
   input: "Input",
+  select: "NativeSelect",
+  option: "NativeSelectOption",
+  optgroup: "NativeSelectOptGroup",
+  form: "Form",
+  fieldset: "FieldSet",
+  legend: "FieldLegend",
 }
 
 export const noRawHtml = defineRule({

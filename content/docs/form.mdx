@@ -1,0 +1,253 @@
+---
+title: Form
+description: A form wrapper that integrates react-hook-form with styled components.
+---
+
+# Form
+
+A **react-hook-form** integration wrapper — bridges `FormProvider`, `Controller`,
+and form field state (`error`, `isDirty`, …) into the on-system component model
+so every form field is wired with correct `aria-*` attributes, accessible labels,
+and validation feedback — no ad-hoc wiring.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary" maxWidth="sm">
+
+  <FormItem>
+    <FormLabel>Email</FormLabel>
+    <FormControl><Input type="email" placeholder="you@example.com" /></FormControl>
+    <FormDescription>We'll never share your email.</FormDescription>
+  </FormItem>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "@/components/form"
+import { Input } from "@/components/input"
+```
+
+Wrap a `useForm` instance in `<Form>` and compose fields with `FormField` +
+`FormItem`:
+
+```tsx
+function MyForm() {
+  const form = useForm({
+    defaultValues: { email: "" },
+  })
+
+  function onSubmit(data: { email: string }) {
+    console.log(data)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} type="email" placeholder="you@example.com" />
+              </FormControl>
+              <FormDescription>
+                We'll never share your email.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  )
+}
+```
+
+### Form + FormField
+
+`Form` is `FormProvider` from react-hook-form — pass your `useForm()` return
+value. `FormField` wraps `Controller` and provides context so descendent
+components can read field state (error, dirty, touched, etc.).
+
+### FormItem
+
+The vertical layout wrapper for a single field. Provides an auto-generated `id`
+(via `React.useId`) that connects `FormLabel` → `FormControl` through
+`htmlFor`/`id`.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <FormItem>
+    <FormLabel>Username</FormLabel>
+    <FormControl><Input placeholder="Ada Lovelace" /></FormControl>
+  </FormItem>
+
+</Box>
+
+```tsx
+<FormItem>
+  <FormLabel>Username</FormLabel>
+  <FormControl><Input placeholder="Ada Lovelace" /></FormControl>
+</FormItem>
+```
+
+### FormLabel
+
+Renders a styled `<label>` linked to the field control via `htmlFor`. When the
+field has a validation error, `data-error="true"` is set and text color turns
+destructive.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <FormItem>
+    <FormLabel>Password</FormLabel>
+    <FormControl><Input type="password" placeholder="••••••••" /></FormControl>
+    <FormMessage>Password is required</FormMessage>
+  </FormItem>
+
+</Box>
+
+```tsx
+<FormItem>
+  <FormLabel>Password</FormLabel>
+  <FormControl><Input type="password" placeholder="••••••••" /></FormControl>
+  <FormMessage>Password is required</FormMessage>
+</FormItem>
+```
+
+### FormControl
+
+Wraps the field's control (Input, Select, etc.) in a `Box` that injects
+`aria-describedby` (linking to description and/or message) and
+`aria-invalid` — so accessibility is handled automatically.
+
+```tsx
+<FormControl>
+  <Input {...field} />
+</FormControl>
+```
+
+### FormDescription
+
+Renders a `<p>` with muted-foreground styling. Its `id` is connected to the control's
+`aria-describedby`.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <FormItem>
+    <FormLabel>Bio</FormLabel>
+    <FormControl><Input placeholder="Tell us about yourself" /></FormControl>
+    <FormDescription>Max 160 characters.</FormDescription>
+  </FormItem>
+
+</Box>
+
+```tsx
+<FormItem>
+  <FormLabel>Bio</FormLabel>
+  <FormControl><Input placeholder="Tell us about yourself" /></FormControl>
+  <FormDescription>Max 160 characters.</FormDescription>
+</FormItem>
+```
+
+### FormMessage
+
+Renders the field-level error message from react-hook-form state. Hidden when
+there is no error. When present, its `id` is appended to the control's
+`aria-describedby` so assistive tech reads it.
+
+```tsx
+<FormMessage />
+{/* When error is set: renders <p data-slot="form-message">Error text</p> */}
+```
+
+### useFormField
+
+A hook that reads `FormFieldContext` + `FormItemContext` and returns:
+
+```tsx
+const {
+  id,                  // auto-generated item id
+  name,                // field name from FormField
+  formItemId,          // `${id}-form-item`
+  formDescriptionId,   // `${id}-form-item-description`
+  formMessageId,       // `${id}-form-item-message`
+  error,               // FieldError | undefined
+  isDirty,             // boolean
+  isTouched,           // boolean
+  invalid,             // boolean
+  // ...all field state from react-hook-form
+} = useFormField()
+```
+
+Throws if called outside a `<FormField>`.
+
+## API Reference
+
+### Form
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `...form` | `UseFormReturn` | Spread the return value of `useForm()`. |
+
+### FormField
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `name` | `FieldPath<TFieldValues>` | Field name. |
+| `rules` | `Rules` | Validation rules for react-hook-form. |
+| `render` | `ControllerRender` | Render function receiving `{ field, fieldState, formState }`. |
+
+Accepts all [`Controller` props](https://react-hook-form.com/api/usecontroller).
+
+### FormItem
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `sx` | `StyleXStyles` | — |
+
+### FormLabel
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `sx` | `StyleXStyles` | — |
+
+All native `<label>` props are forwarded.
+
+### FormControl
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+
+### FormDescription
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `sx` | `StyleXStyles` | — |
+
+All native `<p>` props are forwarded.
+
+### FormMessage
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `sx` | `StyleXStyles` | — |
+
+All native `<p>` props are forwarded. Renders nothing when there is no error.
+
+> [!NOTE]
+> Because every subcomponent carries a `data-slot` attribute and sets
+> `aria-describedby` / `aria-invalid` / `htmlFor` automatically, an agent
+> building a form lands on an accessible, styled, validated form — no wiring
+> required.

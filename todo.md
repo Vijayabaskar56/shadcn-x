@@ -38,22 +38,22 @@ These drive raw-HTML usage toward zero. Build first.
 - [x] Icon (shadcn-x) ⬛ `svg` (library-agnostic: lucide default, createIcon for BYO)
 - [x] Table ⬛ `table`/`thead`/`tbody`/`tr`/`th`/`td`/`caption`
 
-## Phase 1 — Core form &amp; input
+## Phase 1 — Core form &amp; input ✅
 
-- [ ] Field
-- [ ] Form
-- [ ] Checkbox
-- [ ] Radio Group
-- [ ] Switch
-- [ ] Slider
-- [ ] Select
-- [ ] Native Select
-- [ ] Toggle
-- [ ] Toggle Group
+- [x] Field ⬛ `fieldset`, `legend`
+- [x] Form ⬛ `form`
+- [x] Checkbox
+- [x] Radio Group
+- [x] Switch
+- [x] Slider
+- [x] Select
+- [x] Native Select ⬛ `select`, `option`, `optgroup`
+- [x] Toggle
+- [x] Toggle Group
 - [x] Button Group
-- [ ] Input OTP
-- [ ] Input Group
-- [ ] Combobox
+- [x] Input OTP
+- [x] Input Group
+- [x] Combobox
 
 ## Phase 2 — Overlays &amp; menus (Base UI behavior)
 

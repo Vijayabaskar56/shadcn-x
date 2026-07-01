@@ -1,0 +1,152 @@
+---
+title: InputOTP
+description: A one-time password input built on input-otp, styled with StyleX tokens.
+---
+
+# InputOTP
+
+A one-time password (OTP) input built on the [`input-otp`](https://input-otp.vercel.app) package. Provides a secure, accessible OTP input with individual character slots, fake caret animation, and clipboard paste support.
+
+<Box display="flex" justifyContent="center" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputOTP maxLength={6}>
+    <InputOTPGroup>
+      <InputOTPSlot index={0} />
+      <InputOTPSlot index={1} />
+      <InputOTPSlot index={2} />
+    </InputOTPGroup>
+    <InputOTPSeparator />
+    <InputOTPGroup>
+      <InputOTPSlot index={3} />
+      <InputOTPSlot index={4} />
+      <InputOTPSlot index={5} />
+    </InputOTPGroup>
+  </InputOTP>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/input-otp"
+```
+
+```tsx
+<InputOTP maxLength={6} onChange={(value) => console.log(value)}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>
+```
+
+### Grouped with separator
+
+<Box display="flex" justifyContent="center" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputOTP maxLength={6}>
+    <InputOTPGroup>
+      <InputOTPSlot index={0} />
+      <InputOTPSlot index={1} />
+      <InputOTPSlot index={2} />
+    </InputOTPGroup>
+    <InputOTPSeparator />
+    <InputOTPGroup>
+      <InputOTPSlot index={3} />
+      <InputOTPSlot index={4} />
+      <InputOTPSlot index={5} />
+    </InputOTPGroup>
+  </InputOTP>
+</Box>
+
+```tsx
+<InputOTP maxLength={6}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+  </InputOTPGroup>
+  <InputOTPSeparator />
+  <InputOTPGroup>
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>
+```
+
+### Disabled
+
+<Box display="flex" justifyContent="center" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <InputOTP maxLength={4} disabled>
+    <InputOTPGroup>
+      <InputOTPSlot index={0} />
+      <InputOTPSlot index={1} />
+      <InputOTPSlot index={2} />
+      <InputOTPSlot index={3} />
+    </InputOTPGroup>
+  </InputOTP>
+</Box>
+
+```tsx
+<InputOTP maxLength={4} disabled>
+  ...
+</InputOTP>
+```
+
+### With pattern validation
+
+Use the built-in regex patterns from `input-otp`:
+
+```tsx
+import { REGEXP_ONLY_DIGITS } from "input-otp"
+
+<InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS}>
+  ...
+</InputOTP>
+```
+
+## Customization
+
+`InputOTP` accepts no `className`. Customize via `sx` (applied to the container)
+or `createTheme`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tight: { gap: "0.25rem" },
+})
+
+<InputOTP sx={styles.tight}>...</InputOTP>
+```
+
+## API Reference
+
+### InputOTP
+
+| Prop               | Type                         | Default |
+| ------------------ | ---------------------------- | ------- |
+| `maxLength`        | `number`                     | —       |
+| `value`            | `string`                     | —       |
+| `onChange`         | `(value: string) => void`    | —       |
+| `onComplete`       | `() => void`                 | —       |
+| `disabled`         | `boolean`                    | —       |
+| `pattern`          | `RegExp`                     | —       |
+| `sx`               | `StyleXStyles`               | —       |
+
+### InputOTPSlot
+
+| Prop    | Type     | Default |
+| ------- | -------- | ------- |
+| `index` | `number` | —       |
+
+### InputOTPGroup, InputOTPSeparator
+
+Accept standard HTML props and `sx`.

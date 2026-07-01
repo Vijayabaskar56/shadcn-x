@@ -1,0 +1,142 @@
+---
+title: RadioGroup
+description: A set of mutually exclusive radio buttons — shadcn's radio group, ported to StyleX tokens.
+---
+
+# RadioGroup
+
+A set of mutually exclusive radio buttons, built on Base UI's `RadioGroup` and
+`Radio` primitives. Behavior and a11y come from Base UI (keyboard navigation,
+form integration, `onValueChange`), styled 1:1 like shadcn's radio group — same
+look, sizing, focus ring, and disabled state — built from StyleX tokens.
+
+<Box display="flex" flexDirection="column" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <RadioGroup aria-label="Size" defaultValue="m">
+    <Label><RadioGroupItem value="s" /> Small</Label>
+    <Label><RadioGroupItem value="m" /> Medium</Label>
+    <Label><RadioGroupItem value="l" /> Large</Label>
+  </RadioGroup>
+</Box>
+
+## Usage
+
+```tsx
+import { RadioGroup, RadioGroupItem } from "@/components/radio-group"
+```
+
+```tsx
+<RadioGroup aria-label="Size" defaultValue="m">
+  <RadioGroupItem value="s" />
+  <RadioGroupItem value="m" />
+  <RadioGroupItem value="l" />
+</RadioGroup>
+```
+
+## With labels
+
+Wrap each item in a `<Label>` for accessible click-to-select.
+
+<Box display="flex" flexDirection="column" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <RadioGroup aria-label="Plan" defaultValue="free">
+    <Label><RadioGroupItem value="free" /> Free</Label>
+    <Label><RadioGroupItem value="pro" /> Pro</Label>
+    <Label><RadioGroupItem value="enterprise" /> Enterprise</Label>
+  </RadioGroup>
+</Box>
+
+```tsx
+<Label><RadioGroupItem value="free" /> Free</Label>
+<Label><RadioGroupItem value="pro" /> Pro</Label>
+```
+
+## Controlled
+
+Use `value` / `onValueChange` for controlled state.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  {/* Controlled example — see the code below for the pattern */}
+  <RadioGroup aria-label="Controlled" value="a">
+    <Label><RadioGroupItem value="a" /> Option A</Label>
+    <Label><RadioGroupItem value="b" /> Option B</Label>
+  </RadioGroup>
+</Box>
+
+```tsx
+import { useState } from "react"
+
+function Favorite() {
+  const [value, setValue] = useState("a")
+  return (
+    <RadioGroup value={value} onValueChange={setValue}>
+      <RadioGroupItem value="a" />
+      <RadioGroupItem value="b" />
+    </RadioGroup>
+  )
+}
+```
+
+## Disabled
+
+Set `disabled` on a `RadioGroupItem` to prevent selection of that option, or
+on the `RadioGroup` to disable all options.
+
+<Box display="flex" flexDirection="column" gap="l" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <RadioGroup aria-label="Disabled" defaultValue="a">
+    <Label><RadioGroupItem value="a" /> Available</Label>
+    <Label><RadioGroupItem value="b" disabled /> Unavailable</Label>
+    <Label><RadioGroupItem value="c" /> Available</Label>
+  </RadioGroup>
+</Box>
+
+```tsx
+<RadioGroupItem value="b" disabled />
+```
+
+## Customization
+
+`RadioGroup` and `RadioGroupItem` accept no `className`. Customize them
+on-system:
+
+1. **`sx`** — a typed, per-instance override (StyleX styles only), merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token values.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  column: { flexDirection: "column", gap: "0.5rem" },
+})
+
+<RadioGroup sx={styles.column}>
+  <RadioGroupItem value="a" />
+</RadioGroup>
+```
+
+## API Reference
+
+### RadioGroup
+
+| Prop             | Type                                         | Default  |
+| ---------------- | -------------------------------------------- | -------- |
+| `value`          | `Value`                                      | —        |
+| `defaultValue`   | `Value`                                      | —        |
+| `onValueChange`  | `(value: Value, details) => void`            | —        |
+| `disabled`       | `boolean`                                    | `false`  |
+| `name`           | `string`                                     | —        |
+| `sx`             | `StyleXStyles`                               | —        |
+
+All other Base UI `RadioGroup` props are forwarded. Renders a `<div>` with
+`data-slot="radio-group"`.
+
+### RadioGroupItem
+
+| Prop             | Type                                         | Default  |
+| ---------------- | -------------------------------------------- | -------- |
+| `value`          | `Value`                                      | —        |
+| `disabled`       | `boolean`                                    | `false`  |
+| `aria-invalid`   | `boolean`                                    | —        |
+| `sx`             | `StyleXStyles`                               | —        |
+
+All other Base UI `Radio` props are forwarded. Renders a `<span>` with
+`data-slot="radio-group-item"` and an indicator with
+`data-slot="radio-group-indicator"`.
