@@ -1,0 +1,226 @@
+---
+title: Drawer
+description: A panel that slides in from a screen edge, with drag-to-dismiss, built on vaul.
+---
+
+# Drawer
+
+A drawer built on the [vaul](https://vaul.emilkowalski.dev) primitive and styled
+with StyleX design tokens. Behavior and accessibility — drag-to-dismiss, focus
+management, scroll lock, portal stacking — come from vaul; appearance comes from
+a closed set of typed `sx` props. Never accepts `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Drawer defaultOpen>
+  <DrawerTrigger render={<Button variant="outline">Open Drawer</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Move Goal</DrawerTitle>
+      <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <Button>Confirm</Button>
+      <DrawerClose render={<Button variant="outline">Cancel</Button>} />
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/drawer"
+```
+
+```tsx
+<Drawer>
+  <DrawerTrigger render={<Button variant="outline">Open Drawer</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Move Goal</DrawerTitle>
+      <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <Button>Confirm</Button>
+      <DrawerClose render={<Button variant="outline">Cancel</Button>} />
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+> **Trigger as another element.** `DrawerTrigger` renders a `<button>` by
+> default. To style another element as the trigger (e.g. a `Button`), pass it
+> via the `render` prop (or vaul's `asChild`) — never `className`.
+
+## Examples
+
+### Direction
+
+Set `direction` on `Drawer` to slide in from any edge. The default is `bottom`;
+the drag handle is shown only for the bottom direction (matching shadcn).
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Drawer defaultOpen direction="right">
+  <DrawerTrigger render={<Button variant="outline">Right drawer</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Side panel</DrawerTitle>
+      <DrawerDescription>Slides in from the inline-end edge.</DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+
+</Box>
+
+```tsx
+<Drawer direction="right">
+  <DrawerTrigger render={<Button variant="outline">Right drawer</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Side panel</DrawerTitle>
+      <DrawerDescription>Slides in from the inline-end edge.</DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+```
+
+### Custom handle
+
+`DrawerContent` renders the drag grip (`DrawerHandle`) automatically for bottom
+drawers. Set `showHandle={false}` and place your own, or drop a `DrawerHandle`
+anywhere inside the content.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Drawer defaultOpen>
+  <DrawerTrigger render={<Button variant="outline">Custom handle</Button>} />
+  <DrawerContent showHandle={false}>
+    <DrawerHandle />
+    <DrawerHeader>
+      <DrawerTitle>Standalone handle</DrawerTitle>
+      <DrawerDescription>The grip is placed manually here.</DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+
+</Box>
+
+```tsx
+<Drawer defaultOpen>
+  <DrawerTrigger render={<Button variant="outline">Custom handle</Button>} />
+  <DrawerContent showHandle={false}>
+    <DrawerHandle />
+    <DrawerHeader>
+      <DrawerTitle>Standalone handle</DrawerTitle>
+      <DrawerDescription>The grip is placed manually here.</DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+```
+
+### Controlled
+
+Drive the drawer with `open` / `onOpenChange`. The live preview below uses
+`defaultOpen` so it renders open immediately.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Drawer defaultOpen>
+  <DrawerTrigger render={<Button variant="outline">Controlled</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Controlled drawer</DrawerTitle>
+      <DrawerDescription>State can live in the parent.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <DrawerClose render={<Button>OK</Button>} />
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+
+</Box>
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<Drawer open={open} onOpenChange={setOpen}>
+  <DrawerTrigger render={<Button variant="outline">Controlled</Button>} />
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Controlled drawer</DrawerTitle>
+      <DrawerDescription>State lives in the parent.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerFooter>
+      <DrawerClose render={<Button>OK</Button>} />
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+## Customization
+
+`Drawer` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width or spacing
+   tweaks on `DrawerContent` / `DrawerHeader` / `DrawerFooter`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "100%" },
+})
+
+<Drawer direction="right">
+  <DrawerTrigger render={<Button variant="outline">Wide</Button>} />
+  <DrawerContent sx={styles.wide}>
+    <DrawerHeader>
+      <DrawerTitle>Wider content</DrawerTitle>
+      <DrawerDescription>
+        The default max width is overridden via the last-wins sx prop.
+      </DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+```
+
+## API Reference
+
+`Drawer` (Root) accepts all [vaul Drawer Root
+props](https://vaul.emilkowalski.dev) (`open`, `onOpenChange`, `defaultOpen`,
+`direction`, `dismissible`, `shouldScaleBackground`, `snapPoints`, etc.).
+
+| Subcomponent        | Prop          | Type                                  | Default   |
+| ------------------- | ------------- | ------------------------------------- | --------- |
+| `Drawer`            | `direction`   | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` |
+| `DrawerTrigger`     | `render`      | element                               | —         |
+|                     | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerContent`     | `showHandle`  | `boolean`                             | `true`    |
+|                     | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerHandle`      | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerHeader`      | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerFooter`      | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerTitle`       | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerDescription` | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerClose`       | `render`      | element                               | —         |
+|                     | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerOverlay`     | `sx`          | `StyleXStyles`                        | —         |
+| `DrawerPortal`      | —             | vaul Portal                           | —         |
+
+All other props (native attributes, `render`, vaul behavior props) are forwarded
+to the underlying vaul primitive.

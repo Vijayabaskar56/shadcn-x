@@ -1,0 +1,189 @@
+---
+title: Tooltip
+description: Displays a short label in a portal, anchored to a trigger, on hover or focus.
+---
+
+# Tooltip
+
+A non-modal overlay built on the [Base UI](https://base-ui.com) tooltip
+primitive and styled with StyleX design tokens. Behavior and accessibility —
+portal rendering, anchor positioning, hover/focus open delay, dismiss on escape
+and blur — come from Base UI; appearance comes from a closed set of typed `sx`
+props. Never accepts `className`.
+
+The popup uses an inverted surface — solid dark in light mode, solid light in
+dark mode — via the `light-dark()` text/background tokens, matching shadcn.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Tooltip defaultOpen>
+  <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
+  <TooltipContent>Add to library</TooltipContent>
+</Tooltip>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/tooltip"
+```
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
+  <TooltipContent>Add to library</TooltipContent>
+</Tooltip>
+```
+
+> **Trigger as another element.** `TooltipTrigger` renders a `<button>` by
+> default. To style another element as the trigger (e.g. a `Button` or `Link`),
+> pass it via the `render` prop — never `className`.
+
+## Examples
+
+### Placement
+
+`TooltipContent` accepts `side` (`top` | `bottom` | `left` | `right` |
+`inline-end` | `inline-start`) and `align` (`start` | `center` | `end`) to
+control where it appears relative to the trigger, plus `sideOffset` and
+`alignOffset` pixel gaps. The live preview below defaults to
+`side="top" align="center"`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Tooltip defaultOpen>
+  <TooltipTrigger render={<Button variant="outline">Start-aligned</Button>} />
+  <TooltipContent side="top" align="start" sideOffset={4}>
+    Anchored to the start edge
+  </TooltipContent>
+</Tooltip>
+
+</Box>
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline">Start-aligned</Button>} />
+  <TooltipContent side="top" align="start" sideOffset={4}>
+    Anchored to the start edge
+  </TooltipContent>
+</Tooltip>
+```
+
+### Arrow
+
+`TooltipContent` shows a pointing arrow by default. Pass `showArrow={false}` to
+hide it — useful when the label sits directly on the trigger or in a dense bar.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Tooltip defaultOpen>
+  <TooltipTrigger render={<Button variant="outline">No arrow</Button>} />
+  <TooltipContent side="top" showArrow={false}>
+    A plain label, no pointer
+  </TooltipContent>
+</Tooltip>
+
+</Box>
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline">No arrow</Button>} />
+  <TooltipContent side="top" showArrow={false}>
+    A plain label, no pointer
+  </TooltipContent>
+</Tooltip>
+```
+
+### Hover delay
+
+Wrap a group of tooltips in a `TooltipProvider` to share an open `delay` (ms).
+Base UI keeps the first tooltip's delay for subsequent triggers within the
+group, so sweeping across a toolbar feels instant instead of re-arming each
+item. The provider defaults to `delay={0}`.
+
+```tsx
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/tooltip"
+
+<TooltipProvider delay={0}>
+  <Tooltip>
+    <TooltipTrigger render={<Button variant="outline">Undo</Button>} />
+    <TooltipContent>Undo last action</TooltipContent>
+  </Tooltip>
+  <Tooltip>
+    <TooltipTrigger render={<Button variant="outline">Redo</Button>} />
+    <TooltipContent>Redo last action</TooltipContent>
+  </Tooltip>
+</TooltipProvider>
+```
+
+### Controlled
+
+Drive the tooltip with `open` / `onOpenChange` instead of leaving it
+uncontrolled. The live previews above use `defaultOpen` so the popup renders
+open immediately.
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<Tooltip open={open} onOpenChange={setOpen}>
+  <TooltipTrigger render={<Button variant="outline">Controlled</Button>} />
+  <TooltipContent>State lives in the parent.</TooltipContent>
+</Tooltip>
+```
+
+## Customization
+
+`Tooltip` has no visual variants or sizes — it is a structural overlay. Its
+appearance is a closed set of styles, customizable on-system in order of reach:
+
+1. **`sx`** — a typed, per-instance override on `TooltipTrigger` or
+   `TooltipContent` that accepts `StyleXStyles` and merges last, so it wins.
+   Useful for width, padding, or color tweaks on the popup.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { maxWidth: "28rem" },
+})
+
+<Tooltip defaultOpen>
+  <TooltipTrigger render={<Button variant="outline">Wide</Button>} />
+  <TooltipContent sx={styles.wide}>
+    The default max width is overridden via the last-wins <code>sx</code> prop.
+  </TooltipContent>
+</Tooltip>
+```
+
+## API Reference
+
+`Tooltip` (aliased from `TooltipPrimitive.Root`) accepts all [Base UI Tooltip
+Root props](https://base-ui.com/react/components/tooltip) (`open`,
+`onOpenChange`, `defaultOpen`, etc.).
+
+| Subcomponent       | Prop           | Type                                  | Default  |
+| ------------------ | -------------- | ------------------------------------- | -------- |
+| `TooltipProvider`  | `delay`        | number (ms)                           | `0`      |
+| `TooltipTrigger`   | `render`       | element                               | —        |
+|                    | `sx`           | `StyleXStyles`                        | —        |
+| `TooltipContent`   | `side`         | `top` \| `bottom` \| `left` \| ...    | `top`    |
+|                    | `align`        | `start` \| `center` \| `end`          | `center` |
+|                    | `sideOffset`   | number                                | `4`      |
+|                    | `alignOffset`  | number                                | `0`      |
+|                    | `showArrow`    | boolean                               | `true`   |
+|                    | `sx`           | `StyleXStyles`                        | —        |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

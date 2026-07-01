@@ -1,0 +1,205 @@
+---
+title: Dialog
+description: A window overlaid on the primary content, rendered in a portal.
+---
+
+# Dialog
+
+A modal dialog built on the [Base UI](https://base-ui.com) dialog primitive and
+styled with StyleX design tokens. Behavior and accessibility — focus trap, scroll
+lock, escape-to-close, portal stacking — come from Base UI; appearance comes from
+a closed set of typed `sx` props. Never accepts `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Dialog>
+  <DialogTrigger render={<Button variant="outline">Open Dialog</Button>} />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Edit profile</DialogTitle>
+      <DialogDescription>
+        Make changes to your profile here. Click save when you're done.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button variant="outline">Cancel</Button>} />
+      <Button>Save changes</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/dialog"
+```
+
+```tsx
+<Dialog>
+  <DialogTrigger render={<Button variant="outline">Open Dialog</Button>} />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Edit profile</DialogTitle>
+      <DialogDescription>
+        Make changes to your profile here. Click save when you're done.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button variant="outline">Cancel</Button>} />
+      <Button>Save changes</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+> **Trigger as a link/other element.** `DialogTrigger` renders a `<button>` by
+> default. To style another element as the trigger (e.g. a `Button` or `Link`),
+> pass it via the `render` prop — never `className`.
+
+## Examples
+
+### Custom close button
+
+`DialogContent` shows a built-in close affordance (an icon button, top-end) by
+default. Set `showCloseButton={false}` to render your own close control with
+`DialogClose` anywhere inside the content.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Dialog>
+  <DialogTrigger render={<Button variant="outline">Custom close</Button>} />
+  <DialogContent showCloseButton={false}>
+    <DialogHeader>
+      <DialogTitle>No default close</DialogTitle>
+      <DialogDescription>
+        The top-end icon button is omitted; provide your own.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button variant="outline">Dismiss</Button>} />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+</Box>
+
+```tsx
+<Dialog>
+  <DialogTrigger render={<Button variant="outline">Custom close</Button>} />
+  <DialogContent showCloseButton={false}>
+    <DialogHeader>
+      <DialogTitle>No default close</DialogTitle>
+      <DialogDescription>
+        The top-end icon button is omitted; provide your own.
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button variant="outline">Dismiss</Button>} />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+### Controlled
+
+Drive the dialog with `open` / `onOpenChange` instead of leaving it uncontrolled.
+The live preview below uses `defaultOpen` so it renders open immediately.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Dialog defaultOpen>
+  <DialogTrigger render={<Button variant="outline">Controlled</Button>} />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Controlled dialog</DialogTitle>
+      <DialogDescription>State can live in the parent.</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button>OK</Button>} />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+</Box>
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogTrigger render={<Button variant="outline">Controlled</Button>} />
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Controlled dialog</DialogTitle>
+      <DialogDescription>State lives in the parent.</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button>OK</Button>} />
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+## Customization
+
+`Dialog` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, alignment, or
+   spacing tweaks on `DialogContent` / `DialogHeader` / `DialogFooter`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { maxWidth: "42rem" },
+})
+
+<Dialog>
+  <DialogTrigger render={<Button variant="outline">Wide</Button>} />
+  <DialogContent sx={styles.wide}>
+    <DialogHeader>
+      <DialogTitle>Wider content</DialogTitle>
+      <DialogDescription>
+        The default max width is overridden via the last-wins `sx` prop.
+      </DialogDescription>
+    </DialogHeader>
+  </DialogContent>
+</Dialog>
+```
+
+## API Reference
+
+`Dialog` (aliased from `DialogPrimitive.Root`) accepts all [Base UI Dialog Root
+props](https://base-ui.com/react/components/dialog) (`open`, `onOpenChange`,
+`defaultOpen`, `modal`, etc.).
+
+| Subcomponent        | Prop                | Type             | Default |
+| ------------------- | ------------------- | ---------------- | ------- |
+| `DialogTrigger`     | `render`            | element          | —       |
+|                     | `sx`                | `StyleXStyles`   | —       |
+| `DialogContent`     | `showCloseButton`   | `boolean`        | `true`  |
+|                     | `sx`                | `StyleXStyles`   | —       |
+| `DialogHeader`      | `sx`                | `StyleXStyles`   | —       |
+| `DialogFooter`      | `sx`                | `StyleXStyles`   | —       |
+| `DialogTitle`       | `sx`                | `StyleXStyles`   | —       |
+| `DialogDescription` | `sx`                | `StyleXStyles`   | —       |
+| `DialogClose`       | `render`            | element          | —       |
+|                     | `sx`                | `StyleXStyles`   | —       |
+| `DialogOverlay`     | `sx`                | `StyleXStyles`   | —       |
+| `DialogPortal`      | —                   | Base UI Portal   | —       |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

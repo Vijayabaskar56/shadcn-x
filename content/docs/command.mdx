@@ -1,0 +1,217 @@
+---
+title: Command
+description: A fast, composable command menu with async autocomplete support.
+---
+
+# Command
+
+A command menu built on the [cmdk](https://cmdk.paco.me) primitive and styled
+with StyleX design tokens. Behavior and accessibility — combobox filtering,
+keyboard navigation (arrow keys, enter to select), the `listbox`/`option` roles,
+and the active-row tracking — come from cmdk; appearance comes from a closed set
+of typed `sx` props. Never accepts `className`.
+
+## Live preview
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Command>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup>
+      <CommandLabel>Suggestions</CommandLabel>
+      <CommandItem>Calendar</CommandItem>
+      <CommandItem>Search Emoji</CommandItem>
+      <CommandItem>Calculator</CommandItem>
+    </CommandGroup>
+    <CommandSeparator />
+    <CommandGroup>
+      <CommandLabel>Settings</CommandLabel>
+      <CommandItem>
+        Profile
+        <CommandShortcut>⌘P</CommandShortcut>
+      </CommandItem>
+      <CommandItem>
+        Billing
+        <CommandShortcut>⌘B</CommandShortcut>
+      </CommandItem>
+      <CommandItem>
+        Logout
+        <CommandShortcut>⌘L</CommandShortcut>
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandLabel,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/command"
+```
+
+```tsx
+<Command>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup>
+      <CommandLabel>Suggestions</CommandLabel>
+      <CommandItem>Calendar</CommandItem>
+      <CommandItem>Search Emoji</CommandItem>
+    </CommandGroup>
+    <CommandSeparator />
+    <CommandGroup>
+      <CommandLabel>Settings</CommandLabel>
+      <CommandItem>
+        Profile
+        <CommandShortcut>⌘P</CommandShortcut>
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+```
+
+> **Group headings.** Render `<CommandLabel>` inside a `<CommandGroup>` to label
+> a section. cmdk's own `heading` prop is also forwarded (cmdk renders it
+> unstyled), but `<CommandLabel>` is the on-system, token-styled element.
+
+## Examples
+
+### Command Dialog
+
+Wrap a `Command` in `CommandDialog` to render it inside a modal `Dialog`
+(positioned toward the top third, no padding). A title and description are
+provided for screen readers by default.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<CommandDialog defaultOpen title="Command Palette" description="Search for a command to run...">
+  <Command>
+    <CommandInput placeholder="Type a command or search..." />
+    <CommandList>
+      <CommandEmpty>No results found.</CommandEmpty>
+      <CommandGroup>
+        <CommandLabel>Suggestions</CommandLabel>
+        <CommandItem>Calendar</CommandItem>
+        <CommandItem>Search Emoji</CommandItem>
+      </CommandGroup>
+    </CommandList>
+  </Command>
+</CommandDialog>
+
+</Box>
+
+```tsx
+import { CommandDialog } from "@/components/command"
+
+<CommandDialog defaultOpen>
+  <Command>
+    <CommandInput placeholder="Type a command or search..." />
+    <CommandList>
+      <CommandEmpty>No results found.</CommandEmpty>
+      <CommandGroup>
+        <CommandLabel>Suggestions</CommandLabel>
+        <CommandItem>Calendar</CommandItem>
+      </CommandGroup>
+    </CommandList>
+  </Command>
+</CommandDialog>
+```
+
+### Controlled filtering
+
+`Command` is uncontrolled by default. Drive the query with `value` /
+`onValueChange` to filter programmatically.
+
+```tsx
+const [search, setSearch] = React.useState("")
+
+<Command value={search} onValueChange={setSearch}>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup>
+      <CommandItem>Calendar</CommandItem>
+      <CommandItem>Search Emoji</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+```
+
+### Selecting an item
+
+Pass `onSelect` to a `CommandItem` (cmdk calls it with the item's `value`, or its
+text content when no `value` is given).
+
+```tsx
+<CommandItem value="calendar" onSelect={(value) => console.log(value)}>
+  Calendar
+</CommandItem>
+```
+
+## Customization
+
+`Command` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, spacing, or
+   surface tweaks on the root, list, or items.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "32rem" },
+})
+
+<Command sx={styles.wide}>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandItem>Calendar</CommandItem>
+  </CommandList>
+</Command>
+```
+
+## API Reference
+
+`Command` (and its subcomponents) are built on the [cmdk](https://cmdk.paco.me)
+primitive. They accept all cmdk props (`value`, `onValueChange`, `filter`,
+`loop`, `shouldFilter`, etc.) plus the props below.
+
+| Subcomponent      | Prop               | Type             | Default                     |
+| ----------------- | ------------------ | ---------------- | --------------------------- |
+| `Command`         | `sx`               | `StyleXStyles`   | —                           |
+| `CommandInput`    | `sx`               | `StyleXStyles`   | —                           |
+| `CommandList`     | `sx`               | `StyleXStyles`   | —                           |
+| `CommandEmpty`    | `sx`               | `StyleXStyles`   | —                           |
+| `CommandGroup`    | `heading`          | `string`         | —                           |
+|                   | `sx`               | `StyleXStyles`   | —                           |
+| `CommandLabel`    | `sx`               | `StyleXStyles`   | —                           |
+| `CommandSeparator`| `sx`               | `StyleXStyles`   | —                           |
+| `CommandItem`     | `value`            | `string`         | text content                |
+|                   | `disabled`         | `boolean`        | —                           |
+|                   | `onSelect`         | `(v) => void`    | —                           |
+|                   | `sx`               | `StyleXStyles`   | —                           |
+| `CommandShortcut` | `sx`               | `StyleXStyles`   | —                           |
+| `CommandDialog`   | `title`            | `string`         | `"Command Palette"`         |
+|                   | `description`      | `string`         | `"Search for a command..."` |
+|                   | `showCloseButton`  | `boolean`        | `false`                     |
+|                   | `children`         | `ReactNode`      | —                           |
+
+All other props (native attributes, cmdk-specific props, `render`) are forwarded
+to the underlying cmdk / Dialog primitive.

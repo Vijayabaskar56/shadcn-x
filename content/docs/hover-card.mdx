@@ -1,0 +1,164 @@
+---
+title: Hover Card
+description: Displays rich content in a portal, anchored to a trigger, on hover.
+---
+
+# Hover Card
+
+A non-modal overlay built on the [Base UI](https://base-ui.com) preview card
+primitive (Base UI's hover card) and styled with StyleX design tokens. Behavior
+and accessibility — hover open/close delay, portal rendering, anchor positioning
+— come from Base UI; appearance comes from a closed set of typed `sx` props.
+Never accepts `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<HoverCard>
+  <HoverCardTrigger render={<Button variant="link">Hover for details</Button>} />
+  <HoverCardContent>
+    <Text variant="p">
+      The card appears on hover with an open delay, and dismisses after a close
+      delay when the pointer leaves both the trigger and the content.
+    </Text>
+  </HoverCardContent>
+</HoverCard>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/hover-card"
+```
+
+```tsx
+<HoverCard>
+  <HoverCardTrigger render={<Button variant="link">Hover for details</Button>} />
+  <HoverCardContent>
+    <Text variant="p">Revealed on hover.</Text>
+  </HoverCardContent>
+</HoverCard>
+```
+
+> **Trigger as another element.** `HoverCardTrigger` renders an `<a>` by
+> default. To style another element as the trigger (e.g. a `Button` or `Link`),
+> pass it via the `render` prop — never `className`.
+
+## Examples
+
+### Placement
+
+`HoverCardContent` accepts `side` (`top` | `bottom` | `left` | `right` |
+`inline-end` | `inline-start`) and `align` (`start` | `center` | `end`) to
+control where it appears relative to the trigger, plus `sideOffset` and
+`alignOffset` pixel gaps. The live preview below defaults to
+`side="bottom" align="center"`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<HoverCard>
+  <HoverCardTrigger render={<Button variant="link">Start-aligned</Button>} />
+  <HoverCardContent side="bottom" align="start" sideOffset={4}>
+    <Text variant="p">
+      <code>align="start"</code> anchors the popup's start edge.
+    </Text>
+  </HoverCardContent>
+</HoverCard>
+
+</Box>
+
+```tsx
+<HoverCard>
+  <HoverCardTrigger render={<Button variant="link">Start-aligned</Button>} />
+  <HoverCardContent side="bottom" align="start" sideOffset={4}>
+    <Text variant="p">
+      <code>align="start"</code> anchors the popup's start edge.
+    </Text>
+  </HoverCardContent>
+</HoverCard>
+```
+
+### Hover delay
+
+`HoverCardTrigger` accepts `delay` (ms before opening, default `600`) and
+`closeDelay` (ms before closing, default `300`). Lower the open delay for a
+snappier feel, or raise the close delay to let users sweep between the trigger
+and the card.
+
+```tsx
+<HoverCard>
+  <HoverCardTrigger delay={200} closeDelay={400} render={<Button variant="link">Quick open</Button>} />
+  <HoverCardContent>
+    <Text variant="p">Opens after 200ms.</Text>
+  </HoverCardContent>
+</HoverCard>
+```
+
+### Controlled
+
+Drive the hover card with `open` / `onOpenChange` instead of leaving it
+uncontrolled.
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<HoverCard open={open} onOpenChange={setOpen}>
+  <HoverCardTrigger render={<Button variant="link">Controlled</Button>} />
+  <HoverCardContent>
+    <Text variant="p">State lives in the parent.</Text>
+  </HoverCardContent>
+</HoverCard>
+```
+
+## Customization
+
+`HoverCard` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, padding, or
+   color tweaks on `HoverCardContent`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "20rem" },
+})
+
+<HoverCard>
+  <HoverCardTrigger render={<Button variant="link">Wide</Button>} />
+  <HoverCardContent sx={styles.wide}>
+    <Text variant="p">
+      The default width is overridden via the last-wins <code>sx</code> prop.
+    </Text>
+  </HoverCardContent>
+</HoverCard>
+```
+
+## API Reference
+
+`HoverCard` (aliased from `PreviewCardPrimitive.Root`) accepts all [Base UI
+Preview Card Root
+props](https://base-ui.com/react/components/preview-card) (`open`,
+`onOpenChange`, `defaultOpen`, etc.).
+
+| Subcomponent        | Prop           | Type                                  | Default   |
+| ------------------- | -------------- | ------------------------------------- | --------- |
+| `HoverCardTrigger`  | `render`       | element                               | —         |
+|                     | `delay`        | number (ms)                           | `600`     |
+|                     | `closeDelay`   | number (ms)                           | `300`     |
+|                     | `sx`           | `StyleXStyles`                        | —         |
+| `HoverCardContent`  | `side`         | `top` \| `bottom` \| `left` \| ...    | `bottom`  |
+|                     | `align`        | `start` \| `center` \| `end`          | `center`  |
+|                     | `sideOffset`   | number                                | `4`       |
+|                     | `alignOffset`  | number                                | `4`       |
+|                     | `sx`           | `StyleXStyles`                        | —         |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

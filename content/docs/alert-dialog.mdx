@@ -1,0 +1,183 @@
+---
+title: Alert Dialog
+description: A modal dialog that interrupts the user to require a confirmation or acknowledgement.
+---
+
+# Alert Dialog
+
+An alert dialog built on the [Base UI](https://base-ui.com) alert dialog
+primitive and styled with StyleX design tokens. Unlike a regular `Dialog`, an
+alert dialog is **non-dismissable by default** — the user must choose an explicit
+action (`AlertDialogAction`) or cancel (`AlertDialogCancel`); clicking the
+backdrop does not close it. Behavior and accessibility — focus trap, scroll lock,
+escape handling, portal stacking, the `alertdialog` role — come from Base UI;
+appearance comes from a closed set of typed props. Never accepts `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Show Alert Dialog</Button>} />
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. This will permanently delete your account
+        and remove your data from our servers.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction variant="destructive">Continue</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/alert-dialog"
+```
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Show Alert Dialog</Button>} />
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. This will permanently delete your account
+        and remove your data from our servers.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction variant="destructive">Continue</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
+> **Trigger as another element.** `AlertDialogTrigger` renders a `<button>` by
+> default. To style another element as the trigger (e.g. a `Button` or `Link`),
+> pass it via the `render` prop — never `className`.
+
+> **Action vs. Cancel.** `AlertDialogCancel` is an alert-dialog `Close`, so
+> clicking it dismisses the dialog automatically. `AlertDialogAction` is a plain
+> `Button` — it does **not** close by default; wire its `onClick` to close via
+> the controlled `open`/`onOpenChange` props on `AlertDialog` when the action
+> should also dismiss.
+
+## Sizes
+
+`AlertDialogContent` supports a `size` prop. The default is a comfortable
+`max-w-lg`; `sm` constrains it to `max-w-xs` for short confirmations.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Small alert</Button>} />
+  <AlertDialogContent size="sm">
+    <AlertDialogHeader>
+      <AlertDialogTitle>Log out?</AlertDialogTitle>
+      <AlertDialogDescription>You can sign back in anytime.</AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Stay</AlertDialogCancel>
+      <AlertDialogAction>Log out</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+</Box>
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Small alert</Button>} />
+  <AlertDialogContent size="sm">
+    <AlertDialogHeader>
+      <AlertDialogTitle>Log out?</AlertDialogTitle>
+      <AlertDialogDescription>You can sign back in anytime.</AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Stay</AlertDialogCancel>
+      <AlertDialogAction>Log out</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
+## Customization
+
+`AlertDialog` never accepts `className`. Customize it on-system, in order of
+reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, alignment, or
+   spacing tweaks on `AlertDialogContent` / `AlertDialogHeader` /
+   `AlertDialogFooter`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { maxWidth: "42rem" },
+})
+
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Wide</Button>} />
+  <AlertDialogContent sx={styles.wide}>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Wider content</AlertDialogTitle>
+      <AlertDialogDescription>
+        The default max width is overridden via the last-wins `sx` prop.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
+## API Reference
+
+`AlertDialog` (aliased from `AlertDialogPrimitive.Root`) accepts all [Base UI
+Alert Dialog Root
+props](https://base-ui.com/react/components/alert-dialog) (`open`,
+`onOpenChange`, `defaultOpen`, etc.). It is always modal and does not dismiss on
+backdrop interaction.
+
+| Subcomponent              | Prop       | Type                            | Default     |
+| ------------------------- | ---------- | ------------------------------- | ----------- |
+| `AlertDialogTrigger`      | `render`   | element                         | —           |
+|                           | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogContent`      | `size`     | `"default" \| "sm"`             | `"default"` |
+|                           | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogHeader`       | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogFooter`       | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogTitle`        | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogDescription`  | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogAction`       | `variant`  | `ButtonVariant`                 | `"default"` |
+|                           | `size`     | `ButtonSize`                    | `"default"` |
+|                           | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogCancel`       | `variant`  | `ButtonVariant`                 | `"outline"` |
+|                           | `size`     | `ButtonSize`                    | `"default"` |
+|                           | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogOverlay`      | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogPortal`       | —          | Base UI Portal                  | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive. `AlertDialogCancel` forwards props to the alert
+dialog `Close` primitive (it auto-dismisses); `AlertDialogAction` forwards to
+`Button` (it does not).

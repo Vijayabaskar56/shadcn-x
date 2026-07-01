@@ -1,0 +1,324 @@
+---
+title: Dropdown Menu
+description: A menu of actions revealed on click, built on Base UI.
+---
+
+# Dropdown Menu
+
+A dropdown menu built on the [Base UI](https://base-ui.com) menu primitive and
+styled with StyleX design tokens. Behavior and accessibility — click trigger,
+positioning, roving focus, keyboard navigation, submenu, and portal stacking —
+come from Base UI; appearance comes from a closed set of typed `inset` /
+`variant` / `sx` props. Never accepts `className`.
+
+**Click the button below to open the menu.**
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+      <DropdownMenuItem>
+        Back
+        <DropdownMenuShortcut>⌘[</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        Forward
+        <DropdownMenuShortcut>⌘]</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem disabled>Reload</DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuCheckboxItem checked>Show bookmarks</DropdownMenuCheckboxItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>Share</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem>Email link</DropdownMenuItem>
+        <DropdownMenuItem>Copy link</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/dropdown-menu"
+```
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>
+      Back
+      <DropdownMenuShortcut>⌘[</DropdownMenuShortcut>
+    </DropdownMenuItem>
+    <DropdownMenuItem>Forward</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## Examples
+
+### With groups, labels, and a separator
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>Window</DropdownMenuLabel>
+      <DropdownMenuItem>New window</DropdownMenuItem>
+      <DropdownMenuItem>New tab</DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>History</DropdownMenuLabel>
+      <DropdownMenuItem inset>Back</DropdownMenuItem>
+      <DropdownMenuItem inset>Forward</DropdownMenuItem>
+    </DropdownMenuGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>Window</DropdownMenuLabel>
+      <DropdownMenuItem>New window</DropdownMenuItem>
+      <DropdownMenuItem>New tab</DropdownMenuItem>
+    </DropdownMenuGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuLabel>History</DropdownMenuLabel>
+      <DropdownMenuItem inset>Back</DropdownMenuItem>
+      <DropdownMenuItem inset>Forward</DropdownMenuItem>
+    </DropdownMenuGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+### Checkbox items
+
+Toggle settings on or off with `DropdownMenuCheckboxItem`. The check indicator
+appears automatically when the item is checked.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuCheckboxItem checked>Show status bar</DropdownMenuCheckboxItem>
+    <DropdownMenuCheckboxItem>Show side panel</DropdownMenuCheckboxItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+```tsx
+function SettingsMenu() {
+  const [statusBar, setStatusBar] = React.useState(true)
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuCheckboxItem
+          checked={statusBar}
+          onCheckedChange={setStatusBar}
+        >
+          Show status bar
+        </DropdownMenuCheckboxItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+```
+
+### Radio items
+
+Group mutually-exclusive choices with `DropdownMenuRadioGroup` and
+`DropdownMenuRadioItem`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuRadioGroup defaultValue="compact">
+      <DropdownMenuLabel>View density</DropdownMenuLabel>
+      <DropdownMenuRadioItem value="compact">Compact</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="comfortable">Comfortable</DropdownMenuRadioItem>
+    </DropdownMenuRadioGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuRadioGroup defaultValue="compact">
+      <DropdownMenuLabel>View density</DropdownMenuLabel>
+      <DropdownMenuRadioItem value="compact">Compact</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="comfortable">Comfortable</DropdownMenuRadioItem>
+    </DropdownMenuRadioGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+### Submenu
+
+Nest a secondary menu with `DropdownMenuSub`, `DropdownMenuSubTrigger`, and
+`DropdownMenuSubContent`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuItem>Copy</DropdownMenuItem>
+    <DropdownMenuItem>Paste</DropdownMenuItem>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>Find</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem>Find next</DropdownMenuItem>
+        <DropdownMenuItem>Find previous</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>Copy</DropdownMenuItem>
+    <DropdownMenuItem>Paste</DropdownMenuItem>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>Find</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem>Find next</DropdownMenuItem>
+        <DropdownMenuItem>Find previous</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+### Destructive item
+
+Set `variant="destructive"` to style an item as a destructive action.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<DropdownMenu>
+  <DropdownMenuTrigger render={<Button variant="outline">Open Menu</Button>} />
+  <DropdownMenuContent>
+    <DropdownMenuItem>Open</DropdownMenuItem>
+    <DropdownMenuItem>Rename</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Move to trash</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+</Box>
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>Open</DropdownMenuItem>
+    <DropdownMenuItem>Rename</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Move to trash</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## Customization
+
+`DropdownMenu` never accepts `className`. Customize it on-system, in order of
+reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, alignment, or
+   spacing tweaks on `DropdownMenuContent` / `DropdownMenuItem`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "16rem" },
+})
+
+<DropdownMenu>
+  <DropdownMenuTrigger>Open me</DropdownMenuTrigger>
+  <DropdownMenuContent sx={styles.wide}>
+    <DropdownMenuItem>Open</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## API Reference
+
+`DropdownMenu` (aliased from `MenuPrimitive.Root`) accepts all [Base UI Menu
+Root props](https://base-ui.com/react/components/menu) (`open`, `onOpenChange`,
+etc.).
+
+| Subcomponent               | Prop           | Type                                                | Default     |
+| -------------------------- | -------------- | --------------------------------------------------- | ----------- |
+| `DropdownMenuTrigger`      | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuContent`      | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"bottom"`  |
+|                            | `sideOffset`   | `number`                                            | `4`         |
+|                            | `align`        | `"start" \| "center" \| "end"`                      | `"start"`   |
+|                            | `alignOffset`  | `number`                                            | `0`         |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuGroup`        | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuLabel`        | `inset`        | `boolean`                                           | `false`     |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuItem`         | `inset`        | `boolean`                                           | `false`     |
+|                            | `variant`      | `"default" \| "destructive"`                        | `"default"` |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuCheckboxItem` | `checked`      | `boolean`                                           | —           |
+|                            | `inset`        | `boolean`                                           | `false`     |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuRadioGroup`   | `value`        | `any`                                               | —           |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuRadioItem`    | `value`        | `any`                                               | —           |
+|                            | `inset`        | `boolean`                                           | `false`     |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuSub`          | —              | Base UI SubmenuRoot                                 | —           |
+| `DropdownMenuSubTrigger`   | `inset`        | `boolean`                                           | `false`     |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuSubContent`   | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"right"`   |
+|                            | `alignOffset`  | `number`                                            | `-3`        |
+|                            | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuSeparator`    | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuShortcut`     | `sx`           | `StyleXStyles`                                      | —           |
+| `DropdownMenuPortal`       | —              | Base UI Portal                                      | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

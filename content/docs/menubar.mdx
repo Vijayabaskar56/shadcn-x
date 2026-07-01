@@ -1,0 +1,365 @@
+---
+title: Menubar
+description: A horizontal menu of dropdowns for application-level commands, built on Base UI.
+---
+
+# Menubar
+
+A menubar built on the [Base UI](https://base-ui.com) menubar and menu
+primitives and styled with StyleX design tokens. Behavior and accessibility — a
+horizontal bar of triggers with roving focus, dropdown positioning, keyboard
+navigation, submenu, and portal stacking — come from Base UI; appearance comes
+from a closed set of typed `inset` / `variant` / `sx` props. Never accepts
+`className`.
+
+**Click a menu heading below to open it.**
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>File</MenubarTrigger>
+  <MenubarContent>
+    <MenubarGroup>
+      <MenubarLabel>File</MenubarLabel>
+      <MenubarItem>
+        New Tab
+        <MenubarShortcut>⌘T</MenubarShortcut>
+      </MenubarItem>
+      <MenubarItem>
+        New Window
+        <MenubarShortcut>⌘N</MenubarShortcut>
+      </MenubarItem>
+      <MenubarItem disabled>Open Recent…</MenubarItem>
+    </MenubarGroup>
+    <MenubarSeparator />
+    <MenubarCheckboxItem checked>Always show previews</MenubarCheckboxItem>
+  </MenubarContent>
+</MenubarMenu>
+
+<MenubarMenu>
+  <MenubarTrigger>Edit</MenubarTrigger>
+  <MenubarContent>
+    <MenubarItem inset>
+      Undo
+      <MenubarShortcut>⌘Z</MenubarShortcut>
+    </MenubarItem>
+    <MenubarItem inset>
+      Redo
+      <MenubarShortcut>⇧⌘Z</MenubarShortcut>
+    </MenubarItem>
+    <MenubarSeparator />
+    <MenubarSub>
+      <MenubarSubTrigger>Find</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem>Find Next…</MenubarItem>
+        <MenubarItem>Find Previous…</MenubarItem>
+      </MenubarSubContent>
+    </MenubarSub>
+    <MenubarSeparator />
+    <MenubarItem variant="destructive">Cut</MenubarItem>
+  </MenubarContent>
+</MenubarMenu>
+
+<MenubarMenu>
+  <MenubarTrigger>View</MenubarTrigger>
+  <MenubarContent>
+    <MenubarRadioGroup defaultValue="comfortable">
+      <MenubarLabel>Density</MenubarLabel>
+      <MenubarRadioItem value="compact">Compact</MenubarRadioItem>
+      <MenubarRadioItem value="comfortable">Comfortable</MenubarRadioItem>
+    </MenubarRadioGroup>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+## Usage
+
+```tsx
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/menubar"
+```
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>
+        New File
+        <MenubarShortcut>⌘N</MenubarShortcut>
+      </MenubarItem>
+      <MenubarItem>Open…</MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Examples
+
+### With groups, labels, and a separator
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>Edit</MenubarTrigger>
+  <MenubarContent>
+    <MenubarGroup>
+      <MenubarLabel>Text</MenubarLabel>
+      <MenubarItem>Cut</MenubarItem>
+      <MenubarItem>Copy</MenubarItem>
+    </MenubarGroup>
+    <MenubarSeparator />
+    <MenubarGroup>
+      <MenubarLabel>History</MenubarLabel>
+      <MenubarItem inset>Undo</MenubarItem>
+      <MenubarItem inset>Redo</MenubarItem>
+    </MenubarGroup>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>Edit</MenubarTrigger>
+    <MenubarContent>
+      <MenubarGroup>
+        <MenubarLabel>Text</MenubarLabel>
+        <MenubarItem>Cut</MenubarItem>
+        <MenubarItem>Copy</MenubarItem>
+      </MenubarGroup>
+      <MenubarSeparator />
+      <MenubarGroup>
+        <MenubarLabel>History</MenubarLabel>
+        <MenubarItem inset>Undo</MenubarItem>
+        <MenubarItem inset>Redo</MenubarItem>
+      </MenubarGroup>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+### Checkbox item
+
+Toggle a setting on or off with `MenubarCheckboxItem`. The check indicator
+appears automatically when the item is checked.
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>View</MenubarTrigger>
+  <MenubarContent>
+    <MenubarCheckboxItem checked>Show status bar</MenubarCheckboxItem>
+    <MenubarCheckboxItem>Show side panel</MenubarCheckboxItem>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+```tsx
+function ViewMenu() {
+  const [statusBar, setStatusBar] = React.useState(true)
+  return (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>View</MenubarTrigger>
+        <MenubarContent>
+          <MenubarCheckboxItem
+            checked={statusBar}
+            onCheckedChange={setStatusBar}
+          >
+            Show status bar
+          </MenubarCheckboxItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+  )
+}
+```
+
+### Radio items
+
+Group mutually-exclusive choices with `MenubarRadioGroup` and `MenubarRadioItem`.
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>View</MenubarTrigger>
+  <MenubarContent>
+    <MenubarRadioGroup defaultValue="comfortable">
+      <MenubarLabel>Density</MenubarLabel>
+      <MenubarRadioItem value="compact">Compact</MenubarRadioItem>
+      <MenubarRadioItem value="comfortable">Comfortable</MenubarRadioItem>
+    </MenubarRadioGroup>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>View</MenubarTrigger>
+    <MenubarContent>
+      <MenubarRadioGroup defaultValue="comfortable">
+        <MenubarLabel>Density</MenubarLabel>
+        <MenubarRadioItem value="compact">Compact</MenubarRadioItem>
+        <MenubarRadioItem value="comfortable">Comfortable</MenubarRadioItem>
+      </MenubarRadioGroup>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+### Submenu
+
+Nest a secondary menu with `MenubarSub`, `MenubarSubTrigger`, and
+`MenubarSubContent`.
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>Edit</MenubarTrigger>
+  <MenubarContent>
+    <MenubarItem>Copy</MenubarItem>
+    <MenubarItem>Paste</MenubarItem>
+    <MenubarSub>
+      <MenubarSubTrigger>Find</MenubarSubTrigger>
+      <MenubarSubContent>
+        <MenubarItem>Find next</MenubarItem>
+        <MenubarItem>Find previous</MenubarItem>
+      </MenubarSubContent>
+    </MenubarSub>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>Edit</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>Copy</MenubarItem>
+      <MenubarItem>Paste</MenubarItem>
+      <MenubarSub>
+        <MenubarSubTrigger>Find</MenubarSubTrigger>
+        <MenubarSubContent>
+          <MenubarItem>Find next</MenubarItem>
+          <MenubarItem>Find previous</MenubarItem>
+        </MenubarSubContent>
+      </MenubarSub>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+### Destructive item
+
+Set `variant="destructive"` to style an item as a destructive action.
+
+<Menubar>
+
+<MenubarMenu>
+  <MenubarTrigger>File</MenubarTrigger>
+  <MenubarContent>
+    <MenubarItem>Open</MenubarItem>
+    <MenubarItem>Rename</MenubarItem>
+    <MenubarSeparator />
+    <MenubarItem variant="destructive">Move to trash</MenubarItem>
+  </MenubarContent>
+</MenubarMenu>
+
+</Menubar>
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>Open</MenubarItem>
+      <MenubarItem>Rename</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem variant="destructive">Move to trash</MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Customization
+
+`Menubar` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, alignment, or
+   spacing tweaks on `Menubar` / `MenubarContent` / `MenubarItem`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "16rem" },
+})
+
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent sx={styles.wide}>
+      <MenubarItem>Open</MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+## API Reference
+
+`Menubar` accepts all [Base UI Menubar Root props](https://base-ui.com/react/components/menubar)
+(`modal`, `orientation`, `loopFocus`, etc.). Each `MenubarMenu` maps to a
+[Base UI Menu Root](https://base-ui.com/react/components/menu) (`open`,
+`onOpenChange`, etc.).
+
+| Subcomponent             | Prop           | Type                                                | Default     |
+| ------------------------ | -------------- | --------------------------------------------------- | ----------- |
+| `Menubar`                | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarMenu`            | —              | Base UI Menu Root                                   | —           |
+| `MenubarTrigger`         | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarContent`         | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"bottom"`  |
+|                          | `sideOffset`   | `number`                                            | `8`         |
+|                          | `align`        | `"start" \| "center" \| "end"`                      | `"start"`   |
+|                          | `alignOffset`  | `number`                                            | `-4`        |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarGroup`           | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarLabel`           | `inset`        | `boolean`                                           | `false`     |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarItem`            | `inset`        | `boolean`                                           | `false`     |
+|                          | `variant`      | `"default" \| "destructive"`                        | `"default"` |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarCheckboxItem`    | `checked`      | `boolean`                                           | —           |
+|                          | `inset`        | `boolean`                                           | `false`     |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarRadioGroup`      | `value`        | `any`                                               | —           |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarRadioItem`       | `value`        | `any`                                               | —           |
+|                          | `inset`        | `boolean`                                           | `false`     |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarSub`             | —              | Base UI SubmenuRoot                                 | —           |
+| `MenubarSubTrigger`      | `inset`        | `boolean`                                           | `false`     |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarSubContent`      | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"right"`   |
+|                          | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarSeparator`       | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarShortcut`        | `sx`           | `StyleXStyles`                                      | —           |
+| `MenubarPortal`          | —              | Base UI Portal                                      | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

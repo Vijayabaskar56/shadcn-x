@@ -57,18 +57,18 @@ These drive raw-HTML usage toward zero. Build first.
 
 ## Phase 2 — Overlays &amp; menus (Base UI behavior)
 
-- [ ] Dialog
-- [ ] Alert Dialog
-- [ ] Sheet
-- [ ] Drawer
-- [ ] Popover
-- [ ] Hover Card
-- [ ] Tooltip
-- [ ] Dropdown Menu
-- [ ] Context Menu
-- [ ] Menubar
-- [ ] Navigation Menu
-- [ ] Command
+- [x] Dialog
+- [x] Alert Dialog
+- [x] Sheet
+- [x] Drawer
+- [x] Popover
+- [x] Hover Card
+- [x] Tooltip
+- [x] Dropdown Menu
+- [x] Context Menu
+- [x] Menubar
+- [x] Navigation Menu
+- [x] Command
 
 ## Phase 3 — Layout &amp; containers
 

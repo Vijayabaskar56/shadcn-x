@@ -1,0 +1,221 @@
+---
+title: Navigation Menu
+description: A navigation landmark with triggers, content panels, and a shared tweening viewport.
+---
+
+# Navigation Menu
+
+A site-navigation menu built on the [Base UI](https://base-ui.com/react/components/navigation-menu)
+navigation-menu primitive and styled with StyleX design tokens. Behavior and
+accessibility — hover or click to open, keyboard roving focus, portal
+positioning, and content tweening through a single shared viewport — come from
+Base UI; appearance comes from a closed set of typed `sx` props. Never accepts
+`className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuLink href="/docs/introduction" active>
+        Home
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+    <NavigationMenuItem value="components">
+      <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/docs/button" active>
+          Button
+        </NavigationMenuLink>
+        <NavigationMenuLink href="/docs/dialog">Dialog</NavigationMenuLink>
+        <NavigationMenuLink href="/docs/popover">Popover</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    <NavigationMenuItem value="guides">
+      <NavigationMenuTrigger>Guides</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/docs/theming">Theming</NavigationMenuLink>
+        <NavigationMenuLink href="/docs/installation">
+          Installation
+        </NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/navigation-menu"
+```
+
+```tsx
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuLink href="/">Home</NavigationMenuLink>
+    </NavigationMenuItem>
+    <NavigationMenuItem value="products">
+      <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/shoes">Shoes</NavigationMenuLink>
+        <NavigationMenuLink href="/shirts">Shirts</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+```
+
+An item is either a plain `NavigationMenuLink` (renders directly in the list) or
+a `NavigationMenuTrigger` paired with `NavigationMenuContent` (revealed on hover
+or click). The trigger carries a chevron that flips when its panel is open.
+
+> **State styling without `className`.** StyleX can't key a style off an
+> element's *own* `data-*` attribute, so the open-trigger tint and the
+> active-link tint are applied by reading Base UI's exposed `open` / `active`
+> state — the sanctioned composition path. Never reach for `className`.
+
+## Examples
+
+### Shared viewport
+
+By default `NavigationMenu` renders a single shared `NavigationMenuViewport`
+that the active item's content tweens into and out of, so opening one panel
+smoothly re-sizes into the next. Set `viewport={false}` to render each item's
+content inline instead.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<NavigationMenu viewport={false}>
+  <NavigationMenuList>
+    <NavigationMenuItem value="inline">
+      <NavigationMenuTrigger>Inline content</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/docs/a">Link A</NavigationMenuLink>
+        <NavigationMenuLink href="/docs/b">Link B</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+
+</Box>
+
+```tsx
+<NavigationMenu viewport={false}>
+  <NavigationMenuList>
+    <NavigationMenuItem value="inline">
+      <NavigationMenuTrigger>Inline content</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/docs/a">Link A</NavigationMenuLink>
+        <NavigationMenuLink href="/docs/b">Link B</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+```
+
+### Controlled
+
+Drive the open item with `value` / `onValueChange` instead of leaving it
+uncontrolled. Pass `defaultValue` to render a specific item open initially.
+
+```tsx
+const [value, setValue] = React.useState<string | null>("products")
+
+<NavigationMenu value={value} onValueChange={setValue}>
+  <NavigationMenuList>
+    <NavigationMenuItem value="products">
+      <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/shoes">Shoes</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+```
+
+### Current-page link
+
+Pass `active` to a `NavigationMenuLink` to mark it as the current page — it
+gets the accent tint and `data-active="true"`.
+
+```tsx
+<NavigationMenuLink href="/docs/button" active>
+  Button
+</NavigationMenuLink>
+```
+
+## Customization
+
+`NavigationMenu` never accepts `className`. Customize it on-system, in order of
+reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for widths, gaps, or color
+   tweaks on `NavigationMenuContent` / `NavigationMenuList`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "16rem" },
+})
+
+<NavigationMenuItem value="products">
+  <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+  <NavigationMenuContent sx={styles.wide}>
+    <NavigationMenuLink href="/shoes">Shoes</NavigationMenuLink>
+    <NavigationMenuLink href="/shirts">Shirts</NavigationMenuLink>
+  </NavigationMenuContent>
+</NavigationMenuItem>
+```
+
+## API Reference
+
+`NavigationMenu` (Root) accepts all [Base UI NavigationMenu Root
+props](https://base-ui.com/react/components/navigation-menu) (`value`,
+`defaultValue`, `onValueChange`, `delay`, etc.) plus:
+
+| Subcomponent             | Prop            | Type                                  | Default   |
+| ------------------------ | --------------- | ------------------------------------- | --------- |
+| `NavigationMenu`         | `viewport`      | `boolean`                             | `true`    |
+|                          | `viewportAlign` | `"start" \| "center" \| "end"`        | `"start"` |
+|                          | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuList`     | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuItem`     | `value`         | `string \| number`                    | —         |
+|                          | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuTrigger`  | `render`        | element \| function                   | —         |
+|                          | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuContent`  | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuLink`     | `active`        | `boolean`                             | `false`   |
+|                          | `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuIndicator`| `sx`            | `StyleXStyles`                        | —         |
+| `NavigationMenuViewport` | `side`          | `"top" \| "bottom" \| ...`            | `"bottom"`|
+|                          | `sideOffset`    | `number`                              | `8`       |
+|                          | `align`         | `"start" \| "center" \| "end"`        | `"start"` |
+|                          | `alignOffset`   | `number`                              | `0`       |
+|                          | `sx`            | `StyleXStyles`                        | —         |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive. Each part renders with a `data-slot` for targeting
+(`navigation-menu`, `navigation-menu-list`, `navigation-menu-item`,
+`navigation-menu-trigger`, `navigation-menu-content`, `navigation-menu-link`,
+`navigation-menu-indicator`, `navigation-menu-viewport`).
+
+> [!NOTE]
+> shadcn also exports a `navigationMenuTriggerStyle()` helper for applying the
+> trigger look to another element via `className`. shadcn-x has no `className`,
+> so that helper is intentionally omitted — to style another element as a
+> trigger, pass it through the trigger's `render` prop, or mirror the trigger
+> tokens via `sx`.

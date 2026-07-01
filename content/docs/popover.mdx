@@ -1,0 +1,185 @@
+---
+title: Popover
+description: Displays rich content in a portal, anchored to a trigger.
+---
+
+# Popover
+
+A non-modal overlay built on the [Base UI](https://base-ui.com) popover
+primitive and styled with StyleX design tokens. Behavior and accessibility —
+portal rendering, anchor positioning, focus management, escape/outside-click to
+dismiss — come from Base UI; appearance comes from a closed set of typed `sx`
+props. Never accepts `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Popover>
+  <PopoverTrigger render={<Button variant="outline">Open Popover</Button>} />
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>Dimensions</PopoverTitle>
+      <PopoverDescription>
+        Set the dimensions of the popover.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/popover"
+```
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline">Open Popover</Button>} />
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>Dimensions</PopoverTitle>
+      <PopoverDescription>
+        Set the dimensions of the popover.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+```
+
+> **Trigger as another element.** `PopoverTrigger` renders a `<button>` by
+> default. To style another element as the trigger (e.g. a `Button` or `Link`),
+> pass it via the `render` prop — never `className`.
+
+## Examples
+
+### Placement
+
+`PopoverContent` accepts `side` (`top` | `bottom` | `left` | `right` |
+`inline-end` | `inline-start`) and `align` (`start` | `center` | `end`) to
+control where it appears relative to the trigger, plus `sideOffset` and
+`alignOffset` pixel gaps. The live preview below defaults to
+`side="bottom" align="center"`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Popover>
+  <PopoverTrigger render={<Button variant="outline">Start-aligned</Button>} />
+  <PopoverContent side="bottom" align="start" sideOffset={4}>
+    <PopoverHeader>
+      <PopoverTitle>Aligned to start</PopoverTitle>
+      <PopoverDescription>
+        <code>align="start"</code> anchors the popup's start edge.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+
+</Box>
+
+```tsx
+<Popover>
+  <PopoverTrigger render={<Button variant="outline">Start-aligned</Button>} />
+  <PopoverContent side="bottom" align="start" sideOffset={4}>
+    <PopoverHeader>
+      <PopoverTitle>Aligned to start</PopoverTitle>
+      <PopoverDescription>
+        <code>align="start"</code> anchors the popup's start edge.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+```
+
+### Controlled
+
+Drive the popover with `open` / `onOpenChange` instead of leaving it
+uncontrolled. The live preview below uses `defaultOpen` so it renders open
+immediately.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<Popover defaultOpen>
+  <PopoverTrigger render={<Button variant="outline">Controlled</Button>} />
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>Controlled popover</PopoverTitle>
+      <PopoverDescription>State can live in the parent.</PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+
+</Box>
+
+```tsx
+const [open, setOpen] = React.useState(false)
+
+<Popover open={open} onOpenChange={setOpen}>
+  <PopoverTrigger render={<Button variant="outline">Controlled</Button>} />
+  <PopoverContent>
+    <PopoverHeader>
+      <PopoverTitle>Controlled popover</PopoverTitle>
+      <PopoverDescription>State lives in the parent.</PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+```
+
+## Customization
+
+`Popover` never accepts `className`. Customize it on-system, in order of reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, padding, or
+   color tweaks on `PopoverContent` / `PopoverHeader`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { width: "24rem" },
+})
+
+<Popover>
+  <PopoverTrigger render={<Button variant="outline">Wide</Button>} />
+  <PopoverContent sx={styles.wide}>
+    <PopoverHeader>
+      <PopoverTitle>Wider content</PopoverTitle>
+      <PopoverDescription>
+        The default width is overridden via the last-wins `sx` prop.
+      </PopoverDescription>
+    </PopoverHeader>
+  </PopoverContent>
+</Popover>
+```
+
+## API Reference
+
+`Popover` (aliased from `PopoverPrimitive.Root`) accepts all [Base UI Popover
+Root props](https://base-ui.com/react/components/popover) (`open`,
+`onOpenChange`, `defaultOpen`, `modal`, etc.).
+
+| Subcomponent        | Prop           | Type                                  | Default   |
+| ------------------- | -------------- | ------------------------------------- | --------- |
+| `PopoverTrigger`    | `render`       | element                               | —         |
+|                     | `sx`           | `StyleXStyles`                        | —         |
+| `PopoverContent`    | `side`         | `top` \| `bottom` \| `left` \| ...    | `bottom`  |
+|                     | `align`        | `start` \| `center` \| `end`          | `center`  |
+|                     | `sideOffset`   | `number`                              | `4`       |
+|                     | `alignOffset`  | `number`                              | `0`       |
+|                     | `sx`           | `StyleXStyles`                        | —         |
+| `PopoverHeader`     | `sx`           | `StyleXStyles`                        | —         |
+| `PopoverTitle`      | `sx`           | `StyleXStyles`                        | —         |
+| `PopoverDescription`| `sx`           | `StyleXStyles`                        | —         |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.

@@ -1,0 +1,347 @@
+---
+title: Context Menu
+description: A menu of actions revealed on right-click, built on Base UI.
+---
+
+# Context Menu
+
+A context menu built on the [Base UI](https://base-ui.com) context menu
+primitive and styled with StyleX design tokens. Behavior and accessibility —
+right-click trigger, positioning, roving focus, keyboard navigation, submenu, and
+portal stacking — come from Base UI; appearance comes from a closed set of typed
+`inset` / `variant` / `sx` props. Never accepts `className`.
+
+**Right-click the area below to open the menu.**
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuGroup>
+      <ContextMenuLabel>Actions</ContextMenuLabel>
+      <ContextMenuItem>
+        Back
+        <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+      </ContextMenuItem>
+      <ContextMenuItem>
+        Forward
+        <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+      </ContextMenuItem>
+      <ContextMenuItem disabled>Reload</ContextMenuItem>
+    </ContextMenuGroup>
+    <ContextMenuSeparator />
+    <ContextMenuCheckboxItem checked>Show bookmarks</ContextMenuCheckboxItem>
+    <ContextMenuSeparator />
+    <ContextMenuSub>
+      <ContextMenuSubTrigger>Share</ContextMenuSubTrigger>
+      <ContextMenuSubContent>
+        <ContextMenuItem>Email link</ContextMenuItem>
+        <ContextMenuItem>Copy link</ContextMenuItem>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+    <ContextMenuSeparator />
+    <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from "@/components/context-menu"
+```
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>
+      Back
+      <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuItem>Forward</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Examples
+
+### With groups, labels, and a separator
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuGroup>
+      <ContextMenuLabel>Window</ContextMenuLabel>
+      <ContextMenuItem>New window</ContextMenuItem>
+      <ContextMenuItem>New tab</ContextMenuItem>
+    </ContextMenuGroup>
+    <ContextMenuSeparator />
+    <ContextMenuGroup>
+      <ContextMenuLabel>History</ContextMenuLabel>
+      <ContextMenuItem inset>Back</ContextMenuItem>
+      <ContextMenuItem inset>Forward</ContextMenuItem>
+    </ContextMenuGroup>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuGroup>
+      <ContextMenuLabel>Window</ContextMenuLabel>
+      <ContextMenuItem>New window</ContextMenuItem>
+      <ContextMenuItem>New tab</ContextMenuItem>
+    </ContextMenuGroup>
+    <ContextMenuSeparator />
+    <ContextMenuGroup>
+      <ContextMenuLabel>History</ContextMenuLabel>
+      <ContextMenuItem inset>Back</ContextMenuItem>
+      <ContextMenuItem inset>Forward</ContextMenuItem>
+    </ContextMenuGroup>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+### Checkbox items
+
+Toggle settings on or off with `ContextMenuCheckboxItem`. The check indicator
+appears automatically when the item is checked.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuCheckboxItem checked>Show status bar</ContextMenuCheckboxItem>
+    <ContextMenuCheckboxItem>Show side panel</ContextMenuCheckboxItem>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+```tsx
+function SettingsMenu() {
+  const [statusBar, setStatusBar] = React.useState(true)
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuCheckboxItem
+          checked={statusBar}
+          onCheckedChange={setStatusBar}
+        >
+          Show status bar
+        </ContextMenuCheckboxItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
+### Radio items
+
+Group mutually-exclusive choices with `ContextMenuRadioGroup` and
+`ContextMenuRadioItem`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuRadioGroup defaultValue="compact">
+      <ContextMenuLabel>View density</ContextMenuLabel>
+      <ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem>
+      <ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem>
+    </ContextMenuRadioGroup>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuRadioGroup defaultValue="compact">
+      <ContextMenuLabel>View density</ContextMenuLabel>
+      <ContextMenuRadioItem value="compact">Compact</ContextMenuRadioItem>
+      <ContextMenuRadioItem value="comfortable">Comfortable</ContextMenuRadioItem>
+    </ContextMenuRadioGroup>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+### Submenu
+
+Nest a secondary menu with `ContextMenuSub`, `ContextMenuSubTrigger`, and
+`ContextMenuSubContent`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>Copy</ContextMenuItem>
+    <ContextMenuItem>Paste</ContextMenuItem>
+    <ContextMenuSub>
+      <ContextMenuSubTrigger>Find</ContextMenuSubTrigger>
+      <ContextMenuSubContent>
+        <ContextMenuItem>Find next</ContextMenuItem>
+        <ContextMenuItem>Find previous</ContextMenuItem>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>Copy</ContextMenuItem>
+    <ContextMenuItem>Paste</ContextMenuItem>
+    <ContextMenuSub>
+      <ContextMenuSubTrigger>Find</ContextMenuSubTrigger>
+      <ContextMenuSubContent>
+        <ContextMenuItem>Find next</ContextMenuItem>
+        <ContextMenuItem>Find previous</ContextMenuItem>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+### Destructive item
+
+Set `variant="destructive"` to style an item as a destructive action.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Box padding="2xl" backgroundColor="background-muted" borderRadius="m" textAlign="center" color="text-secondary">
+      Right-click here
+    </Box>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>Open</ContextMenuItem>
+    <ContextMenuItem>Rename</ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuItem variant="destructive">Move to trash</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+
+</Box>
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>Open</ContextMenuItem>
+    <ContextMenuItem>Rename</ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuItem variant="destructive">Move to trash</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Customization
+
+`ContextMenu` never accepts `className`. Customize it on-system, in order of
+reach:
+
+1. **`sx`** — a typed, per-instance override on any subcomponent that accepts
+   `StyleXStyles` and merges last, so it wins. Useful for width, alignment, or
+   spacing tweaks on `ContextMenuContent` / `ContextMenuItem`.
+2. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`, `boxShadow`).
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  wide: { minWidth: "16rem" },
+})
+
+<ContextMenu>
+  <ContextMenuTrigger>Right-click me</ContextMenuTrigger>
+  <ContextMenuContent sx={styles.wide}>
+    <ContextMenuItem>Open</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## API Reference
+
+`ContextMenu` (aliased from `ContextMenuPrimitive.Root`) accepts all [Base UI
+Context Menu Root props](https://base-ui.com/react/components/context-menu)
+(`open`, `onOpenChange`, etc.).
+
+| Subcomponent              | Prop           | Type                                                | Default     |
+| ------------------------- | -------------- | --------------------------------------------------- | ----------- |
+| `ContextMenuTrigger`      | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuContent`      | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"right"`   |
+|                           | `sideOffset`   | `number`                                            | `0`         |
+|                           | `align`        | `"start" \| "center" \| "end"`                      | `"start"`   |
+|                           | `alignOffset`  | `number`                                            | `4`         |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuGroup`        | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuLabel`        | `inset`        | `boolean`                                           | `false`     |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuItem`         | `inset`        | `boolean`                                           | `false`     |
+|                           | `variant`      | `"default" \| "destructive"`                        | `"default"` |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuCheckboxItem` | `checked`      | `boolean`                                           | —           |
+|                           | `inset`        | `boolean`                                           | `false`     |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuRadioGroup`   | `value`        | `any`                                               | —           |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuRadioItem`    | `value`        | `any`                                               | —           |
+|                           | `inset`        | `boolean`                                           | `false`     |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuSub`          | —              | Base UI SubmenuRoot                                 | —           |
+| `ContextMenuSubTrigger`   | `inset`        | `boolean`                                           | `false`     |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuSubContent`   | `side`         | `"top" \| "bottom" \| "left" \| "right" \| …`       | `"right"`   |
+|                           | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuSeparator`    | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuShortcut`     | `sx`           | `StyleXStyles`                                      | —           |
+| `ContextMenuPortal`       | —              | Base UI Portal                                      | —           |
+
+All other props (native attributes, `render`, etc.) are forwarded to the
+underlying Base UI primitive.
