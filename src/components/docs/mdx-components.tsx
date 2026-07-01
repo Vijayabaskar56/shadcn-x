@@ -9,6 +9,7 @@ import {
   ButtonGroupSeparator,
   ButtonGroupText,
 } from "@/components/button-group"
+import { DirectionProvider } from "@/components/direction"
 import { Icon } from "@/components/icon"
 import { Image } from "@/components/image"
 import { Input } from "@/components/input"
@@ -213,6 +214,7 @@ export const mdxComponents = {
   TableHead,
   TableCell,
   TableCaption,
+  DirectionProvider,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (

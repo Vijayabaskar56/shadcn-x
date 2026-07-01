@@ -36,6 +36,7 @@ export const docsNav: Array<DocsNavSection> = [
       { label: "Image", slug: "image" },
       { label: "Table", slug: "table" },
       { label: "Textarea", slug: "textarea" },
+      { label: "Direction", slug: "direction" },
     ],
   },
 ]

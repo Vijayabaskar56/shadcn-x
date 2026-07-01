@@ -100,16 +100,16 @@ These drive raw-HTML usage toward zero. Build first.
 - [ ] Carousel
 - [ ] Chart
 
-## Phase 5 — RTL / Direction
+## Phase 5 — RTL / Direction ✅
 
-Plan: `docs/plans/2026-06-30-rtl-support.md`
+Plan: `docs/plans/2026-06-30-rtl-support.md` (implemented in `9680f1c`)
 
-- [ ] `enableLTRRTLComments` config
-- [ ] Direction (provider) + `useDirection` hook
-- [ ] RTL: migrate Box physical → logical (`paddingX`, `borderLeft/Right`, `textAlign`)
-- [ ] RTL: migrate Text (`borderLeft` → `borderInlineStart`)
-- [ ] RTL: migrate docs components (mdx-components, doc-toc)
-- [ ] RTL: Icon auto-flip (`stylex.when.ancestor('[dir="rtl"]')`)
+- [x] `enableLTRRTLComments` config
+- [x] Direction (provider) + `useDirection` hook
+- [x] RTL: migrate Box physical → logical (`paddingX`, `borderLeft/Right`, `textAlign`)
+- [x] RTL: migrate Text (`borderLeft` → `borderInlineStart`)
+- [x] RTL: migrate docs components (mdx-components, doc-toc, docs-sidebar, docs layout)
+- [x] RTL: Icon auto-flip (`flipRtl` prop via `stylex.when.ancestor('[dir="rtl"]')`)
 - [ ] RTL: overlay animation directions (Phases 2-4)
 - [ ] RTL: lint rule (`preferInline` equivalent for oxlint)
 - [ ] RTL: test suite

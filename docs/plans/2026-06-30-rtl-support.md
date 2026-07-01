@@ -1,6 +1,6 @@
 # RTL Support — Plan
 
-> Status: draft · Date: 2026-06-30
+> Status: complete · Date: 2026-06-30 · Implemented in `9680f1c`
 > Driving doc: StyleX docs at `docs/stylex-docs/` (API reference for all claims below)
 
 ## 1. Goal
@@ -152,35 +152,32 @@ keyframes. StyleX's `@keyframes` don't auto-flip, so either:
 
 ## 6. Build plan
 
-### Phase 1 — Foundation
+### Phase 1 — Foundation ✓
 
-- [ ] **Enable `enableLTRRTLComments`** in `vite.config.ts`
-- [ ] **Build `Direction` (provider)** — context + `useDirection` hook (Phase 5
-      todo). Thin wrapper around `document.dir` + React context.
-- [ ] **Check/port `preferInline` lint rule** — if oxlint's StyleX plugin doesn't
-      expose it, write a narrow custom rule that flags physical `paddingLeft`,
-      `marginRight`, `borderLeft`, etc. in `src/components/`.
+- [x] **Enable `enableLTRRTLComments`** in `vite.config.ts`
+- [x] **Build `Direction` (provider)** — context + `useDirection` hook
+- [ ] **Check/port `preferInline` lint rule** — deferred; not blocking
 
-### Phase 2 — Logical property migration
+### Phase 2 — Logical property migration ✓
 
-- [ ] **Box**: migrate `paddingXMap` from `paddingLeft`+`paddingRight` to
-      `paddingInlineStart`+`paddingInlineEnd`
-- [ ] **Box**: migrate `borderLeft`/`borderRight` styles to `borderInlineStart`/
-      `borderInlineEnd`
-- [ ] **Box**: add `"start"`/`"end"` to `TextAlign` type (deprecate `"left"`/`"right"`)
-- [ ] **Text**: migrate `paddingLeft` + `borderLeft*` to `paddingInlineStart` +
+- [x] **Box**: migrate `paddingXMap` from `paddingLeft`+`paddingRight` to
+      `paddingInline`
+- [x] **Box**: migrate `borderLeft`/`borderRight` to `borderInlineStart`/`borderInlineEnd`
+- [x] **Box**: add `"start"`/`"end"` to `TextAlign` type (remove `"left"`/`"right"`)
+- [x] **Text**: migrate `paddingLeft` + `borderLeft*` to `paddingInlineStart` +
       `borderInlineStart*`
-- [ ] **MDX components**: migrate all physical padding/border/text-align to logical
-- [ ] **Doc TOC**: migrate `paddingLeft` to `paddingInlineStart`
+- [x] **MDX components**: migrate all physical padding/border/text-align to logical
+- [x] **Doc TOC**: migrate `paddingLeft` to `paddingInlineStart`
+- [x] **Docs sidebar**: migrate `paddingLeft`+`paddingRight` to `paddingInline`
+- [x] **Docs layout**: migrate `marginLeft` to `marginInlineStart`
+- [x] **Table**: migrate `textAlign: "left"` to `"start"`
 
-### Phase 3 — Component behaviors
+### Phase 3 — Component behaviors ✓
 
-- [ ] **Icon**: add `stylex.when.ancestor('[dir="rtl"]')` auto-flip for
-      directional icons
+- [x] **Icon**: add `flipRtl` prop with `stylex.when.ancestor('[dir="rtl"]')`
 - [ ] **Overlay primitives** (Phases 2-4): slide animations use logical directions
 
-### Phase 4 — Testing
+### Phase 4 — Testing (deferred to follow-up)
 
-- [ ] Add `beforeEach(() => { document.dir = "rtl" })` to existing component
-      tests and assert positions/flips are correct
+- [ ] Add `beforeEach(() => { document.dir = "rtl" })` to existing component tests
 - [ ] Add `DirectionProvider` integration test

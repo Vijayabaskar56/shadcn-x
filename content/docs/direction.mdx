@@ -1,0 +1,96 @@
+---
+title: Direction
+description: Right-to-left (RTL) support — logical properties, DirectionProvider, and icon flipping.
+---
+
+# Direction
+
+shadcn-x components have first-class support for right-to-left (RTL) layouts. All directional styles use CSS logical properties (`padding-inline-start`, `border-inline-end`, `text-align: start`) so they automatically respect the document's `dir` attribute — no per-component opt-in, no `dark:`-style direction variants.
+
+## Quick start
+
+Wrap your app in `DirectionProvider` to set the direction:
+
+```tsx
+import { DirectionProvider } from "@/components/direction"
+
+function App() {
+  return (
+    <DirectionProvider dir="rtl">
+      {/* all components now render in RTL */}
+    </DirectionProvider>
+  )
+}
+```
+
+`dir` defaults to `"ltr"` when omitted. The provider sets `document.documentElement.dir` and all components respond via CSS logical properties.
+
+## How it works
+
+StyleX does **not** auto-flip physical properties. Instead, shadcn-x's styles are authored with CSS logical properties from the start:
+
+| Physical | Logical (used by shadcn-x) |
+|---|---|
+| `paddingLeft` / `paddingRight` | `paddingInlineStart` / `paddingInlineEnd` |
+| `paddingLeft` + `paddingRight` | `paddingInline` |
+| `marginLeft` / `marginRight` | `marginInlineStart` / `marginInlineEnd` |
+| `borderLeft*` / `borderRight*` | `borderInlineStart*` / `borderInlineEnd*` |
+| `textAlign: "left"` / `"right"` | `textAlign: "start"` / `"end"` |
+
+The browser maps these based on `dir` — left in LTR, right in RTL.
+
+## Box prop surface
+
+The Box component's props already use logical properties under the hood:
+
+- `paddingX` → `padding-inline`
+- `borderLeft` → `border-inline-start`
+- `borderRight` → `border-inline-end`
+- `textAlign` → `"start"` / `"end"` (use these instead of `"left"` / `"right"`)
+
+## Icons
+
+Directional icons (arrows, chevrons, carets) can be flipped in RTL with the `flipRtl` prop:
+
+```tsx
+<Icon name="ChevronRight" flipRtl />
+```
+
+This applies `scaleX(-1)` when `dir="rtl"`.
+
+## `useDirection` hook
+
+Read the current direction from anywhere in the tree:
+
+```tsx
+import { useDirection } from "@/components/direction"
+
+function MyComponent() {
+  const dir = useDirection() // "ltr" | "rtl"
+  // ...
+}
+```
+
+## What's covered
+
+All shadcn-x components use logical properties:
+
+- **Box** — `paddingX`, `borderLeft`/`borderRight`, `textAlign`
+- **Text** — blockquote indent and border
+- **Table** — header cell text alignment
+- **Icon** — `flipRtl` prop for directional icons
+- **Button** — padding already uses `paddingInline*`
+- **Docs infrastructure** — sidebar, table of contents, MDX prose
+
+## Verifying RTL
+
+To test a component in RTL during development:
+
+```tsx
+beforeEach(() => {
+  document.dir = "rtl"
+})
+afterEach(() => {
+  document.dir = "ltr"
+})
+```
