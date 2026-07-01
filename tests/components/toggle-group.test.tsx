@@ -77,4 +77,31 @@ describe("ToggleGroup", () => {
     )
     expect(screen.getByRole("button").className).not.toBe("")
   })
+
+  it("reflects a default-selected item as pressed", () => {
+    render(
+      <ToggleGroup multiple defaultValue={["b"]}>
+        <ToggleGroupItem value="a">A</ToggleGroupItem>
+        <ToggleGroupItem value="b">B</ToggleGroupItem>
+      </ToggleGroup>
+    )
+    // The selected item must carry the pressed style vs an unselected one.
+    expect(screen.getByRole("button", { name: "B" }).className).not.toBe(
+      screen.getByRole("button", { name: "A" }).className
+    )
+  })
+
+  it("applies the pressed style when an item is selected (uncontrolled)", async () => {
+    render(
+      <ToggleGroup multiple>
+        <ToggleGroupItem value="a">A</ToggleGroupItem>
+      </ToggleGroup>
+    )
+    const item = screen.getByRole("button", { name: "A" })
+    const unpressedClass = item.className
+    await userEvent.click(item)
+    expect(item).toHaveAttribute("aria-pressed", "true")
+    // Selecting must restyle the item, not merely flip aria-pressed.
+    expect(item.className).not.toBe(unpressedClass)
+  })
 })

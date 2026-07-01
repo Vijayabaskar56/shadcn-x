@@ -4,7 +4,7 @@ import type { CSSProperties } from "react"
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
 import * as stylex from "@stylexjs/stylex"
-import { createContext, useContext } from "react"
+import { createContext, useContext, useState } from "react"
 
 import { borderRadius } from "../styles/tokens.stylex"
 import { groupItemEdges } from "./group-item-edges"
@@ -18,13 +18,20 @@ type ToggleGroupContextValue = {
   size?: Size
   spacing: number
   orientation: "horizontal" | "vertical"
+  // The group's current value, so each item can derive its pressed state. StyleX
+  // can't key off the self `[data-pressed]` attribute, and per-item local state
+  // would desync when the group deselects an item, so items derive from this.
+  value: readonly string[]
 }
+
+const EMPTY: readonly string[] = []
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue>({
   size: "default",
   variant: "default",
   spacing: 0,
   orientation: "horizontal",
+  value: EMPTY,
 })
 
 const styles = stylex.create({
@@ -64,10 +71,20 @@ function ToggleGroup({
   size,
   spacing: gap = 0,
   orientation = "horizontal",
+  value,
+  defaultValue,
+  onValueChange,
   children,
   sx,
   ...props
 }: ToggleGroupProps) {
+  // Mirror the group value so items can derive pressed state. Controlled `value`
+  // wins; otherwise the local mirror is updated via onValueChange.
+  const [internalValue, setInternalValue] = useState<readonly string[]>(
+    defaultValue ?? EMPTY
+  )
+  const groupValue = value ?? internalValue
+
   return (
     <ToggleGroupPrimitive
       data-slot="toggle-group"
@@ -76,6 +93,12 @@ function ToggleGroup({
       data-spacing={gap}
       data-orientation={orientation}
       style={{ "--gap": gap } as CSSProperties}
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={(nextValue, eventDetails) => {
+        setInternalValue(nextValue)
+        onValueChange?.(nextValue, eventDetails)
+      }}
       {...stylex.props(
         styles.group,
         orientationStyles[orientation],
@@ -85,7 +108,13 @@ function ToggleGroup({
       {...props}
     >
       <ToggleGroupContext.Provider
-        value={{ variant, size, spacing: gap, orientation }}
+        value={{
+          variant,
+          size,
+          spacing: gap,
+          orientation,
+          value: groupValue,
+        }}
       >
         {children}
       </ToggleGroupContext.Provider>
@@ -123,7 +152,10 @@ function ToggleGroupItem({
   const context = useContext(ToggleGroupContext)
   const variant = context.variant ?? itemVariant ?? "default"
   const size = context.size ?? itemSize ?? "default"
-  const isPressed = props.pressed === true
+  // Pressed is derived from the group value (Base UI only fires the item's
+  // onPressedChange on user clicks, not on group-driven deselection).
+  const isPressed =
+    props.value != null && context.value.includes(String(props.value))
 
   return (
     <TogglePrimitive

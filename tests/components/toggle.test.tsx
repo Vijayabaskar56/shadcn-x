@@ -65,4 +65,27 @@ describe("Toggle", () => {
       "true"
     )
   })
+
+  it("reflects the pressed style when defaultPressed (uncontrolled)", () => {
+    render(
+      <>
+        <Toggle>Off</Toggle>
+        <Toggle defaultPressed>On</Toggle>
+      </>
+    )
+    // defaultPressed must apply the pressed styles, not just Base UI's aria state.
+    expect(screen.getByRole("button", { name: "On" }).className).not.toBe(
+      screen.getByRole("button", { name: "Off" }).className
+    )
+  })
+
+  it("updates the pressed style when toggled (uncontrolled)", async () => {
+    render(<Toggle>Tap</Toggle>)
+    const toggle = screen.getByRole("button", { name: "Tap" })
+    const unpressedClass = toggle.className
+    await userEvent.click(toggle)
+    expect(toggle).toHaveAttribute("aria-pressed", "true")
+    // Toggling on must restyle the button, not merely flip aria-pressed.
+    expect(toggle.className).not.toBe(unpressedClass)
+  })
 })

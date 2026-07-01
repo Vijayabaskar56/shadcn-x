@@ -2,6 +2,7 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import * as stylex from "@stylexjs/stylex"
+import { useState } from "react"
 
 import {
   borderRadius,
@@ -120,15 +121,29 @@ function Toggle({
   variant = "default",
   size = "default",
   sx,
+  pressed,
+  defaultPressed,
+  onPressedChange,
   ...props
 }: ToggleProps) {
-  const isPressed = props.pressed === true
+  // Base UI's Toggle is uncontrolled by default (`defaultPressed`, no `pressed`),
+  // and StyleX can't key the pressed state off the self `[data-pressed]` attribute
+  // (silently dropped). Track the live state in JS — controlled `pressed` wins
+  // when provided, otherwise the local mirror updated via onPressedChange.
+  const [internal, setInternal] = useState(defaultPressed ?? false)
+  const isPressed = pressed ?? internal
 
   return (
     <TogglePrimitive
       data-slot="toggle"
       data-size={size}
       data-variant={variant}
+      pressed={pressed}
+      defaultPressed={defaultPressed}
+      onPressedChange={(nextPressed, eventDetails) => {
+        setInternal(nextPressed)
+        onPressedChange?.(nextPressed, eventDetails)
+      }}
       {...stylex.props(
         toggleStyles.base,
         variantStyles[variant],
