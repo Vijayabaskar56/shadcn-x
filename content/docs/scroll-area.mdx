@@ -1,0 +1,154 @@
+---
+title: Scroll Area
+description: Augments native scrolling with token-styled scrollbars.
+---
+
+import * as stylex from "@stylexjs/stylex"
+
+export const scrollAreaPreviewStyles = stylex.create({
+  demo: {
+    height: "12rem",
+    width: "100%",
+  },
+  horizontal: {
+    width: "100%",
+  },
+  row: {
+    width: "36rem",
+  },
+})
+
+# Scroll Area
+
+A scrollable viewport built on the [Base UI](https://base-ui.com) scroll area
+primitive and styled with StyleX design tokens. Behavior, overflow measurement,
+thumb sizing, and scrollbar interaction come from Base UI. Appearance comes from
+the shadcn-compatible `ScrollArea` and `ScrollBar` slots, with `sx` replacing
+`className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ScrollArea sx={scrollAreaPreviewStyles.demo}>
+  <Box display="grid" gap="s">
+    <Text variant="p">Inbox</Text>
+    <Text variant="p">Quarterly budget review</Text>
+    <Text variant="p">Design critique notes</Text>
+    <Text variant="p">Vendor renewal draft</Text>
+    <Text variant="p">Incident follow-up</Text>
+    <Text variant="p">Roadmap review</Text>
+    <Text variant="p">Launch checklist</Text>
+    <Text variant="p">Customer interview notes</Text>
+  </Box>
+</ScrollArea>
+
+</Box>
+
+## Usage
+
+```tsx
+import { ScrollArea, ScrollBar } from "@/components/scroll-area"
+```
+
+```tsx
+<ScrollArea>
+  <Text variant="p">Scrollable content</Text>
+</ScrollArea>
+```
+
+## Examples
+
+### Vertical
+
+`ScrollArea` renders a vertical `ScrollBar` by default, matching shadcn's API.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ScrollArea sx={scrollAreaPreviewStyles.demo}>
+  <Box display="grid" gap="s">
+    <Text variant="p">Activity feed</Text>
+    <Text variant="p">Payment received</Text>
+    <Text variant="p">Invoice sent</Text>
+    <Text variant="p">Subscription updated</Text>
+    <Text variant="p">Reminder scheduled</Text>
+    <Text variant="p">Transfer reconciled</Text>
+  </Box>
+</ScrollArea>
+
+</Box>
+
+```tsx
+<ScrollArea>
+  <Text variant="p">Scrollable content</Text>
+</ScrollArea>
+```
+
+### Horizontal
+
+Add a horizontal `ScrollBar` for wide content. The component preserves shadcn's
+`orientation="horizontal"` prop and forwards Base UI scrollbar props.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<ScrollArea sx={scrollAreaPreviewStyles.horizontal}>
+  <Box display="flex" gap="m" sx={scrollAreaPreviewStyles.row}>
+    <Box padding="m" backgroundColor="background-muted" borderRadius="m">
+      <Text variant="p">January</Text>
+    </Box>
+    <Box padding="m" backgroundColor="background-muted" borderRadius="m">
+      <Text variant="p">February</Text>
+    </Box>
+    <Box padding="m" backgroundColor="background-muted" borderRadius="m">
+      <Text variant="p">March</Text>
+    </Box>
+    <Box padding="m" backgroundColor="background-muted" borderRadius="m">
+      <Text variant="p">April</Text>
+    </Box>
+  </Box>
+  <ScrollBar orientation="horizontal" />
+</ScrollArea>
+
+</Box>
+
+```tsx
+<ScrollArea>
+  <Box display="flex" gap="m" sx={styles.row}>
+    {/* wide content */}
+  </Box>
+  <ScrollBar orientation="horizontal" />
+</ScrollArea>
+```
+
+## Customization
+
+`ScrollArea` and `ScrollBar` never accept `className`. Customize them on-system:
+
+1. **`sx`** — a typed, per-instance StyleX override, merged last.
+2. **`createTheme`** — re-skin a subtree by overriding token values.
+3. **Owned source** — edit the copied component when you need a structural
+   scrollbar change.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  compact: {
+    width: "16rem",
+    height: "10rem",
+  },
+})
+
+<ScrollArea sx={styles.compact}>
+  <Text variant="p">Scrollable content</Text>
+</ScrollArea>
+```
+
+## API Reference
+
+| Component    | Prop          | Type                         | Default      |
+| ------------ | ------------- | ---------------------------- | ------------ |
+| `ScrollArea` | `sx`          | `StyleXStyles`               | —            |
+| `ScrollBar`  | `orientation` | `"vertical" \| "horizontal"` | `"vertical"` |
+|              | `keepMounted` | `boolean`                    | `false`      |
+|              | `sx`          | `StyleXStyles`               | —            |
+
+All other Base UI scroll area props are forwarded to the matching primitive.

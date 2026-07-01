@@ -1,0 +1,200 @@
+---
+title: Resizable
+description: Accessible resizable panel layouts with token-styled handles.
+---
+
+import * as stylex from "@stylexjs/stylex"
+
+export const resizablePreviewStyles = stylex.create({
+  frame: {
+    width: "100%",
+    height: "14rem",
+  },
+  compactFrame: {
+    width: "100%",
+    height: "10rem",
+  },
+  panel: {
+    height: "100%",
+  },
+})
+
+# Resizable
+
+Resizable creates split layouts with draggable panel handles. It ports shadcn's
+`ResizablePanelGroup`, `ResizablePanel`, and `ResizableHandle` API to
+`react-resizable-panels`, then replaces `className` with StyleX token styling
+and typed `sx` overrides.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary" sx={resizablePreviewStyles.frame}>
+
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={50}>
+    <Box display="flex" alignItems="center" justifyContent="center" backgroundColor="background-muted" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">One</Text>
+    </Box>
+  </ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={50}>
+    <Box display="flex" alignItems="center" justifyContent="center" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">Two</Text>
+    </Box>
+  </ResizablePanel>
+</ResizablePanelGroup>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/resizable"
+```
+
+```tsx
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={50}>One</ResizablePanel>
+  <ResizableHandle />
+  <ResizablePanel defaultSize={50}>Two</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+## Examples
+
+### Horizontal
+
+Use `direction="horizontal"` for side-by-side panels. This is the default.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary" sx={resizablePreviewStyles.compactFrame}>
+
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={35}>
+    <Box display="flex" alignItems="center" justifyContent="center" backgroundColor="background-muted" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">Sidebar</Text>
+    </Box>
+  </ResizablePanel>
+  <ResizableHandle />
+  <ResizablePanel defaultSize={65}>
+    <Box display="flex" alignItems="center" justifyContent="center" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">Content</Text>
+    </Box>
+  </ResizablePanel>
+</ResizablePanelGroup>
+
+</Box>
+
+```tsx
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={35}>Sidebar</ResizablePanel>
+  <ResizableHandle />
+  <ResizablePanel defaultSize={65}>Content</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+### Vertical
+
+Use `direction="vertical"` for stacked panels.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary" sx={resizablePreviewStyles.compactFrame}>
+
+<ResizablePanelGroup direction="vertical">
+  <ResizablePanel defaultSize={45}>
+    <Box display="flex" alignItems="center" justifyContent="center" backgroundColor="background-muted" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">Preview</Text>
+    </Box>
+  </ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={55}>
+    <Box display="flex" alignItems="center" justifyContent="center" sx={resizablePreviewStyles.panel}>
+      <Text variant="p">Inspector</Text>
+    </Box>
+  </ResizablePanel>
+</ResizablePanelGroup>
+
+</Box>
+
+```tsx
+<ResizablePanelGroup direction="vertical">
+  <ResizablePanel defaultSize={45}>Preview</ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={55}>Inspector</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+### Constraints
+
+Panel sizing, min/max constraints, collapsibility, and persistence props are
+forwarded to `react-resizable-panels`.
+
+```tsx
+<ResizablePanelGroup direction="horizontal">
+  <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
+    Navigation
+  </ResizablePanel>
+  <ResizableHandle />
+  <ResizablePanel defaultSize={70}>Main</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+## Customization
+
+Resizable does not accept `className` or raw `style`. Customize it on-system:
+
+1. **`sx`** — typed StyleX overrides on `ResizablePanelGroup` and
+   `ResizableHandle`, merged last.
+2. **`createTheme`** — re-skin handle color, focus ring, radius, and spacing by
+   overriding tokens.
+3. **Owned source** — edit the copied component for structural changes.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  tall: {
+    height: "20rem",
+  },
+})
+
+<ResizablePanelGroup direction="horizontal" sx={styles.tall}>
+  <ResizablePanel defaultSize={50}>One</ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={50}>Two</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+## API Reference
+
+### ResizablePanelGroup
+
+| Prop        | Type                         | Default        |
+| ----------- | ---------------------------- | -------------- |
+| `direction` | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `sx`        | `StyleXStyles`               | —              |
+
+All other `react-resizable-panels` group props are forwarded, except
+`className`, `style`, and the lower-level `orientation` prop.
+
+### ResizablePanel
+
+| Prop          | Type                | Default |
+| ------------- | ------------------- | ------- |
+| `defaultSize` | `number \| string` | —       |
+| `minSize`     | `number \| string` | —       |
+| `maxSize`     | `number \| string` | —       |
+| `collapsible` | `boolean`           | —       |
+
+All other `react-resizable-panels` panel props are forwarded, except
+`className` and `style`.
+
+### ResizableHandle
+
+| Prop         | Type           | Default |
+| ------------ | -------------- | ------- |
+| `withHandle` | `boolean`      | `false` |
+| `sx`         | `StyleXStyles` | —       |
+
+All other `react-resizable-panels` separator props are forwarded, except
+`className` and `style`.

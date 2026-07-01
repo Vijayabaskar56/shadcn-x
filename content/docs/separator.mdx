@@ -1,0 +1,94 @@
+---
+title: Separator
+description: Visually or semantically separates content.
+---
+
+# Separator
+
+A themeable separator built on the [Base UI](https://base-ui.com) separator
+primitive and styled with StyleX design tokens. It matches shadcn's
+`orientation` and `decorative` API while replacing `className` with typed `sx`.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Text>Account</Text>
+  <Separator />
+  <Text color="text-secondary">Billing and notification preferences.</Text>
+</Box>
+
+## Usage
+
+```tsx
+import { Separator } from "@/components/separator"
+```
+
+```tsx
+<Separator />
+```
+
+## Examples
+
+### Horizontal
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Text>Profile</Text>
+  <Separator />
+  <Text color="text-secondary">Manage public account details.</Text>
+</Box>
+
+```tsx
+<Separator />
+```
+
+### Vertical
+
+Use `orientation="vertical"` when the separator sits between inline or flexed
+items.
+
+<Box display="flex" alignItems="stretch" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Text>Overview</Text>
+  <Separator orientation="vertical" />
+  <Text>Activity</Text>
+  <Separator orientation="vertical" />
+  <Text>Settings</Text>
+</Box>
+
+```tsx
+<Separator orientation="vertical" />
+```
+
+### Accessible
+
+Separators are decorative by default, matching shadcn. Set `decorative={false}`
+when the divider should be exposed to assistive technology.
+
+```tsx
+<Separator decorative={false} />
+```
+
+## Customization
+
+`Separator` never accepts `className`. Customize it on-system with `sx` or by
+re-theming the border token used by the component.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  inset: {
+    width: "75%",
+  },
+})
+
+<Separator sx={styles.inset} />
+```
+
+## API Reference
+
+| Prop          | Type                           | Default        |
+| ------------- | ------------------------------ | -------------- |
+| `orientation` | `"horizontal" \| "vertical"`   | `"horizontal"` |
+| `decorative`  | `boolean`                      | `true`         |
+| `sx`          | `StyleXStyles`                 | —              |
+
+All other [Base UI separator props](https://base-ui.com/react/components/separator)
+(`id`, `render`, `aria-*`, …) are forwarded.

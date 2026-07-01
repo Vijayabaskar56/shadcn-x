@@ -1,0 +1,109 @@
+---
+title: Aspect Ratio
+description: Displays content within a desired ratio.
+---
+
+# Aspect Ratio
+
+A layout primitive for preserving a fixed width-to-height ratio. It ports
+shadcn's `AspectRatio` API to StyleX: pass `ratio`, put any content inside, and
+customize with `sx` instead of `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <AspectRatio ratio={16 / 9}>
+    <Image src="https://picsum.photos/seed/aspect-ratio/960/540" alt="A landscape preview" sx={{ width: "100%", height: "100%" }} />
+  </AspectRatio>
+
+</Box>
+
+## Usage
+
+```tsx
+import { AspectRatio } from "@/components/aspect-ratio"
+```
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <Image src="/image.jpg" alt="Image" />
+</AspectRatio>
+```
+
+## Examples
+
+### Default
+
+The default ratio is square (`1`), matching Radix's `AspectRatio.Root` default.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <AspectRatio>
+    <Image src="https://picsum.photos/seed/aspect-square/600/600" alt="Square crop" sx={{ width: "100%", height: "100%" }} />
+  </AspectRatio>
+
+</Box>
+
+```tsx
+<AspectRatio>
+  <Image src="/avatar.jpg" alt="Avatar" />
+</AspectRatio>
+```
+
+### Custom Ratio
+
+Use `ratio` for any width / height value, such as `16 / 9`, `4 / 3`, or `1`.
+
+<Box display="grid" gap="m" sx={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}>
+
+  <AspectRatio ratio={16 / 9}>
+    <Image src="https://picsum.photos/seed/aspect-video/640/360" alt="16 by 9 preview" sx={{ width: "100%", height: "100%" }} />
+  </AspectRatio>
+
+  <AspectRatio ratio={4 / 3}>
+    <Image src="https://picsum.photos/seed/aspect-standard/640/480" alt="4 by 3 preview" sx={{ width: "100%", height: "100%" }} />
+  </AspectRatio>
+
+</Box>
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <Image src="/thumbnail.jpg" alt="Video thumbnail" />
+</AspectRatio>
+```
+
+## Customization
+
+`AspectRatio` does not accept `className` or `style`. Customize it on-system:
+
+1. **`ratio`** — the component's public layout decision.
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last.
+3. **`createTheme`** — re-skin nested content by overriding token values.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { borderRadius } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  framed: {
+    overflow: "hidden",
+    borderRadius: borderRadius.l,
+  },
+})
+
+<AspectRatio ratio={16 / 9} sx={styles.framed}>
+  <Image src="/image.jpg" alt="Image" />
+</AspectRatio>
+```
+
+## API Reference
+
+### AspectRatio
+
+| Prop    | Type           | Default |
+| ------- | -------------- | ------- |
+| `ratio` | `number`       | `1`     |
+| `sx`    | `StyleXStyles` | —       |
+
+All native `<div>` props except `className` and `style` are forwarded. Renders a
+`<div>` with `data-slot="aspect-ratio"`.

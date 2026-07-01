@@ -1,0 +1,249 @@
+---
+title: Item
+description: Displays a flexible list item with media, content, metadata, and actions.
+---
+
+# Item
+
+`Item` is a flexible row/container primitive for dense lists, settings panels,
+feeds, and search results. It matches shadcn's item anatomy: `Item`,
+`ItemGroup`, `ItemSeparator`, `ItemMedia`, `ItemContent`, `ItemTitle`,
+`ItemDescription`, `ItemActions`, `ItemHeader`, and `ItemFooter`.
+
+<Box display="grid" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ItemGroup>
+    <Item variant="outline">
+      <ItemMedia variant="icon">
+        <Icon name="FileText" />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>Quarterly report</ItemTitle>
+        <ItemDescription>Financial summary and operating notes.</ItemDescription>
+      </ItemContent>
+      <ItemActions>
+        <Button variant="outline" size="sm">Open</Button>
+      </ItemActions>
+    </Item>
+    <ItemSeparator />
+    <Item>
+      <ItemMedia variant="icon">
+        <Icon name="Bell" />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>Notifications</ItemTitle>
+        <ItemDescription>Delivery preferences and reminder windows.</ItemDescription>
+      </ItemContent>
+    </Item>
+  </ItemGroup>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/components/item"
+```
+
+```tsx
+<Item>
+  <ItemMedia variant="icon">PM</ItemMedia>
+  <ItemContent>
+    <ItemTitle>Project milestone</ItemTitle>
+    <ItemDescription>Due next Friday.</ItemDescription>
+  </ItemContent>
+  <ItemActions>Open</ItemActions>
+</Item>
+```
+
+## Variants
+
+`Item` supports shadcn's `default`, `outline`, and `muted` variants.
+
+<Box display="grid" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Item>
+    <ItemContent>
+      <ItemTitle>Default item</ItemTitle>
+      <ItemDescription>Transparent surface for plain lists.</ItemDescription>
+    </ItemContent>
+  </Item>
+  <Item variant="outline">
+    <ItemContent>
+      <ItemTitle>Outline item</ItemTitle>
+      <ItemDescription>Bordered surface for separated rows.</ItemDescription>
+    </ItemContent>
+  </Item>
+  <Item variant="muted">
+    <ItemContent>
+      <ItemTitle>Muted item</ItemTitle>
+      <ItemDescription>Subtle filled surface for grouped content.</ItemDescription>
+    </ItemContent>
+  </Item>
+</Box>
+
+```tsx
+<Item>Default item</Item>
+<Item variant="outline">Outline item</Item>
+<Item variant="muted">Muted item</Item>
+```
+
+## Sizes
+
+`Item` supports `default`, `sm`, and `xs`. Use smaller sizes for dense
+operational views.
+
+<Box display="grid" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Item size="default" variant="outline">
+    <ItemContent>
+      <ItemTitle>Default</ItemTitle>
+      <ItemDescription>Comfortable spacing for primary content.</ItemDescription>
+    </ItemContent>
+  </Item>
+  <Item size="sm" variant="outline">
+    <ItemContent>
+      <ItemTitle>Small</ItemTitle>
+      <ItemDescription>Compact spacing for settings and lists.</ItemDescription>
+    </ItemContent>
+  </Item>
+  <Item size="xs" variant="outline">
+    <ItemContent>
+      <ItemTitle>Extra small</ItemTitle>
+      <ItemDescription>Dense rows for secondary metadata.</ItemDescription>
+    </ItemContent>
+  </Item>
+</Box>
+
+```tsx
+<Item size="default">Default</Item>
+<Item size="sm">Small</Item>
+<Item size="xs">Extra small</Item>
+```
+
+## Media
+
+`ItemMedia` supports `default`, `icon`, and `image` variants.
+
+<Box display="grid" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Item variant="outline">
+    <ItemMedia variant="icon">
+      <Icon name="User" />
+    </ItemMedia>
+    <ItemContent>
+      <ItemTitle>Icon media</ItemTitle>
+      <ItemDescription>Use for symbols and compact avatars.</ItemDescription>
+    </ItemContent>
+  </Item>
+  <Item variant="outline">
+    <ItemMedia variant="image">
+      <Image
+        alt="Abstract project thumbnail"
+        src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=160&q=80"
+        fit="cover"
+      />
+    </ItemMedia>
+    <ItemContent>
+      <ItemTitle>Image media</ItemTitle>
+      <ItemDescription>Use for thumbnails or visual previews.</ItemDescription>
+    </ItemContent>
+  </Item>
+</Box>
+
+```tsx
+<ItemMedia variant="icon">
+  <Icon name="User" />
+</ItemMedia>
+
+<ItemMedia variant="image">
+  <Image alt="Project thumbnail" src="/thumbnail.jpg" fit="cover" />
+</ItemMedia>
+```
+
+## Header and Footer
+
+Use `ItemHeader` and `ItemFooter` when the item needs full-width metadata above
+or below the main row.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Item variant="outline">
+    <ItemHeader>
+      <Text variant="small">Production</Text>
+      <Text variant="muted">2 min ago</Text>
+    </ItemHeader>
+    <ItemContent>
+      <ItemTitle>Deploy completed</ItemTitle>
+      <ItemDescription>Version 3.14.0 is live in all regions.</ItemDescription>
+    </ItemContent>
+    <ItemFooter>
+      <Text variant="muted">8 checks passed</Text>
+      <Button variant="ghost" size="sm">Details</Button>
+    </ItemFooter>
+  </Item>
+</Box>
+
+```tsx
+<Item>
+  <ItemHeader>
+    <span>Production</span>
+    <span>2 min ago</span>
+  </ItemHeader>
+  <ItemContent>
+    <ItemTitle>Deploy completed</ItemTitle>
+    <ItemDescription>Version 3.14.0 is live.</ItemDescription>
+  </ItemContent>
+  <ItemFooter>8 checks passed</ItemFooter>
+</Item>
+```
+
+## Customization
+
+`Item` and every item slot accept `sx`, a typed StyleX style merged last. There
+is no `className`; broader visual changes should go through tokens or owned
+source.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  selected: {
+    borderColor: colors.accent,
+  },
+})
+
+<Item variant="outline" sx={styles.selected}>
+  <ItemContent>
+    <ItemTitle>Selected item</ItemTitle>
+  </ItemContent>
+</Item>
+```
+
+## API Reference
+
+| Component         | Prop      | Type                                  | Default     |
+| ----------------- | --------- | ------------------------------------- | ----------- |
+| `Item`            | `variant` | `"default" \| "outline" \| "muted"`  | `"default"` |
+| `Item`            | `size`    | `"default" \| "sm" \| "xs"`          | `"default"` |
+| `Item`            | `render`  | `ReactElement \| function`            | —           |
+| `Item`            | `sx`      | `StyleXStyles`                        | —           |
+| `ItemMedia`       | `variant` | `"default" \| "icon" \| "image"`     | `"default"` |
+| `ItemMedia`       | `sx`      | `StyleXStyles`                        | —           |
+| `ItemGroup`       | `sx`      | `StyleXStyles`                        | —           |
+| `ItemSeparator`   | `sx`      | `StyleXStyles`                        | —           |
+| `ItemContent`     | `sx`      | `StyleXStyles`                        | —           |
+| `ItemTitle`       | `sx`      | `StyleXStyles`                        | —           |
+| `ItemDescription` | `sx`      | `StyleXStyles`                        | —           |
+| `ItemActions`     | `sx`      | `StyleXStyles`                        | —           |
+| `ItemHeader`      | `sx`      | `StyleXStyles`                        | —           |
+| `ItemFooter`      | `sx`      | `StyleXStyles`                        | —           |
+
+All slots forward their matching DOM props except `className`, `style`, and
+`color`. `ItemSeparator` forwards `Separator` props.

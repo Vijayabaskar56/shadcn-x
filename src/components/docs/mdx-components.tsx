@@ -3,6 +3,12 @@ import type { ComponentPropsWithoutRef } from "react"
 import * as stylex from "@stylexjs/stylex"
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/accordion"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -15,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/alert-dialog"
+import { AspectRatio } from "@/components/aspect-ratio"
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
 import {
@@ -22,7 +29,21 @@ import {
   ButtonGroupSeparator,
   ButtonGroupText,
 } from "@/components/button-group"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/card"
 import { Checkbox } from "@/components/checkbox"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/collapsible"
 import {
   Combobox,
   ComboboxClear,
@@ -112,6 +133,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/dropdown-menu"
 import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/empty"
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -154,6 +183,18 @@ import {
   InputOTPSlot,
   InputOTPSeparator,
 } from "@/components/input-otp"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/components/item"
 import { Label } from "@/components/label"
 import { Link } from "@/components/link"
 import {
@@ -199,6 +240,12 @@ import {
 } from "@/components/popover"
 import { RadioGroup, RadioGroupItem } from "@/components/radio-group"
 import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/resizable"
+import { ScrollArea, ScrollBar } from "@/components/scroll-area"
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -210,6 +257,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/select"
+import { Separator } from "@/components/separator"
 import {
   Sheet,
   SheetClose,
@@ -222,6 +270,30 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/sheet"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarSeparator,
+  SidebarTrigger,
+} from "@/components/sidebar"
 import { Slider } from "@/components/slider"
 import { Switch } from "@/components/switch"
 import {
@@ -234,6 +306,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs"
 import { Text } from "@/components/text"
 import { Textarea } from "@/components/textarea"
 import { Toggle } from "@/components/toggle"
@@ -253,8 +326,7 @@ import { borderRadius, colors, fontWeight } from "../../styles/tokens.stylex"
  * the intrinsic HTML elements with styled renderers that match the look of the
  * `.md` (prose) pipeline.
  *
- * Every renderer maps to the `Box` primitive (`Box` covers the full prose tag
- * set, including the table family / hr / img), styled via token props + `sx`.
+ * Every renderer maps to a shadcn-x primitive, styled via token props + `sx`.
  * No raw HTML, no `className`.
  */
 
@@ -377,12 +449,10 @@ const styles = stylex.create({
     paddingBottom: "0.5rem",
   },
   hr: {
+    // Separator already draws the 1px rule via its own base styles; only
+    // contribute the prose spacing here so the line isn't rendered twice.
     marginTop: "2rem",
     marginBottom: "2rem",
-    borderWidth: "0",
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: colors["border-primary"],
   },
   img: {
     borderRadius: borderRadius.m,
@@ -409,12 +479,33 @@ function MdxCode(props: CodeProps) {
   )
 }
 
+function MdxHr(props: Without<"hr">) {
+  return (
+    <Separator
+      {...(props as ComponentPropsWithoutRef<typeof Separator>)}
+      sx={styles.hr}
+    />
+  )
+}
+
 export const mdxComponents = {
   // Live primitives usable directly in MDX.
   Box,
   Button,
   Text,
   Link,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  AspectRatio,
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Label,
   Icon,
   Image,
@@ -440,6 +531,9 @@ export const mdxComponents = {
   ComboboxInput,
   ComboboxTrigger,
   ComboboxValue,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   DirectionProvider,
   Dialog,
   DialogClose,
@@ -496,6 +590,12 @@ export const mdxComponents = {
   DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -554,6 +654,29 @@ export const mdxComponents = {
   SheetPortal,
   SheetTitle,
   SheetTrigger,
+  Separator,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarSeparator,
+  SidebarTrigger,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -575,6 +698,16 @@ export const mdxComponents = {
   FormItem,
   FormLabel,
   FormMessage,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
@@ -590,6 +723,11 @@ export const mdxComponents = {
   NativeSelectOptGroup,
   RadioGroup,
   RadioGroupItem,
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+  ScrollArea,
+  ScrollBar,
   Select,
   SelectContent,
   SelectGroup,
@@ -610,6 +748,10 @@ export const mdxComponents = {
   TableHead,
   TableCell,
   TableCaption,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Toggle,
   ToggleGroup,
   ToggleGroupItem,
@@ -647,7 +789,7 @@ export const mdxComponents = {
   ),
   th: (props: Without<"th">) => <Box as="th" sx={styles.th} {...props} />,
   td: (props: Without<"td">) => <Box as="td" sx={styles.td} {...props} />,
-  hr: (props: Without<"hr">) => <Box as="hr" sx={styles.hr} {...props} />,
+  hr: MdxHr,
   img: ({ alt, ...props }: Without<"img">) => (
     <Image alt={alt ?? ""} sx={styles.img} {...props} />
   ),

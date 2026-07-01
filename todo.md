@@ -72,17 +72,17 @@ These drive raw-HTML usage toward zero. Build first.
 
 ## Phase 3 — Layout &amp; containers
 
-- [ ] Card
-- [ ] Separator
-- [ ] Aspect Ratio
-- [ ] Scroll Area
-- [ ] Resizable
-- [ ] Sidebar
-- [ ] Collapsible
-- [ ] Accordion
-- [ ] Tabs
-- [ ] Item
-- [ ] Empty
+- [x] Card
+- [x] Separator
+- [x] Aspect Ratio
+- [x] Scroll Area
+- [x] Resizable
+- [x] Sidebar
+- [x] Collapsible
+- [x] Accordion
+- [x] Tabs
+- [x] Item
+- [x] Empty
 
 ## Phase 4 — Display &amp; feedback
 
@@ -129,16 +129,17 @@ When Primitive ships, Box loses these elements from its `AllowedElement` type
 and `no-raw-html` remaps them from `Box` → `Primitive`:
 
 
-| Element(s)                                                                        | Moves to                                              | When            |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------- |
-| `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`, `code`, `hr` | **Primitive** (new)                                   | Primitive [ ]   |
-| `form`, `fieldset`                                                                | **Form** (Phase 1)                                    | Phase 1         |
-| `p`, `h1`–`h6`                                                                    | **Text**                                              | Done ✓          |
-| `button`                                                                          | **Button**                                            | Done ✓          |
-| `a`                                                                               | **Link**                                              | Done ✓          |
-| `label`                                                                           | **Label**                                             | Done ✓          |
-| `img`                                                                             | **Image**                                             | Done ✓          |
-| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                            | **Table** (th/td kept for MDX prose)                  | Done ✓          |
+| Element(s)                                                                  | Moves to                             | When          |
+| --------------------------------------------------------------------------- | ------------------------------------ | ------------- |
+| `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`, `code` | **Primitive** (new)                  | Primitive [ ] |
+| `form`, `fieldset`                                                          | **Form** (Phase 1)                   | Phase 1       |
+| `p`, `h1`–`h6`                                                              | **Text**                             | Done ✓        |
+| `button`                                                                    | **Button**                           | Done ✓        |
+| `a`                                                                         | **Link**                             | Done ✓        |
+| `label`                                                                     | **Label**                            | Done ✓        |
+| `img`                                                                       | **Image**                            | Done ✓        |
+| `hr`                                                                        | **Separator**                        | Done ✓        |
+| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                      | **Table** (th/td kept for MDX prose) | Done ✓        |
 
 
 ---

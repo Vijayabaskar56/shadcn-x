@@ -98,5 +98,11 @@ ruleTester.run("no-raw-html", plugin.rules["no-raw-html"] as never, {
         { messageId: "rawHtml", data: { tag: "td", primitive: "TableCell" } },
       ],
     },
+    {
+      code: "const a = <hr />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "hr", primitive: "Separator" } },
+      ],
+    },
   ],
 })

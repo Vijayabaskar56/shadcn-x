@@ -1,0 +1,155 @@
+---
+title: Card
+description: Displays grouped content and actions in a bordered surface.
+---
+
+# Card
+
+`Card` is a themeable content container built from shadcn's card anatomy and
+styled with StyleX design tokens. It exposes the same public slots as shadcn:
+`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`,
+`CardContent`, and `CardFooter`.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Card>
+    <CardHeader>
+      <CardTitle>Team plan</CardTitle>
+      <CardDescription>Seats, usage, and billing status.</CardDescription>
+      <CardAction>
+        <Button variant="outline" size="sm">Manage</Button>
+      </CardAction>
+    </CardHeader>
+    <CardContent>
+      <Text variant="large">$49/mo</Text>
+    </CardContent>
+    <CardFooter>
+      <Text variant="muted">Renews on July 12.</Text>
+    </CardFooter>
+  </Card>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/card"
+```
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Card title</CardTitle>
+    <CardDescription>Card description</CardDescription>
+  </CardHeader>
+  <CardContent>Card content</CardContent>
+  <CardFooter>Card footer</CardFooter>
+</Card>
+```
+
+## Examples
+
+### With Action
+
+Use `CardAction` inside `CardHeader` for a trailing action. The header switches
+to a two-column layout when the action slot is present.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Card>
+    <CardHeader>
+      <CardTitle>Deployments</CardTitle>
+      <CardDescription>Latest production release.</CardDescription>
+      <CardAction>
+        <Button variant="secondary" size="sm">View</Button>
+      </CardAction>
+    </CardHeader>
+    <CardContent>
+      <Text>Production is healthy.</Text>
+    </CardContent>
+  </Card>
+</Box>
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Deployments</CardTitle>
+    <CardDescription>Latest production release.</CardDescription>
+    <CardAction>
+      <Button variant="secondary" size="sm">View</Button>
+    </CardAction>
+  </CardHeader>
+  <CardContent>Production is healthy.</CardContent>
+</Card>
+```
+
+### Size
+
+The Base UI shadcn reference includes `size="default" | "sm"`. Use `sm` for
+denser panels and dashboards.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Card size="sm">
+    <CardHeader>
+      <CardTitle>Storage</CardTitle>
+      <CardDescription>Compact card spacing.</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <Text variant="small">64 GB used</Text>
+    </CardContent>
+  </Card>
+</Box>
+
+```tsx
+<Card size="sm">
+  <CardHeader>
+    <CardTitle>Storage</CardTitle>
+    <CardDescription>Compact card spacing.</CardDescription>
+  </CardHeader>
+  <CardContent>64 GB used</CardContent>
+</Card>
+```
+
+## Customization
+
+`Card` and every card slot accept `sx`, a typed StyleX style merged last. There
+is no `className`; broader visual changes should go through tokens or owned
+source.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { boxShadow } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  quiet: {
+    boxShadow: boxShadow.none,
+  },
+})
+
+<Card sx={styles.quiet}>
+  <CardHeader>
+    <CardTitle>Quiet card</CardTitle>
+  </CardHeader>
+</Card>
+```
+
+## API Reference
+
+| Component         | Prop   | Type                   | Default     |
+| ----------------- | ------ | ---------------------- | ----------- |
+| `Card`            | `size` | `"default" \| "sm"`    | `"default"` |
+| `Card`            | `sx`   | `StyleXStyles`         | —           |
+| `CardHeader`      | `sx`   | `StyleXStyles`         | —           |
+| `CardTitle`       | `sx`   | `StyleXStyles`         | —           |
+| `CardDescription` | `sx`   | `StyleXStyles`         | —           |
+| `CardAction`      | `sx`   | `StyleXStyles`         | —           |
+| `CardContent`     | `sx`   | `StyleXStyles`         | —           |
+| `CardFooter`      | `sx`   | `StyleXStyles`         | —           |
+
+All card slots forward standard `div` props except `className`, `style`, and
+`color`.

@@ -1,0 +1,201 @@
+---
+title: Tabs
+description: A set of layered sections where one panel is visible at a time.
+---
+
+# Tabs
+
+Tabs organize related content into panels. The component uses Base UI for
+selection, keyboard navigation, roles, and panel wiring, then maps shadcn's
+`default` and `line` list variants to StyleX tokens.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Tabs defaultValue="account">
+    <TabsList>
+      <TabsTrigger value="account">Account</TabsTrigger>
+      <TabsTrigger value="password">Password</TabsTrigger>
+    </TabsList>
+    <TabsContent value="account">Manage account details.</TabsContent>
+    <TabsContent value="password">Update password settings.</TabsContent>
+  </Tabs>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/tabs"
+```
+
+```tsx
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account panel</TabsContent>
+  <TabsContent value="password">Password panel</TabsContent>
+</Tabs>
+```
+
+## Examples
+
+### Default
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Tabs defaultValue="overview">
+    <TabsList>
+      <TabsTrigger value="overview">Overview</TabsTrigger>
+      <TabsTrigger value="activity">Activity</TabsTrigger>
+      <TabsTrigger value="settings">Settings</TabsTrigger>
+    </TabsList>
+    <TabsContent value="overview">Overview content.</TabsContent>
+    <TabsContent value="activity">Activity content.</TabsContent>
+    <TabsContent value="settings">Settings content.</TabsContent>
+  </Tabs>
+</Box>
+
+```tsx
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="activity">Activity</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">Overview content.</TabsContent>
+  <TabsContent value="activity">Activity content.</TabsContent>
+  <TabsContent value="settings">Settings content.</TabsContent>
+</Tabs>
+```
+
+### Line
+
+Use `variant="line"` on `TabsList` for shadcn's underline treatment.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Tabs defaultValue="preview">
+    <TabsList variant="line">
+      <TabsTrigger value="preview">Preview</TabsTrigger>
+      <TabsTrigger value="code">Code</TabsTrigger>
+      <TabsTrigger value="history">History</TabsTrigger>
+    </TabsList>
+    <TabsContent value="preview">Preview content.</TabsContent>
+    <TabsContent value="code">Code content.</TabsContent>
+    <TabsContent value="history">History content.</TabsContent>
+  </Tabs>
+</Box>
+
+```tsx
+<Tabs defaultValue="preview">
+  <TabsList variant="line">
+    <TabsTrigger value="preview">Preview</TabsTrigger>
+    <TabsTrigger value="code">Code</TabsTrigger>
+    <TabsTrigger value="history">History</TabsTrigger>
+  </TabsList>
+  <TabsContent value="preview">Preview content.</TabsContent>
+  <TabsContent value="code">Code content.</TabsContent>
+  <TabsContent value="history">History content.</TabsContent>
+</Tabs>
+```
+
+### Vertical
+
+Set `orientation="vertical"` on `Tabs` to stack the list vertically beside the
+active panel.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Tabs defaultValue="usage" orientation="vertical">
+    <TabsList>
+      <TabsTrigger value="usage">Usage</TabsTrigger>
+      <TabsTrigger value="props">Props</TabsTrigger>
+      <TabsTrigger value="tokens">Tokens</TabsTrigger>
+    </TabsList>
+    <TabsContent value="usage">Usage guidance.</TabsContent>
+    <TabsContent value="props">Props reference.</TabsContent>
+    <TabsContent value="tokens">Token details.</TabsContent>
+  </Tabs>
+</Box>
+
+```tsx
+<Tabs defaultValue="usage" orientation="vertical">
+  <TabsList>
+    <TabsTrigger value="usage">Usage</TabsTrigger>
+    <TabsTrigger value="props">Props</TabsTrigger>
+    <TabsTrigger value="tokens">Tokens</TabsTrigger>
+  </TabsList>
+  <TabsContent value="usage">Usage guidance.</TabsContent>
+  <TabsContent value="props">Props reference.</TabsContent>
+  <TabsContent value="tokens">Token details.</TabsContent>
+</Tabs>
+```
+
+## Customization
+
+Tabs does not accept `className` or raw `style`. Use `variant` on `TabsList`,
+controlled `value` / `defaultValue` for state, and `sx` for typed StyleX
+overrides.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  fullWidth: { width: "100%" },
+})
+
+<Tabs defaultValue="one" sx={styles.fullWidth}>
+  <TabsList variant="line">
+    <TabsTrigger value="one">One</TabsTrigger>
+    <TabsTrigger value="two">Two</TabsTrigger>
+  </TabsList>
+  <TabsContent value="one">One panel</TabsContent>
+  <TabsContent value="two">Two panel</TabsContent>
+</Tabs>
+```
+
+## API Reference
+
+### Tabs
+
+| Prop            | Type                         | Default        |
+| --------------- | ---------------------------- | -------------- |
+| `value`         | `TabsTab.Value`              | —              |
+| `defaultValue`  | `TabsTab.Value`              | `0`            |
+| `onValueChange` | Base UI change callback      | —              |
+| `orientation`   | `"horizontal" \| "vertical"` | `"horizontal"` |
+| `sx`            | `StyleXStyles`               | —              |
+
+All other [Base UI tabs root props](https://base-ui.com/react/components/tabs)
+are forwarded.
+
+### TabsList
+
+| Prop      | Type                   | Default     |
+| --------- | ---------------------- | ----------- |
+| `variant` | `"default" \| "line"` | `"default"` |
+| `sx`      | `StyleXStyles`         | —           |
+
+All other Base UI tabs list props are forwarded.
+
+### TabsTrigger
+
+| Prop       | Type            | Default |
+| ---------- | --------------- | ------- |
+| `value`    | `TabsTab.Value` | —       |
+| `disabled` | `boolean`       | —       |
+| `sx`       | `StyleXStyles`  | —       |
+
+All other Base UI tab props are forwarded.
+
+### TabsContent
+
+| Prop          | Type            | Default |
+| ------------- | --------------- | ------- |
+| `value`       | `TabsTab.Value` | —       |
+| `keepMounted` | `boolean`       | `false` |
+| `sx`          | `StyleXStyles`  | —       |
+
+All other Base UI panel props are forwarded.

@@ -1,0 +1,277 @@
+---
+title: Sidebar
+description: A composable application sidebar with desktop collapse, mobile sheet behavior, and menu slots.
+---
+
+# Sidebar
+
+`Sidebar` ports shadcn's broad application-sidebar API into shadcn-x: provider
+state, trigger, rail, inset, sections, groups, menu buttons, actions, badges,
+skeleton rows, and submenu slots. Styling is StyleX-only and every public slot
+accepts `sx` for typed last-wins overrides.
+
+<SidebarProvider>
+  <Box display="flex" border borderColor="border-primary" borderRadius="m" overflow="hidden" backgroundColor="background-card">
+    <Sidebar collapsible="none">
+      <SidebarHeader>
+        <SidebarInput aria-label="Search projects" placeholder="Search" />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive>
+                  <Icon name="LayoutDashboard" />
+                  <span>Dashboard</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <Icon name="Inbox" />
+                  <span>Inbox</span>
+                </SidebarMenuButton>
+                <SidebarMenuBadge>4</SidebarMenuBadge>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarSeparator />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Icon name="Settings" />
+              <span>Settings</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+    <SidebarInset>
+      <Box padding="l">
+        <Text variant="h3">Project overview</Text>
+        <Text variant="muted">The sidebar composes navigation slots without raw className.</Text>
+      </Box>
+    </SidebarInset>
+  </Box>
+</SidebarProvider>
+
+## Usage
+
+```tsx
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarInput,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarSeparator,
+  SidebarTrigger,
+} from "@/components/sidebar"
+```
+
+```tsx
+<SidebarProvider>
+  <Sidebar>
+    <SidebarHeader>
+      <SidebarInput placeholder="Search" />
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>Platform</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive>Dashboard</SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+  </Sidebar>
+  <SidebarInset>Main content</SidebarInset>
+</SidebarProvider>
+```
+
+## Trigger
+
+`SidebarTrigger` toggles desktop collapse state and mobile sheet state through
+`SidebarProvider`. The provider also supports the shadcn keyboard shortcut:
+`cmd+b` / `ctrl+b`.
+
+<SidebarProvider>
+  <Box display="flex" gap="s" alignItems="center" padding="l" border borderColor="border-primary" borderRadius="m" backgroundColor="background-card">
+    <SidebarTrigger />
+    <Text variant="muted">Toggle the provider state.</Text>
+  </Box>
+</SidebarProvider>
+
+```tsx
+<SidebarProvider>
+  <SidebarTrigger />
+  <Sidebar>{/* ... */}</Sidebar>
+</SidebarProvider>
+```
+
+## Variants
+
+`Sidebar` keeps shadcn's `side`, `variant`, and `collapsible` props:
+`side="left" | "right"`, `variant="sidebar" | "floating" | "inset"`, and
+`collapsible="offcanvas" | "icon" | "none"`.
+
+<SidebarProvider defaultOpen={false}>
+  <Sidebar side="right" variant="floating" collapsible="icon">
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>Collapsed</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Reports">
+                <Icon name="ChartColumn" />
+                <span>Reports</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+  </Sidebar>
+</SidebarProvider>
+
+```tsx
+<SidebarProvider defaultOpen={false}>
+  <Sidebar side="right" variant="floating" collapsible="icon">
+    {/* ... */}
+  </Sidebar>
+</SidebarProvider>
+```
+
+## Menu
+
+Menu buttons support shadcn's `variant`, `size`, `isActive`, and `tooltip`
+props. Submenus use `SidebarMenuSub`, `SidebarMenuSubItem`, and
+`SidebarMenuSubButton`.
+
+<SidebarProvider>
+  <Box width="full" padding="l" border borderColor="border-primary" borderRadius="m" backgroundColor="background-card">
+    <SidebarGroup>
+      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      <SidebarGroupAction aria-label="Add item">
+        <Icon name="Plus" />
+      </SidebarGroupAction>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton variant="outline" size="lg" isActive>
+              <Icon name="Folder" />
+              <span>Projects</span>
+            </SidebarMenuButton>
+            <SidebarMenuAction aria-label="More actions">
+              <Icon name="MoreHorizontal" />
+            </SidebarMenuAction>
+            <SidebarMenuSub>
+              <SidebarMenuSubItem>
+                <SidebarMenuSubButton href="#" isActive>
+                  Active
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+              <SidebarMenuSubItem>
+                <SidebarMenuSubButton href="#" size="sm">
+                  Archived
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            </SidebarMenuSub>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  </Box>
+</SidebarProvider>
+
+```tsx
+<SidebarMenu>
+  <SidebarMenuItem>
+    <SidebarMenuButton variant="outline" size="lg" isActive>
+      Projects
+    </SidebarMenuButton>
+    <SidebarMenuAction aria-label="More actions">...</SidebarMenuAction>
+    <SidebarMenuSub>
+      <SidebarMenuSubItem>
+        <SidebarMenuSubButton href="#" isActive>
+          Active
+        </SidebarMenuSubButton>
+      </SidebarMenuSubItem>
+    </SidebarMenuSub>
+  </SidebarMenuItem>
+</SidebarMenu>
+```
+
+## Loading
+
+`SidebarMenuSkeleton` is private to Sidebar and does not export a general
+Phase 4 `Skeleton` component.
+
+<SidebarProvider>
+  <Box padding="l" border borderColor="border-primary" borderRadius="m" backgroundColor="background-card">
+    <SidebarMenuSkeleton showIcon />
+    <SidebarMenuSkeleton />
+  </Box>
+</SidebarProvider>
+
+```tsx
+<SidebarMenuSkeleton showIcon />
+```
+
+## Customization
+
+Every public slot accepts `sx`. Use it for local, typed StyleX overrides; use
+tokens or owned-source edits for broader visual changes.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  active: {
+    backgroundColor: colors["background-muted"],
+  },
+})
+
+<SidebarMenuButton sx={styles.active}>Dashboard</SidebarMenuButton>
+```
+
+## API Reference
+
+| Component              | Prop          | Type                                               | Default      |
+| ---------------------- | ------------- | -------------------------------------------------- | ------------ |
+| `SidebarProvider`      | `defaultOpen` | `boolean`                                          | `true`       |
+|                        | `open`        | `boolean`                                          | —            |
+|                        | `onOpenChange`| `(open: boolean) => void`                          | —            |
+|                        | `sx`          | `StyleXStyles`                                     | —            |
+| `Sidebar`              | `side`        | `"left" \| "right"`                                | `"left"`     |
+|                        | `variant`     | `"sidebar" \| "floating" \| "inset"`               | `"sidebar"`  |
+|                        | `collapsible` | `"offcanvas" \| "icon" \| "none"`                  | `"offcanvas"`|
+|                        | `sx`          | `StyleXStyles`                                     | —            |
+| `SidebarMenuButton`    | `variant`     | `"default" \| "outline"`                           | `"default"`  |
+|                        | `size`        | `"default" \| "sm" \| "lg"`                        | `"default"`  |
+|                        | `isActive`    | `boolean`                                          | `false`      |
+|                        | `tooltip`     | `string \| TooltipContentProps`                    | —            |
+| `SidebarMenuAction`    | `showOnHover` | `boolean`                                          | `false`      |
+| `SidebarMenuSkeleton`  | `showIcon`    | `boolean`                                          | `false`      |
+| `SidebarMenuSubButton` | `size`        | `"sm" \| "md"`                                     | `"md"`       |
+|                        | `isActive`    | `boolean`                                          | `false`      |
+
+All sidebar slots omit raw `className` and `style`; use `sx` instead.

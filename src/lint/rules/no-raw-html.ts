@@ -44,7 +44,7 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   th: "TableHead",
   td: "TableCell",
   caption: "TableCaption",
-  hr: "Box",
+  hr: "Separator",
   img: "Image",
   button: "Button",
   a: "Link",

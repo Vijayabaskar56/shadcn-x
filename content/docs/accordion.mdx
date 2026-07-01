@@ -1,0 +1,227 @@
+---
+title: Accordion
+description: A vertically stacked set of expandable content sections.
+---
+
+# Accordion
+
+Accordion organizes related sections where each trigger expands its matching
+panel. Behavior and accessibility come from Base UI; the public API matches
+shadcn's four-part anatomy: `Accordion`, `AccordionItem`, `AccordionTrigger`,
+and `AccordionContent`.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Accordion defaultValue={["item-1"]}>
+    <AccordionItem value="item-1">
+      <AccordionTrigger>Is it accessible?</AccordionTrigger>
+      <AccordionContent>
+        Yes. Base UI wires the trigger, panel, keyboard behavior, and ARIA state.
+      </AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="item-2">
+      <AccordionTrigger>Can it be styled?</AccordionTrigger>
+      <AccordionContent>
+        Yes. Use tokens, owned source edits, or the typed `sx` prop.
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/accordion"
+```
+
+```tsx
+<Accordion defaultValue={["item-1"]}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionContent>
+      Yes. Base UI provides the behavior and accessibility.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## Examples
+
+### Single Item
+
+The default mode allows one item to be open at a time.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Accordion defaultValue={["billing"]}>
+    <AccordionItem value="billing">
+      <AccordionTrigger>Billing</AccordionTrigger>
+      <AccordionContent>
+        View invoices, payment methods, and renewal dates.
+      </AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="security">
+      <AccordionTrigger>Security</AccordionTrigger>
+      <AccordionContent>
+        Manage passwords, sessions, and two-factor authentication.
+      </AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+</Box>
+
+```tsx
+<Accordion defaultValue={["billing"]}>
+  <AccordionItem value="billing">
+    <AccordionTrigger>Billing</AccordionTrigger>
+    <AccordionContent>
+      View invoices, payment methods, and renewal dates.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="security">
+    <AccordionTrigger>Security</AccordionTrigger>
+    <AccordionContent>
+      Manage passwords, sessions, and two-factor authentication.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+### Multiple Items
+
+Set `multiple` when more than one section can stay expanded.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Accordion multiple defaultValue={["overview", "activity"]}>
+    <AccordionItem value="overview">
+      <AccordionTrigger>Overview</AccordionTrigger>
+      <AccordionContent>Summary metrics and current status.</AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="activity">
+      <AccordionTrigger>Activity</AccordionTrigger>
+      <AccordionContent>Recent changes across the workspace.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+</Box>
+
+```tsx
+<Accordion multiple defaultValue={["overview", "activity"]}>
+  <AccordionItem value="overview">
+    <AccordionTrigger>Overview</AccordionTrigger>
+    <AccordionContent>Summary metrics and current status.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="activity">
+    <AccordionTrigger>Activity</AccordionTrigger>
+    <AccordionContent>Recent changes across the workspace.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+### Disabled Item
+
+Disable an item when its content is unavailable.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Accordion>
+    <AccordionItem value="enabled">
+      <AccordionTrigger>Enabled item</AccordionTrigger>
+      <AccordionContent>Available content.</AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="disabled" disabled>
+      <AccordionTrigger>Disabled item</AccordionTrigger>
+      <AccordionContent>Unavailable content.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+
+</Box>
+
+```tsx
+<Accordion>
+  <AccordionItem value="enabled">
+    <AccordionTrigger>Enabled item</AccordionTrigger>
+    <AccordionContent>Available content.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="disabled" disabled>
+    <AccordionTrigger>Disabled item</AccordionTrigger>
+    <AccordionContent>Unavailable content.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## Customization
+
+Accordion does not accept `className` or raw `style`. Use Base UI state props,
+owned source edits, token themes, and the typed `sx` prop for on-system
+customization.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  muted: { backgroundColor: colors["background-muted"] },
+})
+
+<Accordion defaultValue={["one"]} sx={styles.muted}>
+  <AccordionItem value="one">
+    <AccordionTrigger>One</AccordionTrigger>
+    <AccordionContent>Panel content.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## API Reference
+
+### Accordion
+
+| Prop            | Type                         | Default |
+| --------------- | ---------------------------- | ------- |
+| `value`         | `unknown[]`                  | —       |
+| `defaultValue`  | `unknown[]`                  | —       |
+| `onValueChange` | Base UI change callback      | —       |
+| `multiple`      | `boolean`                    | `false` |
+| `disabled`      | `boolean`                    | `false` |
+| `sx`            | `StyleXStyles`               | —       |
+
+All other Base UI accordion root props are forwarded.
+
+### AccordionItem
+
+| Prop           | Type           | Default |
+| -------------- | -------------- | ------- |
+| `value`        | `unknown`      | —       |
+| `disabled`     | `boolean`      | `false` |
+| `onOpenChange` | Base UI callback | —       |
+| `sx`           | `StyleXStyles` | —       |
+
+All other Base UI accordion item props are forwarded.
+
+### AccordionTrigger
+
+| Prop       | Type           | Default |
+| ---------- | -------------- | ------- |
+| `disabled` | `boolean`      | —       |
+| `sx`       | `StyleXStyles` | —       |
+
+All other Base UI accordion trigger props are forwarded.
+
+### AccordionContent
+
+| Prop               | Type           | Default |
+| ------------------ | -------------- | ------- |
+| `keepMounted`      | `boolean`      | `false` |
+| `hiddenUntilFound` | `boolean`      | `false` |
+| `sx`               | `StyleXStyles` | —       |
+
+All other Base UI accordion panel props are forwarded. Public slots render with
+`data-slot="accordion"`, `data-slot="accordion-item"`,
+`data-slot="accordion-trigger"`, and `data-slot="accordion-content"`.

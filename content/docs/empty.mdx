@@ -1,0 +1,168 @@
+---
+title: Empty
+description: Displays an empty state with optional media, copy, and actions.
+---
+
+# Empty
+
+`Empty` presents a centered empty state. It matches shadcn's public anatomy:
+`Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, and
+`EmptyContent`.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Empty>
+    <EmptyHeader>
+      <EmptyMedia variant="icon">
+        <Icon name="Inbox" size="l" />
+      </EmptyMedia>
+      <EmptyTitle>No messages</EmptyTitle>
+      <EmptyDescription>
+        New conversations will appear here when they arrive.
+      </EmptyDescription>
+    </EmptyHeader>
+    <EmptyContent>
+      <Button size="sm">Compose</Button>
+    </EmptyContent>
+  </Empty>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/empty"
+```
+
+```tsx
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <Icon name="Inbox" size="l" />
+    </EmptyMedia>
+    <EmptyTitle>No messages</EmptyTitle>
+    <EmptyDescription>
+      New conversations will appear here when they arrive.
+    </EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button size="sm">Compose</Button>
+  </EmptyContent>
+</Empty>
+```
+
+## Examples
+
+### Default
+
+Use the default media variant for custom artwork or an unframed icon.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Empty>
+    <EmptyHeader>
+      <EmptyMedia>
+        <Icon name="Search" size="l" />
+      </EmptyMedia>
+      <EmptyTitle>No results found</EmptyTitle>
+      <EmptyDescription>
+        Try adjusting your filters or search query.
+      </EmptyDescription>
+    </EmptyHeader>
+  </Empty>
+</Box>
+
+```tsx
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia>
+      <Icon name="Search" size="l" />
+    </EmptyMedia>
+    <EmptyTitle>No results found</EmptyTitle>
+    <EmptyDescription>
+      Try adjusting your filters or search query.
+    </EmptyDescription>
+  </EmptyHeader>
+</Empty>
+```
+
+### Icon
+
+Use `variant="icon"` to render the media in shadcn's compact muted square.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Empty>
+    <EmptyHeader>
+      <EmptyMedia variant="icon">
+        <Icon name="FolderOpen" size="l" />
+      </EmptyMedia>
+      <EmptyTitle>No files uploaded</EmptyTitle>
+      <EmptyDescription>
+        Upload files to make them available to your team.
+      </EmptyDescription>
+    </EmptyHeader>
+    <EmptyContent>
+      <Button size="sm">Upload file</Button>
+    </EmptyContent>
+  </Empty>
+</Box>
+
+```tsx
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <Icon name="FolderOpen" size="l" />
+    </EmptyMedia>
+    <EmptyTitle>No files uploaded</EmptyTitle>
+    <EmptyDescription>
+      Upload files to make them available to your team.
+    </EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button size="sm">Upload file</Button>
+  </EmptyContent>
+</Empty>
+```
+
+## Customization
+
+Every empty slot accepts `sx`, a typed StyleX override merged last. There is no
+`className` or raw `style`; broader changes should go through tokens or owned
+source.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  subtle: {
+    backgroundColor: colors["background-muted"],
+  },
+})
+
+<Empty sx={styles.subtle}>
+  <EmptyHeader>
+    <EmptyTitle>No activity</EmptyTitle>
+    <EmptyDescription>Activity will appear here.</EmptyDescription>
+  </EmptyHeader>
+</Empty>
+```
+
+## API Reference
+
+| Component          | Prop      | Type                    | Default     |
+| ------------------ | --------- | ----------------------- | ----------- |
+| `Empty`            | `sx`      | `StyleXStyles`          | —           |
+| `EmptyHeader`      | `sx`      | `StyleXStyles`          | —           |
+| `EmptyMedia`       | `variant` | `"default" \| "icon"`   | `"default"` |
+| `EmptyMedia`       | `sx`      | `StyleXStyles`          | —           |
+| `EmptyTitle`       | `sx`      | `StyleXStyles`          | —           |
+| `EmptyDescription` | `sx`      | `StyleXStyles`          | —           |
+| `EmptyContent`     | `sx`      | `StyleXStyles`          | —           |
+
+All empty slots forward standard host props except `className`, `style`, and
+`color`.
