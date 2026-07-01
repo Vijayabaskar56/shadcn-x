@@ -62,6 +62,11 @@ type SidebarContextProps = {
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
+// The active side is a prop of `Sidebar`, not the provider, so it is shared
+// with descendants (notably `SidebarRail`) through a dedicated context rather
+// than a distance selector.
+const SidebarSideContext = React.createContext<SidebarSide>("left")
+
 function useSidebar() {
   const context = React.useContext(SidebarContext)
 
@@ -404,11 +409,20 @@ const styles = stylex.create({
     cursor: "pointer",
   },
   menuActionHover: {
+    // On desktop the action is hidden until the row (menu-item) is hovered or
+    // focused, or the action itself is hovered/focused. The menu-item is the
+    // only marked ancestor in the sidebar, so a bare `when.ancestor` observes
+    // it. It's nested inside the media query so it wins over the `0` default at
+    // that width (bare `when.*` has lower specificity than a media query).
     opacity: {
       default: 1,
-      "@media (min-width: 768px)": 0,
-      ":focus-visible": 1,
-      ":hover": 1,
+      "@media (min-width: 768px)": {
+        default: 0,
+        ":focus-visible": 1,
+        ":hover": 1,
+        [stylex.when.ancestor(":hover")]: 1,
+        [stylex.when.ancestor(":focus-within")]: 1,
+      },
     },
   },
   menuBadge: {
@@ -665,90 +679,96 @@ function Sidebar({
 
   if (collapsible === "none") {
     return (
-      <Div
-        data-slot="sidebar"
-        data-sidebar="sidebar"
-        data-side={side}
-        data-variant={variant}
-        data-collapsible={collapsible}
-        {...stylex.props(styles.sidebar, styles.sidebarStatic, sx)}
-        {...props}
-      >
-        {children}
-      </Div>
+      <SidebarSideContext.Provider value={side}>
+        <Div
+          data-slot="sidebar"
+          data-sidebar="sidebar"
+          data-side={side}
+          data-variant={variant}
+          data-collapsible={collapsible}
+          {...stylex.props(styles.sidebar, styles.sidebarStatic, sx)}
+          {...props}
+        >
+          {children}
+        </Div>
+      </SidebarSideContext.Provider>
     )
   }
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
-        <SheetContent
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          side={side}
-          showCloseButton={false}
-          sx={[styles.mobileContent, sx]}
-          {...props}
-        >
-          <SheetHeader sx={styles.visuallyHidden}>
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
-          <Div {...stylex.props(styles.mobileInner)}>{children}</Div>
-        </SheetContent>
-      </Sheet>
+      <SidebarSideContext.Provider value={side}>
+        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+          <SheetContent
+            data-sidebar="sidebar"
+            data-slot="sidebar"
+            data-mobile="true"
+            side={side}
+            showCloseButton={false}
+            sx={[styles.mobileContent, sx]}
+            {...props}
+          >
+            <SheetHeader sx={styles.visuallyHidden}>
+              <SheetTitle>Sidebar</SheetTitle>
+              <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            </SheetHeader>
+            <Div {...stylex.props(styles.mobileInner)}>{children}</Div>
+          </SheetContent>
+        </Sheet>
+      </SidebarSideContext.Provider>
     )
   }
 
   return (
-    <Div
-      data-slot="sidebar"
-      data-state={state}
-      data-collapsible={collapsed ? collapsible : ""}
-      data-variant={variant}
-      data-side={side}
-      {...stylex.props(styles.sidebar, styles.desktopShell)}
-    >
+    <SidebarSideContext.Provider value={side}>
       <Div
-        data-slot="sidebar-gap"
-        {...stylex.props(
-          styles.gap,
-          collapsed && collapsible === "icon" && styles.gapCollapsed,
-          collapsed && collapsible === "offcanvas" && styles.gapOffcanvas
-        )}
-      />
-      <Div
-        data-slot="sidebar-container"
+        data-slot="sidebar"
+        data-state={state}
+        data-collapsible={collapsed ? collapsible : ""}
+        data-variant={variant}
         data-side={side}
-        {...stylex.props(
-          styles.container,
-          side === "left" ? styles.containerLeft : styles.containerRight,
-          collapsed && collapsible === "icon" && styles.containerIcon,
-          collapsed &&
-            collapsible === "offcanvas" &&
-            (side === "left"
-              ? styles.containerOffcanvasLeft
-              : styles.containerOffcanvasRight),
-          (variant === "floating" || variant === "inset") &&
-            styles.containerFloating,
-          sx
-        )}
-        {...props}
+        {...stylex.props(styles.sidebar, styles.desktopShell)}
       >
         <Div
-          data-slot="sidebar-inner"
-          data-sidebar="sidebar"
+          data-slot="sidebar-gap"
           {...stylex.props(
-            styles.inner,
-            (variant === "floating" || variant === "inset") &&
-              styles.innerFloating
+            styles.gap,
+            collapsed && collapsible === "icon" && styles.gapCollapsed,
+            collapsed && collapsible === "offcanvas" && styles.gapOffcanvas
           )}
+        />
+        <Div
+          data-slot="sidebar-container"
+          data-side={side}
+          {...stylex.props(
+            styles.container,
+            side === "left" ? styles.containerLeft : styles.containerRight,
+            collapsed && collapsible === "icon" && styles.containerIcon,
+            collapsed &&
+              collapsible === "offcanvas" &&
+              (side === "left"
+                ? styles.containerOffcanvasLeft
+                : styles.containerOffcanvasRight),
+            (variant === "floating" || variant === "inset") &&
+              styles.containerFloating,
+            sx
+          )}
+          {...props}
         >
-          {children}
+          <Div
+            data-slot="sidebar-inner"
+            data-sidebar="sidebar"
+            {...stylex.props(
+              styles.inner,
+              (variant === "floating" || variant === "inset") &&
+                styles.innerFloating
+            )}
+          >
+            {children}
+          </Div>
         </Div>
       </Div>
-    </Div>
+    </SidebarSideContext.Provider>
   )
 }
 
@@ -795,6 +815,7 @@ type SidebarRailProps = CleanButtonProps & {
 
 function SidebarRail({ sx, ...props }: SidebarRailProps) {
   const { toggleSidebar } = useSidebar()
+  const side = React.useContext(SidebarSideContext)
 
   return (
     <Button
@@ -806,7 +827,11 @@ function SidebarRail({ sx, ...props }: SidebarRailProps) {
       variant="ghost"
       size="icon"
       onClick={toggleSidebar}
-      sx={[styles.rail, sx]}
+      sx={[
+        styles.rail,
+        side === "left" ? styles.railLeft : styles.railRight,
+        sx,
+      ]}
       {...props}
     />
   )
@@ -1013,7 +1038,7 @@ function SidebarMenuItem({ sx, ...props }: SidebarMenuItemProps) {
     <Li
       data-slot="sidebar-menu-item"
       data-sidebar="menu-item"
-      {...stylex.props(styles.menuItem, sx)}
+      {...stylex.props(styles.menuItem, stylex.defaultMarker(), sx)}
       {...props}
     />
   )
@@ -1149,9 +1174,17 @@ function SidebarMenuSkeleton({
   sx,
   ...props
 }: SidebarMenuSkeletonProps) {
-  const [width] = React.useState(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  })
+  // Derive a stable 50–90% width from the instance id so the varied skeleton
+  // widths agree between the server and client renders (a fresh Math.random()
+  // per render would trip a hydration mismatch).
+  const id = React.useId()
+  const width = React.useMemo(() => {
+    let hash = 0
+    for (let index = 0; index < id.length; index++) {
+      hash = (hash * 31 + id.charCodeAt(index)) | 0
+    }
+    return `${(Math.abs(hash) % 40) + 50}%`
+  }, [id])
 
   return (
     <Div
