@@ -46,6 +46,29 @@ describe("Switch", () => {
     expect(screen.getByRole("switch")).toBeChecked()
   })
 
+  it("reflects the checked style when defaultChecked (uncontrolled)", () => {
+    render(
+      <>
+        <Switch aria-label="Off" />
+        <Switch aria-label="On" defaultChecked />
+      </>
+    )
+    // defaultChecked must apply the checked styles, not just Base UI's aria state.
+    expect(screen.getByRole("switch", { name: "On" }).className).not.toBe(
+      screen.getByRole("switch", { name: "Off" }).className
+    )
+  })
+
+  it("updates the checked style when toggled (uncontrolled)", async () => {
+    render(<Switch aria-label="Notifications" />)
+    const root = screen.getByRole("switch")
+    const uncheckedClass = root.className
+    await userEvent.click(root)
+    expect(root).toBeChecked()
+    // Toggling on must restyle the root, not merely flip aria-checked.
+    expect(root.className).not.toBe(uncheckedClass)
+  })
+
   it("renders every size without error", () => {
     const sizes = ["default", "sm"] as const
     for (const size of sizes) {

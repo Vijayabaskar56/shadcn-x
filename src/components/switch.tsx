@@ -2,6 +2,7 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import * as stylex from "@stylexjs/stylex"
+import { useState } from "react"
 
 import {
   borderRadius,
@@ -91,13 +92,31 @@ type SwitchProps = Omit<
   sx?: StyleXStyles
 }
 
-function Switch({ size = "default", sx, ...props }: SwitchProps) {
-  const isChecked = props.checked === true
+function Switch({
+  size = "default",
+  sx,
+  checked,
+  defaultChecked,
+  onCheckedChange,
+  ...props
+}: SwitchProps) {
+  // Base UI's Switch is uncontrolled by default (`defaultChecked`, no `checked`),
+  // and StyleX can't key the on-state off the self `[data-checked]` attribute
+  // (silently dropped). So track the live state in JS — controlled `checked`
+  // wins when provided, otherwise the local mirror updated via onCheckedChange.
+  const [internal, setInternal] = useState(defaultChecked ?? false)
+  const isChecked = checked ?? internal
 
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
       data-size={size}
+      checked={checked}
+      defaultChecked={defaultChecked}
+      onCheckedChange={(nextChecked, eventDetails) => {
+        setInternal(nextChecked)
+        onCheckedChange?.(nextChecked, eventDetails)
+      }}
       {...stylex.props(
         styles.root,
         rootSizeStyles[size],
