@@ -24,7 +24,7 @@ const styles = stylex.create({
     color: colors["muted-foreground"],
   },
   spacer: {
-    marginLeft: "auto",
+    marginInlineStart: "auto",
   },
   aside: {
     display: "none",

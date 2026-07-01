@@ -75,9 +75,9 @@ const styles = stylex.create({
   },
   blockquote: {
     marginTop: spacing.xl, // mt-6
-    paddingLeft: spacing.xl, // pl-6
-    borderLeftWidth: 2, // border-l-2
-    borderLeftStyle: "solid",
+    paddingInlineStart: spacing.xl, // pl-6 → pis-6
+    borderInlineStartWidth: 2, // border-l-2 → border-is-2
+    borderInlineStartStyle: "solid",
     borderColor: colors["border-primary"],
     fontStyle: "italic",
   },

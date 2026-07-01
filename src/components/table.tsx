@@ -65,7 +65,7 @@ const styles = stylex.create({
   head: {
     height: `calc(${u} * 10)`, // h-10
     paddingInline: spacing.s, // px-2
-    textAlign: "left",
+    textAlign: "start",
     verticalAlign: "middle", // align-middle
     fontWeight: fontWeight.medium, // font-medium
     whiteSpace: "nowrap", // whitespace-nowrap

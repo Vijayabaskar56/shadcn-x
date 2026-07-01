@@ -62,8 +62,7 @@ const styles = stylex.create({
     textUnderlineOffset: "4px",
   },
   inlineCode: {
-    paddingLeft: "0.4em",
-    paddingRight: "0.4em",
+    paddingInline: "0.4em",
     paddingTop: "0.2em",
     paddingBottom: "0.2em",
     fontFamily:
@@ -103,13 +102,13 @@ const styles = stylex.create({
   ul: {
     marginTop: "1.25rem",
     marginBottom: "1.25rem",
-    paddingLeft: "1.5rem",
+    paddingInlineStart: "1.5rem",
     listStyleType: "disc",
   },
   ol: {
     marginTop: "1.25rem",
     marginBottom: "1.25rem",
-    paddingLeft: "1.5rem",
+    paddingInlineStart: "1.5rem",
     listStyleType: "decimal",
   },
   li: {
@@ -118,9 +117,9 @@ const styles = stylex.create({
   },
   blockquote: {
     marginTop: "1.5rem",
-    paddingLeft: "1.5rem",
-    borderLeftWidth: "2px",
-    borderLeftStyle: "solid",
+    paddingInlineStart: "1.5rem",
+    borderInlineStartWidth: "2px",
+    borderInlineStartStyle: "solid",
     fontStyle: "italic",
   },
   // Keep `pre` minimal: shiki emits `<pre class="shiki">` and globals.css owns
@@ -145,19 +144,17 @@ const styles = stylex.create({
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: colors["border-primary"],
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+    paddingInline: "1rem",
     paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
-    textAlign: "left",
+    textAlign: "start",
     fontWeight: 600,
   },
   td: {
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: colors["border-primary"],
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+    paddingInline: "1rem",
     paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
   },

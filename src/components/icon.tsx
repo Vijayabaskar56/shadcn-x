@@ -34,6 +34,15 @@ const styles = stylex.create({
   s: { width: "0.75rem", height: "0.75rem" },
   m: { width: "1rem", height: "1rem" },
   l: { width: "1.25rem", height: "1.25rem" },
+  // Directional icons (arrows, chevrons, carets) mirror in RTL. Applied via
+  // stylex.when.ancestor so every icon flips when the document is RTL — no
+  // per-icon opt-in, no parser needed.
+  flipRtl: {
+    transform: {
+      default: "none",
+      [stylex.when.ancestor('[dir="rtl"]')]: "scaleX(-1)",
+    },
+  },
 })
 
 const sizeStyles = {
@@ -60,6 +69,8 @@ type CommonIconProps = {
   position?: IconPosition
   /** Accessible label. Omit for a decorative icon (rendered aria-hidden). */
   label?: string
+  /** Flip horizontally in RTL contexts (directional icons: arrows, chevrons). */
+  flipRtl?: boolean
   sx?: StyleXStyles
 } & Omit<
   ReactSVGProps<SVGSVGElement>,
@@ -88,6 +99,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
     size,
     position,
     label,
+    flipRtl,
     sx,
     ...rest
   }: IconProps<TLib>) {
@@ -98,6 +110,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
         // sized icon keeps its size and doesn't auto-shrink in xs buttons.
         styles.base,
         size && sizeStyles[size],
+        flipRtl && styles.flipRtl,
         stylex.defaultMarker(),
         sx
       ),

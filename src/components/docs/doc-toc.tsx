@@ -29,7 +29,7 @@ const styles = stylex.create({
     transitionDuration: "150ms",
   },
   linkNested: {
-    paddingLeft: spacing.m,
+    paddingInlineStart: spacing.m,
   },
 })
 

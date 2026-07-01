@@ -23,6 +23,7 @@ const config = defineConfig({
     contentCollections(),
     stylex.vite({
       useCSSLayers: true,
+      enableLTRRTLComments: true,
       lightningcssOptions: { targets: cssTargets },
     }),
     devtools(),

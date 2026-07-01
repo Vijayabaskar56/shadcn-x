@@ -91,16 +91,16 @@ const styles = stylex.create({
   padding4xl: { padding: spacing["4xl"] },
   padding5xl: { padding: spacing["5xl"] },
 
-  paddingXNone: { paddingLeft: spacing.none, paddingRight: spacing.none },
-  paddingXXs: { paddingLeft: spacing.xs, paddingRight: spacing.xs },
-  paddingXS: { paddingLeft: spacing.s, paddingRight: spacing.s },
-  paddingXM: { paddingLeft: spacing.m, paddingRight: spacing.m },
-  paddingXL: { paddingLeft: spacing.l, paddingRight: spacing.l },
-  paddingXXl: { paddingLeft: spacing.xl, paddingRight: spacing.xl },
-  paddingX2xl: { paddingLeft: spacing["2xl"], paddingRight: spacing["2xl"] },
-  paddingX3xl: { paddingLeft: spacing["3xl"], paddingRight: spacing["3xl"] },
-  paddingX4xl: { paddingLeft: spacing["4xl"], paddingRight: spacing["4xl"] },
-  paddingX5xl: { paddingLeft: spacing["5xl"], paddingRight: spacing["5xl"] },
+  paddingXNone: { paddingInline: spacing.none },
+  paddingXXs: { paddingInline: spacing.xs },
+  paddingXS: { paddingInline: spacing.s },
+  paddingXM: { paddingInline: spacing.m },
+  paddingXL: { paddingInline: spacing.l },
+  paddingXXl: { paddingInline: spacing.xl },
+  paddingX2xl: { paddingInline: spacing["2xl"] },
+  paddingX3xl: { paddingInline: spacing["3xl"] },
+  paddingX4xl: { paddingInline: spacing["4xl"] },
+  paddingX5xl: { paddingInline: spacing["5xl"] },
 
   paddingYNone: { paddingTop: spacing.none, paddingBottom: spacing.none },
   paddingYXs: { paddingTop: spacing.xs, paddingBottom: spacing.xs },
@@ -183,9 +183,9 @@ const styles = stylex.create({
   overflowAuto: { overflow: "auto" },
   overflowClip: { overflow: "clip" },
 
-  textAlignLeft: { textAlign: "left" },
+  textAlignStart: { textAlign: "start" },
   textAlignCenter: { textAlign: "center" },
-  textAlignRight: { textAlign: "right" },
+  textAlignEnd: { textAlign: "end" },
 
   flexNone: { flex: "none" },
   flex1: { flex: "1" },
@@ -211,14 +211,14 @@ const styles = stylex.create({
     borderBottomStyle: "solid",
     borderColor: colors["border-primary"],
   },
-  borderLeft: {
-    borderLeftWidth: 1,
-    borderLeftStyle: "solid",
+  borderInlineStart: {
+    borderInlineStartWidth: 1,
+    borderInlineStartStyle: "solid",
     borderColor: colors["border-primary"],
   },
-  borderRight: {
-    borderRightWidth: 1,
-    borderRightStyle: "solid",
+  borderInlineEnd: {
+    borderInlineEndWidth: 1,
+    borderInlineEndStyle: "solid",
     borderColor: colors["border-primary"],
   },
 
@@ -252,7 +252,7 @@ type JustifyContent =
   | "evenly"
 type Position = "static" | "relative" | "absolute" | "fixed" | "sticky"
 type Overflow = "visible" | "hidden" | "scroll" | "auto" | "clip"
-type TextAlign = "left" | "center" | "right"
+type TextAlign = "start" | "center" | "end"
 type FlexValue = "none" | "1" | "auto"
 type Sizing = "full" | "auto"
 
@@ -533,9 +533,9 @@ const overflowMap = {
 }
 
 const textAlignMap = {
-  left: styles.textAlignLeft,
+  start: styles.textAlignStart,
   center: styles.textAlignCenter,
-  right: styles.textAlignRight,
+  end: styles.textAlignEnd,
 }
 
 const flexMap = {
@@ -621,8 +621,8 @@ export function Box<E extends AllowedElement = "div">({
     border && styles.border,
     borderTop && styles.borderTop,
     borderBottom && styles.borderBottom,
-    borderLeft && styles.borderLeft,
-    borderRight && styles.borderRight,
+    borderLeft && styles.borderInlineStart,
+    borderRight && styles.borderInlineEnd,
     flexGrow !== undefined && styles.flexGrow(flexGrow),
     flexShrink !== undefined && styles.flexShrink(flexShrink),
     order !== undefined && styles.order(order),
