@@ -5,6 +5,7 @@ import { Box } from "@/components/box"
 import { Button } from "@/components/button"
 import { Link } from "@/components/link"
 import { Text } from "@/components/text"
+import { ThemeSelect } from "@/components/theme-select"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 import { colors, fontSize, fontWeight } from "../styles/tokens.stylex"
@@ -45,6 +46,7 @@ function App() {
           >
             Docs
           </Button>
+          <ThemeSelect />
           <ThemeToggle />
         </Box>
       </Box>

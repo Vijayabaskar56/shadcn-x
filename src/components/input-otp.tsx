@@ -144,6 +144,7 @@ function InputOTP({
   name,
   inputMode,
   pattern,
+  spellCheck,
 }: InputOTPProps) {
   const { className: containerClass } = stylex.props(
     styles.container,
@@ -153,6 +154,7 @@ function InputOTP({
 
   return (
     <OTPInput
+      data-slot="input-otp"
       containerClassName={containerClass}
       disabled={disabled}
       maxLength={maxLength}
@@ -166,7 +168,7 @@ function InputOTP({
       name={name}
       inputMode={inputMode}
       pattern={pattern}
-      spellCheck={false}
+      spellCheck={spellCheck ?? false}
     >
       {children}
     </OTPInput>

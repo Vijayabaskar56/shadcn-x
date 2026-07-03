@@ -28,10 +28,18 @@ const styles = stylex.create({
       [stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
       [stylex.when.siblingBefore(":disabled")]: 0.5,
     },
+    // shadcn only kills pointer events inside a disabled group
+    // (`group-data-[disabled=true]:pointer-events-none`); the peer-disabled case
+    // keeps pointer events so the not-allowed cursor can show.
     pointerEvents: {
       default: null,
       [stylex.when.ancestor('[data-disabled="true"]')]: "none",
-      [stylex.when.siblingBefore(":disabled")]: "none",
+    },
+    // shadcn's `peer-disabled:cursor-not-allowed` — cursor signals the peer
+    // control is disabled (observed sibling carries defaultMarker via Input).
+    cursor: {
+      default: null,
+      [stylex.when.siblingBefore(":disabled")]: "not-allowed",
     },
   },
 })

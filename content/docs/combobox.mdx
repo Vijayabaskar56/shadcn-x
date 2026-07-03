@@ -252,7 +252,7 @@ Root props](https://base-ui.com/react/components/combobox).
 |                         | `showClear`       | `boolean`                               | `false`     |
 |                         | `sx`              | `StyleXStyles`                          | —           |
 | `ComboboxContent`       | `side`            | `"top" \| "bottom"`                     | `"bottom"`  |
-|                         | `sideOffset`      | `number`                                | `4`         |
+|                         | `sideOffset`      | `number`                                | `6`         |
 |                         | `align`           | `"start" \| "center" \| "end"`          | `"start"`   |
 |                         | `alignOffset`     | `number`                                | `0`         |
 |                         | `anchor`          | `React.RefObject<HTMLElement \| null>`  | —           |
@@ -271,3 +271,23 @@ Root props](https://base-ui.com/react/components/combobox).
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Combobox items={[{ value: "riyadh", label: "الرياض" }, { value: "dubai", label: "دبي" }]}>
+      <ComboboxTrigger>
+        <ComboboxValue placeholder="اختر مدينة" />
+      </ComboboxTrigger>
+      <ComboboxContent>
+        <ComboboxInput placeholder="بحث" />
+        <ComboboxList>
+          <ComboboxItem value="riyadh">الرياض</ComboboxItem>
+          <ComboboxItem value="dubai">دبي</ComboboxItem>
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  </Box>
+</DirectionProvider>
+

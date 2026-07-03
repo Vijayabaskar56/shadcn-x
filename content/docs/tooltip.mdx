@@ -187,3 +187,17 @@ Root props](https://base-ui.com/react/components/tooltip) (`open`,
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger render={<Button variant="outline">مرر هنا</Button>} />
+        <TooltipContent>تلميح RTL</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  </Box>
+</DirectionProvider>
+

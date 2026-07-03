@@ -35,6 +35,7 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   blockquote: "Box",
   pre: "Box",
   code: "Box",
+  kbd: "Kbd",
   time: "Box",
   table: "Table",
   thead: "TableHeader",
@@ -55,7 +56,10 @@ const DEFAULT_ELEMENTS: Record<string, string> = {
   select: "NativeSelect",
   option: "NativeSelectOption",
   optgroup: "NativeSelectOptGroup",
-  form: "Form",
+  // No `form` mapping: our `Form` is the react-hook-form `FormProvider` context
+  // (it renders no DOM), so it does NOT retire the `<form>` element — you still
+  // need a real `<form onSubmit>` inside it. Like `img` before `Image`, `<form>`
+  // stays allowed until a primitive actually covers it.
   fieldset: "FieldSet",
   legend: "FieldLegend",
 }

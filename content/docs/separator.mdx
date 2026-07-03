@@ -92,3 +92,16 @@ const styles = stylex.create({
 
 All other [Base UI separator props](https://base-ui.com/react/components/separator)
 (`id`, `render`, `aria-*`, …) are forwarded.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" alignItems="center" gap="m">
+      <Text>قبل</Text>
+      <Separator orientation="vertical" />
+      <Text>بعد</Text>
+    </Box>
+  </Box>
+</DirectionProvider>
+

@@ -1,7 +1,15 @@
 import * as stylex from "@stylexjs/stylex"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { beforeAll, describe, expect, it, vi } from "vitest"
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest"
 
 import {
   InputOTP,
@@ -19,6 +27,15 @@ beforeAll(() => {
   if (typeof document.elementFromPoint !== "function") {
     document.elementFromPoint = () => null
   }
+})
+
+beforeEach(() => {
+  vi.useFakeTimers({ shouldAdvanceTime: true })
+})
+
+afterEach(() => {
+  vi.runOnlyPendingTimers()
+  vi.useRealTimers()
 })
 
 const sx = stylex.create({
@@ -55,7 +72,7 @@ describe("InputOTP", () => {
   })
 
   it("responds to user typing", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     const onChange = vi.fn()
     render(
       <InputOTP maxLength={4} onChange={onChange}>
@@ -84,6 +101,30 @@ describe("InputOTP", () => {
       container.querySelector('[data-slot="input-otp-group"]')
     ).toBeInTheDocument()
   })
+
+  it("sets data-slot on the root element", () => {
+    const { container } = render(
+      <InputOTP maxLength={4}>
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+    expect(
+      container.querySelector('[data-slot="input-otp"]')
+    ).toBeInTheDocument()
+  })
+
+  it("disables the underlying input when disabled", () => {
+    render(
+      <InputOTP maxLength={4} disabled>
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+    expect(screen.getByRole("textbox")).toBeDisabled()
+  })
 })
 
 describe("InputOTPGroup", () => {
@@ -100,6 +141,17 @@ describe("InputOTPGroup", () => {
       "input-otp-group"
     )
   })
+
+  it("accepts a typed sx prop", () => {
+    render(
+      <InputOTP maxLength={1}>
+        <InputOTPGroup data-testid="group" sx={sx.custom}>
+          <InputOTPSlot index={0} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+    expect(screen.getByTestId("group").getAttribute("class")).toBeTruthy()
+  })
 })
 
 describe("InputOTPSlot", () => {
@@ -115,6 +167,17 @@ describe("InputOTPSlot", () => {
       "data-slot",
       "input-otp-slot"
     )
+  })
+
+  it("accepts a typed sx prop", () => {
+    render(
+      <InputOTP maxLength={1}>
+        <InputOTPGroup>
+          <InputOTPSlot index={0} data-testid="slot" sx={sx.custom} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+    expect(screen.getByTestId("slot").getAttribute("class")).toBeTruthy()
   })
 })
 
@@ -135,6 +198,21 @@ describe("InputOTPSeparator", () => {
       "data-slot",
       "input-otp-separator"
     )
+  })
+
+  it("accepts a typed sx prop", () => {
+    render(
+      <InputOTP maxLength={2}>
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+        </InputOTPGroup>
+        <InputOTPSeparator data-testid="sep" sx={sx.custom} />
+        <InputOTPGroup>
+          <InputOTPSlot index={1} />
+        </InputOTPGroup>
+      </InputOTP>
+    )
+    expect(screen.getByTestId("sep").getAttribute("class")).toBeTruthy()
   })
 
   it("has role separator", () => {

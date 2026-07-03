@@ -170,3 +170,17 @@ const styles = stylex.create({
 All other Base UI Collapsible props are forwarded. Public slots render with
 `data-slot="collapsible"`, `data-slot="collapsible-trigger"`, and
 `data-slot="collapsible-content"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Collapsible defaultOpen>
+      <CollapsibleTrigger render={<Button variant="outline">عرض التفاصيل</Button>} />
+      <CollapsibleContent>
+        <Box paddingBlockStart="m"><Text>تظهر التفاصيل في اتجاه RTL.</Text></Box>
+      </CollapsibleContent>
+    </Collapsible>
+  </Box>
+</DirectionProvider>
+

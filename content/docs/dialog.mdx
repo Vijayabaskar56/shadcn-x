@@ -193,7 +193,8 @@ props](https://base-ui.com/react/components/dialog) (`open`, `onOpenChange`,
 | `DialogContent`     | `showCloseButton`   | `boolean`        | `true`  |
 |                     | `sx`                | `StyleXStyles`   | —       |
 | `DialogHeader`      | `sx`                | `StyleXStyles`   | —       |
-| `DialogFooter`      | `sx`                | `StyleXStyles`   | —       |
+| `DialogFooter`      | `showCloseButton`   | `boolean`        | `false` |
+|                     | `sx`                | `StyleXStyles`   | —       |
 | `DialogTitle`       | `sx`                | `StyleXStyles`   | —       |
 | `DialogDescription` | `sx`                | `StyleXStyles`   | —       |
 | `DialogClose`       | `render`            | element          | —       |
@@ -203,3 +204,20 @@ props](https://base-ui.com/react/components/dialog) (`open`, `onOpenChange`,
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline">فتح الحوار</Button>} />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>حوار RTL</DialogTitle>
+          <DialogDescription>يتم توسيط الحركة والموضع حسب الاتجاه.</DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  </Box>
+</DirectionProvider>
+

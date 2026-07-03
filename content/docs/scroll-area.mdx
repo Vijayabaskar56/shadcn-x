@@ -152,3 +152,18 @@ const styles = stylex.create({
 |              | `sx`          | `StyleXStyles`               | —            |
 
 All other Base UI scroll area props are forwarded to the matching primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <ScrollArea sx={{ maxHeight: "8rem" }}>
+      <Box padding="m">
+        <Text>سطر RTL طويل داخل منطقة تمرير.</Text>
+        <Text>سطر آخر لاختبار المحاذاة.</Text>
+      </Box>
+      <ScrollBar />
+    </ScrollArea>
+  </Box>
+</DirectionProvider>
+

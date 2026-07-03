@@ -1,0 +1,112 @@
+---
+title: Chart
+description: Chart helpers for Recharts with token-aware labels, legends, and tooltips.
+---
+
+export const chartData = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+]
+
+export const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "oklch(0.546 0.245 262.881)",
+  },
+}
+
+## Preview
+
+<ChartContainer config={chartConfig}>
+  <LineChart data={chartData}>
+    <XAxis dataKey="month" />
+    <ChartTooltip content={<ChartTooltipContent />} />
+    <Line type="monotone" dataKey="desktop" stroke="var(--color-desktop)" />
+  </LineChart>
+</ChartContainer>
+
+## Usage
+
+```tsx
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/chart"
+```
+
+## Props
+
+| Component | Props |
+| --- | --- |
+| `ChartContainer` | `config`, `initialDimension`, `sx` |
+| `ChartTooltipContent` | `indicator`, `hideLabel`, `hideIndicator`, `nameKey`, `labelKey`, `color`, `sx`, `labelSx` |
+| `ChartLegendContent` | `hideIcon`, `nameKey` |
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <ChartContainer config={chartConfig}>
+      <LineChart data={chartData}>
+        <XAxis dataKey="month" />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <Line type="monotone" dataKey="desktop" stroke="var(--color-desktop)" />
+      </LineChart>
+    </ChartContainer>
+  </Box>
+</DirectionProvider>
+
+## Customization
+
+Chart helpers never accept `className`. Customize them on-system, in order of reach:
+
+1. **Design tokens via `config`** — series colors flow through the `config`
+   prop and the emitted `--color-*` variables, not inline hex in the chart.
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last, so it wins. `ChartContainer` takes `sx` for the wrapper;
+   `ChartTooltipContent` takes `sx` (tooltip surface) and `labelSx` (the label).
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (spacing, radius, card background), without touching the component.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  square: { aspectRatio: "1 / 1" },
+  compactTooltip: { minWidth: "6rem" },
+  loudLabel: { fontSize: "0.875rem" },
+})
+
+<ChartContainer config={chartConfig} sx={styles.square}>
+  <LineChart data={chartData}>
+    <XAxis dataKey="month" />
+    <ChartTooltip
+      content={
+        <ChartTooltipContent sx={styles.compactTooltip} labelSx={styles.loudLabel} />
+      }
+    />
+    <Line type="monotone" dataKey="desktop" stroke="var(--color-desktop)" />
+  </LineChart>
+</ChartContainer>
+```
+
+Re-theme the chart surface (card background, spacing, radius) with
+`stylex.createTheme` against the shared token vars:
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+import { colors } from "@/styles/tokens.stylex"
+
+const brandChart = stylex.createTheme(colors, {
+  "background-card": "oklch(0.21 0.03 265)",
+  "border-primary": "oklch(0.4 0.05 265)",
+})
+
+<div {...stylex.props(brandChart)}>
+  <ChartContainer config={chartConfig}>{/* … */}</ChartContainer>
+</div>
+```
+

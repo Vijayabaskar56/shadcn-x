@@ -23,7 +23,21 @@ function App() {
 }
 ```
 
-`dir` defaults to `"ltr"` when omitted. The provider sets `document.documentElement.dir` and all components respond via CSS logical properties.
+Direction defaults to `"ltr"` when omitted. `DirectionProvider` wraps Base UI's own `DirectionProvider` (so Base UI components adjust their behavior) and adds a shadcn-x enhancement: it mirrors the resolved direction onto `document.documentElement.dir`, so all components respond via CSS logical properties. This DOM write is a shadcn-x-specific divergence — Base UI's `DirectionProvider` does not touch the DOM on its own.
+
+## Props
+
+### `DirectionProvider`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `direction` | `"ltr" \| "rtl"` | `"ltr"` | Reading direction (Base UI's canonical prop). Takes precedence over `dir`. |
+| `dir` | `"ltr" \| "rtl"` | `"ltr"` | Alias of `direction`, kept for parity with shadcn's API. |
+| `children` | `React.ReactNode` | — | The subtree that reads the direction. |
+
+### `useDirection`
+
+Returns the current `Direction` (`"ltr" | "rtl"`) from the nearest `DirectionProvider`.
 
 ## How it works
 
@@ -94,3 +108,15 @@ afterEach(() => {
   document.dir = "ltr"
 })
 ```
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" gap="s" alignItems="center">
+      <Icon name="ChevronRight" flipRtl />
+      <Text>اتجاه RTL نشط</Text>
+    </Box>
+  </Box>
+</DirectionProvider>
+

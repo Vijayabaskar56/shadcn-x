@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/dialog"
+import { useDirection } from "@/components/direction"
 import { Icon } from "@/components/icon"
 
 import {
@@ -159,12 +160,21 @@ const styles = stylex.create({
 
   // CommandDialog: position the palette at the top third (matches shadcn's Base
   // UI flavor: top-1/3 translate-y-0) with no padding; merged last over our
-  // DialogContent defaults (which center + pad).
+  // DialogContent defaults (which center + pad). The horizontal translate flips
+  // for RTL, but `when.ancestor('[dir="rtl"]')` can't emit usable CSS here —
+  // the marker would have to live on <html> (where DirectionProvider sets dir),
+  // which we don't render, so the branch no-ops. We resolve direction in JS via
+  // `useDirection` and pick the matching transform object instead.
   dialogContent: {
     overflow: "hidden",
     padding: 0,
     top: "33%",
+  },
+  dialogTransformLtr: {
     transform: "translate(-50%, 0)",
+  },
+  dialogTransformRtl: {
+    transform: "translate(50%, 0)",
   },
 
   // Visually-hidden yet screen-reader-available — the canonical sr-only pattern
@@ -354,6 +364,9 @@ function CommandDialog({
   children,
   ...props
 }: CommandDialogProps) {
+  const dir = useDirection()
+  const dialogTransform =
+    dir === "rtl" ? styles.dialogTransformRtl : styles.dialogTransformLtr
   return (
     <Dialog {...props}>
       {/* The header is a11y-only (sr-only): it satisfies Base UI's dialog-name
@@ -366,7 +379,7 @@ function CommandDialog({
       </DialogHeader>
       <DialogContent
         showCloseButton={showCloseButton}
-        sx={styles.dialogContent}
+        sx={[styles.dialogContent, dialogTransform]}
       >
         {children}
       </DialogContent>

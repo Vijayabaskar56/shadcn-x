@@ -11,6 +11,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/alert-dialog"
@@ -155,6 +156,25 @@ describe("AlertDialog", () => {
     await user.click(screen.getByText("Open"))
     expect(onOpenChange).toHaveBeenCalledWith(true, expect.anything())
     expect(screen.getByRole("alertdialog")).toBeInTheDocument()
+  })
+
+  it("renders Media in the header with its data-slot", () => {
+    render(
+      <AlertDialog defaultOpen>
+        <AlertDialogTrigger>Open</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogMedia>
+              <span>icon</span>
+            </AlertDialogMedia>
+            <AlertDialogTitle>Title</AlertDialogTitle>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
+    const media = document.querySelector('[data-slot="alert-dialog-media"]')
+    expect(media).toBeInTheDocument()
+    expect(media).toContainElement(screen.getByText("icon"))
   })
 
   it("applies the size variant as data-size on content", () => {

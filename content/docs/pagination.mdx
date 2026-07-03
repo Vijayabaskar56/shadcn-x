@@ -1,0 +1,269 @@
+---
+title: Pagination
+description: Navigation controls for paginated collections.
+---
+
+# Pagination
+
+Pagination composes navigation, list, item, and link slots into shadcn-compatible
+page controls. Link styling flows through the `Button` primitive, so active and
+inactive pages stay on-system without `className`.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationPrevious href="/docs/pagination" />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">1</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" isActive>2</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">3</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationEllipsis />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationNext href="/docs/pagination" />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/pagination"
+```
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="/invoices?page=1" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/invoices?page=2" isActive>
+        2
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="/invoices?page=3" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+## Examples
+
+### Default
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationPrevious href="/docs/pagination" />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">1</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" isActive>2</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">3</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationNext href="/docs/pagination" />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Box>
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="/docs" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/docs">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/docs" isActive>
+        2
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/docs">3</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="/docs" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+### With Ellipsis
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationPrevious href="/docs/pagination" />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">1</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationEllipsis />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" isActive>10</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationEllipsis />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination">20</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationNext href="/docs/pagination" />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Box>
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="/docs" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/docs">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="/docs" isActive>
+        10
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="/docs" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+### Custom Labels
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationPrevious href="/docs/pagination" text="Back" />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" isActive>4</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationNext href="/docs/pagination" text="Forward" />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Box>
+
+```tsx
+<PaginationPrevious href="/docs" text="Back" />
+<PaginationNext href="/docs" text="Forward" />
+```
+
+### Sizes
+
+`PaginationLink` forwards the `size` prop to the underlying `Button`, so links can
+adopt any button size (`sm`, `default`, `lg`, `icon`). The default is `icon`, which
+keeps numbered pages square.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" size="sm">1</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" size="default">2</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" size="lg">3</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="/docs/pagination" size="icon">4</PaginationLink>
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Box>
+
+```tsx
+<PaginationLink href="/docs" size="sm">1</PaginationLink>
+<PaginationLink href="/docs" size="default">2</PaginationLink>
+<PaginationLink href="/docs" size="lg">3</PaginationLink>
+<PaginationLink href="/docs" size="icon">4</PaginationLink>
+```
+
+## Customization
+
+Pagination does not accept `className` or `style`. Use the component slots first,
+then `sx` for typed StyleX overrides, and `createTheme` to re-skin tokens for a
+subtree.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  start: { justifyContent: "flex-start" },
+})
+
+<Pagination sx={styles.start}>...</Pagination>
+```
+
+## API Reference
+
+| Component              | Props                                          |
+| ---------------------- | ---------------------------------------------- |
+| `Pagination`           | `sx`, nav props                                |
+| `PaginationContent`    | `sx`, ul props                                 |
+| `PaginationItem`       | `sx`, li props                                 |
+| `PaginationLink`       | `isActive`, `size`, `sx`, anchor props         |
+| `PaginationPrevious`   | `text`, `isActive`, `size`, `sx`, anchor props |
+| `PaginationNext`       | `text`, `isActive`, `size`, `sx`, anchor props |
+| `PaginationEllipsis`   | `sx`, span props                               |
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+        <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationNext href="#" /></PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  </Box>
+</DirectionProvider>
+

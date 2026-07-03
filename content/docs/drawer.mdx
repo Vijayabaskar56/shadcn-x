@@ -224,3 +224,20 @@ props](https://vaul.emilkowalski.dev) (`open`, `onOpenChange`, `defaultOpen`,
 
 All other props (native attributes, `render`, vaul behavior props) are forwarded
 to the underlying vaul primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Drawer direction="right">
+      <DrawerTrigger render={<Button variant="outline">فتح الدرج</Button>} />
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>درج RTL</DrawerTitle>
+          <DrawerDescription>تستخدم الحافة inline-end في RTL.</DrawerDescription>
+        </DrawerHeader>
+      </DrawerContent>
+    </Drawer>
+  </Box>
+</DirectionProvider>
+

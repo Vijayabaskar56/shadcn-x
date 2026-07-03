@@ -115,3 +115,15 @@ All other [Base UI checkbox props](https://base-ui.com/react/components/checkbox
 > [!NOTE]
 > The `checked` visual style (primary background, primary foreground icon) is
 > applied synchronously in both controlled and uncontrolled modes.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" alignItems="center" gap="s">
+      <Checkbox id="rtl-checkbox" defaultChecked />
+      <Label htmlFor="rtl-checkbox">استلام التنبيهات</Label>
+    </Box>
+  </Box>
+</DirectionProvider>
+

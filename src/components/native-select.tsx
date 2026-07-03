@@ -37,7 +37,7 @@ const styles = stylex.create({
       default: colors.input,
       ":focus-visible": colors.ring,
     },
-    backgroundColor: `light-dark(transparent, color-mix(in oklch, ${colors.input}, transparent 70%))`,
+    backgroundColor: colors["background-input"],
     color: colors["text-primary"],
     fontSize: {
       default: fontSize.m,
@@ -84,7 +84,7 @@ const styles = stylex.create({
   },
   icon: {
     position: "absolute",
-    right: spacing.m,
+    insetInlineEnd: spacing.m,
     top: "50%",
     transform: "translateY(-50%)",
     pointerEvents: "none",
@@ -142,7 +142,7 @@ function NativeSelect({
       as="div"
       data-slot="native-select-wrapper"
       data-size={size}
-      sx={[styles.wrapper, sx]}
+      sx={styles.wrapper}
     >
       <SelectTag
         data-slot="native-select"
@@ -150,6 +150,7 @@ function NativeSelect({
         {...stylex.props(
           styles.select,
           selectSizeStyles[size],
+          sx,
           stylex.defaultMarker()
         )}
         {...props}

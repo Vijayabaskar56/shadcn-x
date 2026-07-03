@@ -199,3 +199,19 @@ All other Base UI tab props are forwarded.
 | `sx`          | `StyleXStyles`  | —       |
 
 All other Base UI panel props are forwarded.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Tabs defaultValue="account">
+      <TabsList>
+        <TabsTrigger value="account">الحساب</TabsTrigger>
+        <TabsTrigger value="settings">الإعدادات</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">تفاصيل الحساب</TabsContent>
+      <TabsContent value="settings">الإعدادات</TabsContent>
+    </Tabs>
+  </Box>
+</DirectionProvider>
+

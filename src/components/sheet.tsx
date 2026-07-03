@@ -52,32 +52,31 @@ const styles = stylex.create({
 
   sideRight: {
     top: 0,
-    right: 0,
+    insetInlineEnd: 0,
     bottom: 0,
     height: "100%",
     width: "75%",
     maxWidth: "24rem",
-    borderLeftWidth: 1,
-    borderLeftStyle: "solid",
-    borderLeftColor: colors["border-primary"],
+    borderInlineStartWidth: 1,
+    borderInlineStartStyle: "solid",
+    borderInlineStartColor: colors["border-primary"],
   },
 
   sideLeft: {
     top: 0,
-    left: 0,
+    insetInlineStart: 0,
     bottom: 0,
     height: "100%",
     width: "75%",
     maxWidth: "24rem",
-    borderRightWidth: 1,
-    borderRightStyle: "solid",
-    borderRightColor: colors["border-primary"],
+    borderInlineEndWidth: 1,
+    borderInlineEndStyle: "solid",
+    borderInlineEndColor: colors["border-primary"],
   },
 
   sideTop: {
     top: 0,
-    left: 0,
-    right: 0,
+    insetInline: 0,
     borderBottomWidth: 1,
     borderBottomStyle: "solid",
     borderBottomColor: colors["border-primary"],
@@ -85,8 +84,7 @@ const styles = stylex.create({
 
   sideBottom: {
     bottom: 0,
-    left: 0,
-    right: 0,
+    insetInline: 0,
     borderTopWidth: 1,
     borderTopStyle: "solid",
     borderTopColor: colors["border-primary"],

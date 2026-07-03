@@ -133,3 +133,12 @@ are forwarded. Renders an `<input>` with `data-slot="input"`.
 > [!NOTE]
 > `Input` retires the raw `<input>` element — the `no-raw-html` guardrail now
 > points `<input>` at `Input`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Input placeholder="البريد الإلكتروني" />
+  </Box>
+</DirectionProvider>
+

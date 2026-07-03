@@ -86,19 +86,19 @@ These drive raw-HTML usage toward zero. Build first.
 
 ## Phase 4 — Display &amp; feedback
 
-- [ ] Alert
-- [ ] Badge
-- [ ] Avatar
-- [ ] Skeleton
-- [ ] Spinner
-- [ ] Progress
-- [ ] Kbd
-- [ ] Sonner (toast)
-- [ ] Breadcrumb
-- [ ] Pagination
-- [ ] Calendar
-- [ ] Carousel
-- [ ] Chart
+- [x] Alert
+- [x] Badge
+- [x] Avatar
+- [x] Skeleton
+- [x] Spinner
+- [x] Progress
+- [x] Kbd
+- [x] Sonner (toast)
+- [x] Breadcrumb
+- [x] Pagination
+- [x] Calendar
+- [x] Carousel
+- [x] Chart
 
 ## Phase 5 — RTL / Direction ✅
 
@@ -110,9 +110,9 @@ Plan: `docs/plans/2026-06-30-rtl-support.md` (implemented in `9680f1c`)
 - [x] RTL: migrate Text (`borderLeft` → `borderInlineStart`)
 - [x] RTL: migrate docs components (mdx-components, doc-toc, docs-sidebar, docs layout)
 - [x] RTL: Icon auto-flip (`flipRtl` prop via `stylex.when.ancestor('[dir="rtl"]')`)
-- [ ] RTL: overlay animation directions (Phases 2-4)
-- [ ] RTL: lint rule (`preferInline` equivalent for oxlint)
-- [ ] RTL: test suite
+- [x] RTL: overlay animation directions (Phases 2-4)
+- [x] RTL: lint rule (`preferInline` equivalent for oxlint)
+- [x] RTL: test suite
 
 ## Phase 6 — AI / chat (Base UI variant extras; optional, only if needed)
 
@@ -160,4 +160,3 @@ and `no-raw-html` remaps them from `Box` → `Primitive`:
 8. **Verify** — typecheck + oxlint + test pass.
 
 ---
-

@@ -113,6 +113,43 @@ describe("Dialog", () => {
     )
   })
 
+  it("renders a footer close button when showCloseButton is set", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog defaultOpen>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent showCloseButton={false}>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter showCloseButton>
+            <button type="button">Save</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )
+    expect(screen.getByText("Save")).toBeInTheDocument()
+    const close = screen.getByRole("button", { name: "Close" })
+    expect(close).toHaveAttribute("data-slot", "dialog-close")
+    await user.click(close)
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+  })
+
+  it("does not render a footer close button by default", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent showCloseButton={false}>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter>
+            <button type="button">Save</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    )
+    expect(
+      screen.queryByRole("button", { name: "Close" })
+    ).not.toBeInTheDocument()
+  })
+
   it("opens on trigger click and calls onOpenChange", async () => {
     const onOpenChange = vi.fn()
     const user = userEvent.setup()

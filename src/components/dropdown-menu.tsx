@@ -170,7 +170,11 @@ const styles = stylex.create({
 // the context-menu port uses internally.
 const SpanTag = "span" as const
 
-const DropdownMenu = MenuPrimitive.Root
+type DropdownMenuProps = MenuPrimitive.Root.Props
+
+function DropdownMenu({ ...props }: DropdownMenuProps) {
+  return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+}
 
 type DropdownMenuPortalProps = MenuPrimitive.Portal.Props
 
@@ -509,6 +513,7 @@ export type {
   DropdownMenuItemProps,
   DropdownMenuLabelProps,
   DropdownMenuPortalProps,
+  DropdownMenuProps,
   DropdownMenuRadioGroupProps,
   DropdownMenuRadioItemProps,
   DropdownMenuSeparatorProps,

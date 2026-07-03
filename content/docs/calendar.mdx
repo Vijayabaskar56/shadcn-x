@@ -1,0 +1,74 @@
+---
+title: Calendar
+description: A date picker calendar built on react-day-picker.
+---
+
+## Preview
+
+<Calendar month={new Date(2026, 0, 1)} />
+
+## Usage
+
+```tsx
+import { Calendar } from "@/components/calendar"
+```
+
+```tsx
+<Calendar />
+```
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `showOutsideDays` | `boolean` | `true` |
+| `captionLayout` | `DayPicker` caption layout | `"label"` |
+| `buttonVariant` | `Button` variant | `"ghost"` |
+| `sx` | `StyleXStyles` | - |
+
+## Customization
+
+`Calendar` never accepts `className` or `classNames`. Customize it on-system, in
+order of reach:
+
+1. **`buttonVariant` prop** — sets the variant used for the day buttons and month
+   navigation buttons (`"ghost"` by default).
+2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
+   merges last onto the calendar root, so it wins. A raw utility string cannot
+   enter it.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*,
+   without touching the component.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  boxed: { padding: "1rem", borderRadius: "0.5rem" },
+})
+
+<Calendar sx={styles.boxed} />
+```
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+import { colors } from "@/styles/tokens.stylex"
+
+// Re-theme the calendar (and everything under it) by overriding token values.
+const theme = stylex.createTheme(colors, {
+  primary: "oklch(0.55 0.22 260)",
+})
+
+<div {...stylex.props(theme)}>
+  <Calendar mode="single" />
+</div>
+```
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Calendar month={new Date(2026, 0, 1)} />
+  </Box>
+</DirectionProvider>
+

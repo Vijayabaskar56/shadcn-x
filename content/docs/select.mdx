@@ -226,3 +226,18 @@ props](https://base-ui.com/react/components/select).
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Select defaultValue="rtl">
+      <SelectTrigger><SelectValue placeholder="اختر الاتجاه" /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="rtl">RTL</SelectItem>
+        <SelectItem value="ltr">LTR</SelectItem>
+      </SelectContent>
+    </Select>
+  </Box>
+</DirectionProvider>
+

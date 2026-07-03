@@ -107,3 +107,12 @@ forwarded. Renders a `<textarea>` with `data-slot="textarea"`.
 > [!NOTE]
 > `Textarea` retires the raw `<textarea>` element — the `no-raw-html` guardrail
 > now points `<textarea>` at `Textarea`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Textarea placeholder="اكتب ملاحظاتك" />
+  </Box>
+</DirectionProvider>
+

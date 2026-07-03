@@ -225,3 +225,17 @@ All other Base UI accordion trigger props are forwarded.
 All other Base UI accordion panel props are forwarded. Public slots render with
 `data-slot="accordion"`, `data-slot="accordion-item"`,
 `data-slot="accordion-trigger"`, and `data-slot="accordion-content"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Accordion defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>تفاصيل الحساب</AccordionTrigger>
+        <AccordionContent>يتم ضبط المسافات والرموز تلقائيا في اتجاه RTL.</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </Box>
+</DirectionProvider>
+

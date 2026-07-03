@@ -185,3 +185,20 @@ props](https://base-ui.com/react/components/dialog) (`open`, `onOpenChange`,
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI dialog primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Sheet>
+      <SheetTrigger render={<Button variant="outline">فتح اللوحة</Button>} />
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>لوحة RTL</SheetTitle>
+          <SheetDescription>تتحول حافة inline-end تلقائيا.</SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
+  </Box>
+</DirectionProvider>
+

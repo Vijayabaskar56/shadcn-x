@@ -58,8 +58,8 @@ const styles = stylex.create({
     bottom: 0,
     marginTop: spacing["5xl"], // mt-24
     maxHeight: "80vh",
-    borderTopLeftRadius: borderRadius.l, // rounded-t-lg
-    borderTopRightRadius: borderRadius.l,
+    borderStartStartRadius: borderRadius.l, // rounded-t-lg
+    borderStartEndRadius: borderRadius.l,
     borderTopWidth: 1,
     borderTopStyle: "solid",
     borderColor: colors["border-primary"],
@@ -69,15 +69,15 @@ const styles = stylex.create({
     top: 0,
     marginBottom: spacing["5xl"], // mb-24
     maxHeight: "80vh",
-    borderBottomLeftRadius: borderRadius.l, // rounded-b-lg
-    borderBottomRightRadius: borderRadius.l,
+    borderEndStartRadius: borderRadius.l, // rounded-b-lg
+    borderEndEndRadius: borderRadius.l,
     borderBottomWidth: 1,
     borderBottomStyle: "solid",
     borderColor: colors["border-primary"],
   },
   contentRight: {
     insetBlock: 0,
-    right: 0,
+    insetInlineEnd: 0,
     width: "75%", // w-3/4
     borderInlineStartWidth: 1, // border-l
     borderInlineStartStyle: "solid",
@@ -88,7 +88,7 @@ const styles = stylex.create({
   },
   contentLeft: {
     insetBlock: 0,
-    left: 0,
+    insetInlineStart: 0,
     width: "75%",
     borderInlineEndWidth: 1, // border-r
     borderInlineEndStyle: "solid",

@@ -159,3 +159,15 @@ All other [Base UI button props](https://base-ui.com/react/components/button)
 > [!NOTE]
 > Because `Button` has no `className`, an agent can only express on-system
 > styling — the type system rejects everything else.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Button>
+      <Icon name="ChevronRight" position="inline-end" flipRtl />
+      متابعة
+    </Button>
+  </Box>
+</DirectionProvider>
+

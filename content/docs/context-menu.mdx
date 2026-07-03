@@ -345,3 +345,18 @@ Context Menu Root props](https://base-ui.com/react/components/context-menu)
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <ContextMenu>
+      <ContextMenuTrigger render={<Button variant="outline">افتح القائمة بزر الفأرة الأيمن</Button>} />
+      <ContextMenuContent>
+        <ContextMenuItem>تعديل</ContextMenuItem>
+        <ContextMenuItem>نسخ</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  </Box>
+</DirectionProvider>
+

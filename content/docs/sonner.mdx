@@ -1,0 +1,116 @@
+---
+title: Sonner
+description: Displays toast notifications through the Sonner toast library.
+---
+
+import { toast } from "sonner"
+
+# Sonner
+
+`Toaster` mounts the Sonner notification region and wires it to the local
+shadcn-x theme. Trigger toasts with Sonner's `toast` API from application code.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toaster />
+  <Button onClick={() => toast.success("Project saved")}>Show toast</Button>
+</Box>
+
+## Usage
+
+```tsx
+import { Toaster } from "@/components/sonner"
+import { toast } from "sonner"
+```
+
+```tsx
+<Toaster />
+<Button onClick={() => toast("Event has been created")}>Show toast</Button>
+```
+
+## Examples
+
+### Default
+
+Use `toast` for neutral feedback.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toaster />
+  <Button variant="outline" onClick={() => toast("Event has been created")}>Default toast</Button>
+</Box>
+
+```tsx
+<Toaster />
+<Button onClick={() => toast("Event has been created")}>Show toast</Button>
+```
+
+### Rich Colors
+
+Use `richColors` when toast type should drive stronger status color.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toaster richColors />
+  <Button variant="outline" onClick={() => toast.success("Payment captured")}>Success</Button>
+  <Button variant="destructive" onClick={() => toast.error("Payment failed")}>Error</Button>
+</Box>
+
+```tsx
+<Toaster richColors />
+<Button onClick={() => toast.success("Payment captured")}>Success</Button>
+<Button onClick={() => toast.error("Payment failed")}>Error</Button>
+```
+
+### Position
+
+Pass Sonner props through the wrapper to control placement and behavior.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Toaster position="top-right" closeButton />
+  <Button variant="outline" onClick={() => toast.info("Invite copied")}>Top right</Button>
+</Box>
+
+```tsx
+<Toaster position="top-right" closeButton />
+<Button onClick={() => toast.info("Invite copied")}>Top right</Button>
+```
+
+## Customization
+
+Sonner owns the internal toast DOM, so this wrapper intentionally uses Sonner's
+`style` and `toastOptions` API instead of `sx`. The default `style` values are
+token-backed CSS variables for the normal toast surface, border, text, radius,
+and rich-color states.
+
+```tsx
+<Toaster
+  duration={5000}
+  toastOptions={{
+    closeButton: true,
+  }}
+/>
+```
+
+## API Reference
+
+| Component | Prop | Type | Default |
+| --------- | ---- | ---- | ------- |
+| `Toaster` | `theme` | `"light" \| "dark" \| "system"` | local `useTheme().theme` |
+| `Toaster` | `position` | Sonner `Position` | `"bottom-right"` |
+| `Toaster` | `richColors` | `boolean` | `false` |
+| `Toaster` | `closeButton` | `boolean` | `false` |
+| `Toaster` | `toastOptions` | Sonner `ToastOptions` | — |
+
+All Sonner `ToasterProps` are forwarded. The wrapper provides shadcn-style status
+icons, uses the shared `Spinner` for loading toasts, and maps default toast CSS
+variables to shadcn-x tokens.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" gap="s" alignItems="center">
+      <Toaster position="bottom-right" />
+      <Button variant="outline">إظهار تنبيه RTL</Button>
+    </Box>
+  </Box>
+</DirectionProvider>
+

@@ -363,3 +363,20 @@ const styles = stylex.create({
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>ملف</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>جديد</MenubarItem>
+          <MenubarItem>فتح</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+  </Box>
+</DirectionProvider>
+

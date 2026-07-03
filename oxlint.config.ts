@@ -78,6 +78,7 @@ export default defineConfig({
     // layer is ported off raw HTML / className.
     "shadcn-x/no-raw-html": "warn",
     "shadcn-x/no-className-style": "warn",
+    "shadcn-x/no-physical-stylex-properties": "warn",
     "shadcn-x/no-raw-design-values": "warn",
     // no-stylex-atoms is prevention, not migration — we never imported atoms, so
     // any arbitrary-value atom import is a hard error from the start (ADR-0002).

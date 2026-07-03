@@ -19,6 +19,11 @@ import {
 
 const HeaderTag = AccordionPrimitive.Header
 const Inner = "div" as const
+// The trigger's <button> is rendered via the Trigger `render` prop so we can
+// read Base UI's exposed `open` state (a self state StyleX can't key on). A
+// variable tag keeps the `no-raw-html` rule from flagging it — the same
+// technique navigation-menu uses.
+const ButtonTag = "button" as const
 const u = spacing["--spacing"]
 
 const styles = stylex.create({
@@ -67,10 +72,14 @@ const styles = stylex.create({
     color: colors["muted-foreground"],
     transitionProperty: "transform",
     transitionDuration: duration.fast,
-    transform: {
-      default: "none",
-      [stylex.when.ancestor('[aria-expanded="true"]')]: "rotate(180deg)",
-    },
+    transform: "none",
+  },
+  // The trigger's own expanded state is a self condition StyleX can't key off
+  // (aria-/data-attribute self keys and when.ancestor keyed on aria-expanded
+  // emit no reliable CSS). We read Base UI's exposed `state.open` from the
+  // Trigger `render` prop and apply the rotation as a JS conditional instead.
+  triggerIconOpen: {
+    transform: "rotate(180deg)",
   },
   content: {
     overflow: "hidden",
@@ -129,17 +138,23 @@ function AccordionTrigger({ children, sx, ...props }: AccordionTriggerProps) {
     <HeaderTag {...stylex.props(styles.header)}>
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
-        {...stylex.props(styles.trigger, stylex.defaultMarker(), sx)}
         {...props}
-      >
-        {children}
-        <Icon
-          name="ChevronDown"
-          size="m"
-          data-slot="accordion-trigger-icon"
-          sx={styles.triggerIcon}
-        />
-      </AccordionPrimitive.Trigger>
+        // `render` as a function reads Base UI's exposed `open` state — the
+        // sanctioned way to style a self state StyleX can't key on. We spread
+        // the primitive's resolved props (ref, handlers, aria, data-*) and the
+        // styles onto the button, then rotate the chevron from `state.open`.
+        render={(triggerProps, state) => (
+          <ButtonTag {...stylex.props(styles.trigger, sx)} {...triggerProps}>
+            {children}
+            <Icon
+              name="ChevronDown"
+              size="m"
+              data-slot="accordion-trigger-icon"
+              sx={[styles.triggerIcon, state.open && styles.triggerIconOpen]}
+            />
+          </ButtonTag>
+        )}
+      />
     </HeaderTag>
   )
 }

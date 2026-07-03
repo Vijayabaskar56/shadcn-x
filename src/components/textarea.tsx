@@ -26,8 +26,8 @@ const styles = stylex.create({
     borderWidth: 1, // border
     borderStyle: "solid",
     // bg-transparent in light; dark:bg-input/30 — a subtle filled surface in
-    // dark mode (the `input` token at 30% opacity), matching shadcn.
-    backgroundColor: `light-dark(transparent, color-mix(in oklch, ${colors.input}, transparent 70%))`,
+    // dark mode (the shared `background-input` surface token), matching shadcn.
+    backgroundColor: colors["background-input"],
     paddingInline: spacing.m, // px-3
     paddingBlock: spacing.s, // py-2
     boxShadow: {

@@ -215,3 +215,20 @@ primitive. They accept all cmdk props (`value`, `onValueChange`, `filter`,
 
 All other props (native attributes, cmdk-specific props, `render`) are forwarded
 to the underlying cmdk / Dialog primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Command>
+      <CommandInput placeholder="اكتب أمرا" />
+      <CommandList>
+        <CommandGroup>
+          <CommandItem>فتح الإعدادات</CommandItem>
+          <CommandItem>إنشاء ملف</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  </Box>
+</DirectionProvider>
+

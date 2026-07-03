@@ -14,7 +14,7 @@ const sx = stylex.create({
 
 function ExampleResizable() {
   return (
-    <ResizablePanelGroup direction="horizontal">
+    <ResizablePanelGroup orientation="horizontal">
       <ResizablePanel defaultSize={50}>One</ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>Two</ResizablePanel>
@@ -39,7 +39,7 @@ describe("Resizable", () => {
 
   it("forwards panel sizing props", () => {
     render(
-      <ResizablePanelGroup direction="horizontal">
+      <ResizablePanelGroup orientation="horizontal">
         <ResizablePanel
           id="left-panel"
           defaultSize={35}
@@ -59,7 +59,7 @@ describe("Resizable", () => {
 
   it("marks vertical groups for orientation-aware styling", () => {
     const { container } = render(
-      <ResizablePanelGroup direction="vertical">
+      <ResizablePanelGroup orientation="vertical">
         <ResizablePanel defaultSize={50}>Top</ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={50}>Bottom</ResizablePanel>
@@ -73,7 +73,7 @@ describe("Resizable", () => {
 
   it("renders the optional handle grip", () => {
     const { container } = render(
-      <ResizablePanelGroup direction="horizontal">
+      <ResizablePanelGroup orientation="horizontal">
         <ResizablePanel defaultSize={50}>One</ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={50}>Two</ResizablePanel>
@@ -88,7 +88,7 @@ describe("Resizable", () => {
 
   it("accepts typed sx props on styleable slots", () => {
     const { container } = render(
-      <ResizablePanelGroup direction="horizontal" sx={sx.custom}>
+      <ResizablePanelGroup orientation="horizontal" sx={sx.custom}>
         <ResizablePanel defaultSize={50}>One</ResizablePanel>
         <ResizableHandle sx={sx.custom} />
         <ResizablePanel defaultSize={50}>Two</ResizablePanel>

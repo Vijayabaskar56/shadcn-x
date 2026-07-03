@@ -94,3 +94,15 @@ All other native `<label>` props are forwarded. Renders a `<label>` with
 > [!NOTE]
 > `Label` retires the raw `<label>` element — the `no-raw-html` guardrail now
 > points `<label>` at `Label`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" alignItems="center" gap="s">
+      <Checkbox id="rtl-label" />
+      <Label htmlFor="rtl-label">تفعيل الوضع</Label>
+    </Box>
+  </Box>
+</DirectionProvider>
+

@@ -102,6 +102,37 @@ describe("Accordion", () => {
     expect(screen.getByText("Second panel")).toBeInTheDocument()
   })
 
+  it("rotates the trigger chevron based on Base UI open state", async () => {
+    const user = userEvent.setup()
+    render(
+      <Accordion>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Toggle</AccordionTrigger>
+          <AccordionContent>Panel</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+
+    const closedIconClass =
+      screen
+        .getByRole("button", { name: "Toggle" })
+        .querySelector("svg")
+        ?.getAttribute("class") ?? ""
+
+    await user.click(screen.getByRole("button", { name: "Toggle" }))
+
+    const openIconClass =
+      screen
+        .getByRole("button", { name: "Toggle" })
+        .querySelector("svg")
+        ?.getAttribute("class") ?? ""
+
+    // Open state applies the rotation style as a JS conditional, so the
+    // chevron's compiled StyleX class differs from the closed state.
+    expect(openIconClass).not.toBe(closedIconClass)
+    expect(closedIconClass).not.toBe("")
+  })
+
   it("accepts typed sx props on public slots", () => {
     render(
       <Accordion defaultValue={["item-1"]} sx={sx.custom}>

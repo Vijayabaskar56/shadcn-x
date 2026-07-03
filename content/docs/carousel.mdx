@@ -1,0 +1,144 @@
+---
+title: Carousel
+description: A carousel with keyboard navigation and previous/next controls.
+---
+
+## Preview
+
+<Carousel aria-label="Featured numbers">
+  <CarouselContent>
+    {[1, 2, 3].map((item) => (
+      <CarouselItem key={item}>
+        <Card>
+          <CardContent>
+            <Box padding="4xl" display="flex" justifyContent="center">
+              <Text variant="h3">{item}</Text>
+            </Box>
+          </CardContent>
+        </Card>
+      </CarouselItem>
+    ))}
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
+
+## Usage
+
+```tsx
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/carousel"
+```
+
+```tsx
+<Carousel>
+  <CarouselContent>
+    <CarouselItem>Slide 1</CarouselItem>
+    <CarouselItem>Slide 2</CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
+```
+
+## Orientation
+
+Set `orientation="vertical"` to scroll along the Y axis. Give the content a fixed
+height so slides stack within the viewport.
+
+<Carousel orientation="vertical" aria-label="Vertical numbers" sx={{ height: "14rem" }}>
+  <CarouselContent sx={{ height: "12rem" }}>
+    {[1, 2, 3].map((item) => (
+      <CarouselItem key={item} sx={{ flexBasis: "50%" }}>
+        <Card>
+          <CardContent>
+            <Box padding="xl" display="flex" justifyContent="center">
+              <Text variant="h3">{item}</Text>
+            </Box>
+          </CardContent>
+        </Card>
+      </CarouselItem>
+    ))}
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
+
+```tsx
+<Carousel orientation="vertical">
+  <CarouselContent>
+    <CarouselItem>Slide 1</CarouselItem>
+    <CarouselItem>Slide 2</CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
+```
+
+## Options and plugins
+
+`opts` is forwarded to Embla (e.g. `loop`, `align`), and `plugins` accepts any
+Embla plugin. Use `setApi` to reach the Embla API for programmatic control.
+
+```tsx
+<Carousel opts={{ align: "start", loop: true }} setApi={setApi}>
+  <CarouselContent>
+    <CarouselItem>Slide 1</CarouselItem>
+    <CarouselItem>Slide 2</CarouselItem>
+  </CarouselContent>
+</Carousel>
+```
+
+## Customization
+
+Every part accepts a typed `sx` prop (`StyleXStyles`), merged last so it wins over
+the built-in styles. There is no `className` — use `sx` or `stylex.createTheme`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  item: { flexBasis: "50%" },
+})
+
+<CarouselItem sx={styles.item}>Slide</CarouselItem>
+```
+
+The controls forward `Button` props, so `variant` and `size` customize them:
+
+```tsx
+<CarouselPrevious variant="secondary" size="icon" />
+<CarouselNext variant="secondary" size="icon" />
+```
+
+## Props
+
+| Component | Props |
+| --- | --- |
+| `Carousel` | `orientation`, `opts`, `plugins`, `setApi`, `sx` |
+| `CarouselContent` | `sx` |
+| `CarouselItem` | `sx` |
+| `CarouselPrevious` | `Button` props, `sx` |
+| `CarouselNext` | `Button` props, `sx` |
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Carousel aria-label="شرائح RTL">
+      <CarouselContent>
+        <CarouselItem>
+          <Card><CardContent><Box padding="xl"><Text>الشريحة الأولى</Text></Box></CardContent></Card>
+        </CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  </Box>
+</DirectionProvider>
+

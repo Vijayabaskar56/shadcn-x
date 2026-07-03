@@ -3,9 +3,11 @@ import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
 import { Text } from "@/components/text"
+import { useColorTheme } from "@/hooks/use-color-theme"
 import appCss from "@/styles/globals.css?url"
 
 import { DevStyleXInject } from "../DevStyleXInject"
+import { forestTheme, sunsetTheme } from "../styles/themes"
 import { colors } from "../styles/tokens.stylex"
 
 const styles = stylex.create({
@@ -65,9 +67,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body>
-        {children}
+        <ColorThemeScope>{children}</ColorThemeScope>
         <Scripts />
       </body>
     </html>
   )
+}
+
+/** Applies the selected createTheme to the whole app subtree. */
+function ColorThemeScope({ children }: { children: React.ReactNode }) {
+  const { theme } = useColorTheme()
+  const themeStyles =
+    theme === "sunset" ? sunsetTheme : theme === "forest" ? forestTheme : null
+  return <div {...stylex.props(themeStyles)}>{children}</div>
 }

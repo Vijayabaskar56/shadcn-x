@@ -153,3 +153,20 @@ const styles = stylex.create({
 
 All card slots forward standard `div` props except `className`, `style`, and
 `color`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Card>
+      <CardHeader>
+        <CardTitle>بطاقة RTL</CardTitle>
+        <CardDescription>تستخدم الحواف والمسافات المنطقية.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Text>المحتوى يرث اتجاه الصفحة.</Text>
+      </CardContent>
+    </Card>
+  </Box>
+</DirectionProvider>
+

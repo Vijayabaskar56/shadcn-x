@@ -183,3 +183,20 @@ Root props](https://base-ui.com/react/components/popover) (`open`,
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Popover>
+      <PopoverTrigger render={<Button variant="outline">فتح النافذة</Button>} />
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>نافذة RTL</PopoverTitle>
+          <PopoverDescription>تستخدم نقطة الأصل المنطقية من Base UI.</PopoverDescription>
+        </PopoverHeader>
+      </PopoverContent>
+    </Popover>
+  </Box>
+</DirectionProvider>
+

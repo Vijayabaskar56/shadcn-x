@@ -99,3 +99,15 @@ const styles = stylex.create({
 All other [Base UI switch props](https://base-ui.com/react/components/switch)
 are forwarded. Renders a `<button>` with `data-slot="switch"` containing a
 `<span>` with `data-slot="switch-thumb"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" alignItems="center" gap="s">
+      <Switch id="rtl-switch" defaultChecked />
+      <Label htmlFor="rtl-switch">تشغيل</Label>
+    </Box>
+  </Box>
+</DirectionProvider>
+

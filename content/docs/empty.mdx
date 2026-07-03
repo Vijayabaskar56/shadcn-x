@@ -166,3 +166,17 @@ const styles = stylex.create({
 
 All empty slots forward standard host props except `className`, `style`, and
 `color`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>لا توجد نتائج</EmptyTitle>
+        <EmptyDescription>جرب تعديل عوامل التصفية.</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  </Box>
+</DirectionProvider>
+

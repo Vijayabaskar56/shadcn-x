@@ -105,3 +105,12 @@ Defaults `preload="intent"`.
 > `Link` retires the raw `<a>` element — the `no-raw-html` guardrail now points
 > `<a>` at `Link`. Reach for `Link` for navigation and anchors; `Box as="a"` is
 > no longer available — always use `Link`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Link to="/docs/$" params={{ _splat: "direction" }}>اقرأ دليل RTL</Link>
+  </Box>
+</DirectionProvider>
+

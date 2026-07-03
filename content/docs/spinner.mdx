@@ -1,0 +1,111 @@
+---
+title: Spinner
+description: Displays an animated loading indicator.
+---
+
+# Spinner
+
+`Spinner` is a small loading status built from the Lucide loader icon, styled
+with StyleX, and exposed to assistive technology as `role="status"`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Spinner />
+  <Text color="text-secondary">Loading</Text>
+</Box>
+
+## Usage
+
+```tsx
+import { Spinner } from "@/components/spinner"
+```
+
+```tsx
+<Spinner />
+```
+
+## Examples
+
+### Default
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Spinner />
+  <Text>Loading</Text>
+</Box>
+
+```tsx
+<Spinner />
+```
+
+### Custom Label
+
+Use `aria-label` when the loading state needs a more specific accessible name.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Spinner aria-label="Saving" />
+  <Text>Saving changes</Text>
+</Box>
+
+```tsx
+<Spinner aria-label="Saving" />
+```
+
+### In a Button
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Button disabled>
+    <Spinner />
+    Saving
+  </Button>
+  <Button variant="outline" disabled>
+    <Spinner aria-label="Syncing" />
+    Syncing
+  </Button>
+</Box>
+
+```tsx
+<Button disabled>
+  <Spinner />
+  Saving
+</Button>
+```
+
+## Customization
+
+`Spinner` does not accept `className` or raw `style`. Customize it on-system with
+`sx`, merged last.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  subtle: {
+    opacity: 0.6,
+  },
+})
+
+<Spinner sx={styles.subtle} />
+```
+
+## API Reference
+
+| Prop         | Type           | Default     |
+| ------------ | -------------- | ----------- |
+| `aria-label` | `string`       | `"Loading"` |
+| `role`       | `AriaRole`     | `"status"`  |
+| `sx`         | `StyleXStyles` | —           |
+
+Safe SVG props (`id`, `aria-*`, `data-*`, event handlers, …) are forwarded.
+Sizing and color should go through `sx` or inherited text color, not raw SVG
+size/color props.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" alignItems="center" gap="s">
+      <Spinner />
+      <Text>جار التحميل</Text>
+    </Box>
+  </Box>
+</DirectionProvider>
+

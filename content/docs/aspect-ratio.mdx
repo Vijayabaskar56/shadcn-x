@@ -107,3 +107,16 @@ const styles = stylex.create({
 
 All native `<div>` props except `className` and `style` are forwarded. Renders a
 `<div>` with `data-slot="aspect-ratio"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <AspectRatio ratio={16 / 9}>
+      <Box display="flex" alignItems="center" justifyContent="center" backgroundColor="background-muted" borderRadius="m" height="full">
+        <Text>معاينة RTL</Text>
+      </Box>
+    </AspectRatio>
+  </Box>
+</DirectionProvider>
+

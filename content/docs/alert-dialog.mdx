@@ -45,6 +45,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/alert-dialog"
@@ -118,6 +119,43 @@ import {
 </AlertDialog>
 ```
 
+## Media
+
+`AlertDialogMedia` renders a muted, centered square inside the header for an
+icon or other media. Size icons on-system with the `Icon` component (which sizes
+itself) rather than raw SVGs.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="outline">Delete file</Button>} />
+  <AlertDialogContent size="sm">
+    <AlertDialogHeader>
+      <AlertDialogMedia>
+        <Icon name="Trash2" size="l" />
+      </AlertDialogMedia>
+      <AlertDialogTitle>Delete this file?</AlertDialogTitle>
+      <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction variant="destructive">Delete</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
+</Box>
+
+```tsx
+<AlertDialogHeader>
+  <AlertDialogMedia>
+    <Icon name="Trash2" size="l" />
+  </AlertDialogMedia>
+  <AlertDialogTitle>Delete this file?</AlertDialogTitle>
+  <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+</AlertDialogHeader>
+```
+
 ## Customization
 
 `AlertDialog` never accepts `className`. Customize it on-system, in order of
@@ -165,6 +203,7 @@ backdrop interaction.
 | `AlertDialogContent`      | `size`     | `"default" \| "sm"`             | `"default"` |
 |                           | `sx`       | `StyleXStyles`                  | —           |
 | `AlertDialogHeader`       | `sx`       | `StyleXStyles`                  | —           |
+| `AlertDialogMedia`        | `sx`       | `StyleXStyles`                  | —           |
 | `AlertDialogFooter`       | `sx`       | `StyleXStyles`                  | —           |
 | `AlertDialogTitle`        | `sx`       | `StyleXStyles`                  | —           |
 | `AlertDialogDescription`  | `sx`       | `StyleXStyles`                  | —           |
@@ -181,3 +220,24 @@ All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive. `AlertDialogCancel` forwards props to the alert
 dialog `Close` primitive (it auto-dismisses); `AlertDialogAction` forwards to
 `Button` (it does not).
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <AlertDialog>
+      <AlertDialogTrigger render={<Button variant="outline">حذف الحساب</Button>} />
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>هل أنت متأكد؟</AlertDialogTitle>
+          <AlertDialogDescription>هذا المثال يرث اتجاه RTL من المزود.</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>إلغاء</AlertDialogCancel>
+          <AlertDialogAction variant="destructive">حذف</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </Box>
+</DirectionProvider>
+

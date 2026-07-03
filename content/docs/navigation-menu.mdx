@@ -219,3 +219,19 @@ underlying Base UI primitive. Each part renders with a `data-slot` for targeting
 > so that helper is intentionally omitted — to style another element as a
 > trigger, pass it through the trigger's `render` prop, or mirror the trigger
 > tokens via `sx`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>المنتجات</NavigationMenuTrigger>
+          <NavigationMenuContent><Box padding="m">محتوى RTL</Box></NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  </Box>
+</DirectionProvider>
+

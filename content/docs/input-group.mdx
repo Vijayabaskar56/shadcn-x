@@ -150,3 +150,16 @@ All forwarded `<div>` props accepted.
 ### InputGroupInput, InputGroupTextarea
 
 Forward all props from `Input` / `Textarea` respectively, plus `sx`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <InputGroup>
+      <InputGroupAddon align="inline-start">₪</InputGroupAddon>
+      <InputGroupInput placeholder="المبلغ" />
+      <InputGroupAddon align="inline-end">ILS</InputGroupAddon>
+    </InputGroup>
+  </Box>
+</DirectionProvider>
+

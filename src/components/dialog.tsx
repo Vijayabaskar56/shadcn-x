@@ -6,6 +6,7 @@ import * as stylex from "@stylexjs/stylex"
 
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
+import { useDirection } from "@/components/direction"
 import { Icon } from "@/components/icon"
 
 import {
@@ -47,6 +48,10 @@ const styles = stylex.create({
     padding: spacing.xl,
     boxShadow: boxShadow.l,
     outline: "none",
+  },
+
+  contentRtl: {
+    transform: "translate(50%, -50%)",
   },
 
   close: {
@@ -154,12 +159,17 @@ function DialogContent({
   sx,
   ...props
 }: DialogContentProps) {
+  const direction = useDirection()
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
-        {...stylex.props(styles.content, sx)}
+        {...stylex.props(
+          styles.content,
+          direction === "rtl" && styles.contentRtl,
+          sx
+        )}
         {...props}
       >
         {children}
@@ -195,16 +205,26 @@ function DialogHeader({ sx, ...props }: DialogHeaderProps) {
   )
 }
 
-type DialogFooterProps = Omit<ComponentPropsWithoutRef<typeof Box<"div">>, "as">
+type DialogFooterProps = Omit<
+  ComponentPropsWithoutRef<typeof Box<"div">>,
+  "as"
+> & {
+  showCloseButton?: boolean
+}
 
-function DialogFooter({ sx, ...props }: DialogFooterProps) {
+function DialogFooter({
+  children,
+  showCloseButton = false,
+  sx,
+  ...props
+}: DialogFooterProps) {
   return (
-    <Box
-      as="div"
-      data-slot="dialog-footer"
-      sx={[styles.footer, sx]}
-      {...props}
-    />
+    <Box as="div" data-slot="dialog-footer" sx={[styles.footer, sx]} {...props}>
+      {children}
+      {showCloseButton && (
+        <DialogClose render={<Button variant="outline">Close</Button>} />
+      )}
+    </Box>
   )
 }
 

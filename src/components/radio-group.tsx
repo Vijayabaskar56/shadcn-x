@@ -17,7 +17,7 @@ const u = spacing["--spacing"]
 const styles = stylex.create({
   group: {
     display: "grid",
-    gap: spacing.s,
+    gap: spacing.m,
   },
   item: {
     aspectRatio: "1/1",

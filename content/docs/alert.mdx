@@ -1,0 +1,165 @@
+---
+title: Alert
+description: Displays a callout for important information or status feedback.
+---
+
+# Alert
+
+`Alert` displays prominent feedback inside the page. It matches shadcn's alert
+anatomy: `Alert`, `AlertTitle`, `AlertDescription`, and `AlertAction`.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Alert>
+    <Icon name="CircleAlert" />
+    <AlertTitle>Heads up</AlertTitle>
+    <AlertDescription>
+      You can add components to your app using the CLI.
+    </AlertDescription>
+  </Alert>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/alert"
+```
+
+```tsx
+<Alert>
+  <Icon name="CircleAlert" />
+  <AlertTitle>Heads up</AlertTitle>
+  <AlertDescription>
+    You can add components to your app using the CLI.
+  </AlertDescription>
+</Alert>
+```
+
+## Variants
+
+### Default
+
+Use the default variant for neutral information.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Alert>
+    <Icon name="CircleAlert" />
+    <AlertTitle>Scheduled maintenance</AlertTitle>
+    <AlertDescription>
+      The dashboard will be unavailable for a few minutes tonight.
+    </AlertDescription>
+  </Alert>
+</Box>
+
+```tsx
+<Alert>
+  <Icon name="CircleAlert" />
+  <AlertTitle>Scheduled maintenance</AlertTitle>
+  <AlertDescription>
+    The dashboard will be unavailable for a few minutes tonight.
+  </AlertDescription>
+</Alert>
+```
+
+### Destructive
+
+Use `variant="destructive"` for errors or destructive feedback.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Alert variant="destructive">
+    <Icon name="TriangleAlert" />
+    <AlertTitle>Unable to save changes</AlertTitle>
+    <AlertDescription>
+      Check the highlighted fields and try again.
+    </AlertDescription>
+  </Alert>
+</Box>
+
+```tsx
+<Alert variant="destructive">
+  <Icon name="TriangleAlert" />
+  <AlertTitle>Unable to save changes</AlertTitle>
+  <AlertDescription>
+    Check the highlighted fields and try again.
+  </AlertDescription>
+</Alert>
+```
+
+### With Action
+
+Use `AlertAction` for a trailing action slot.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Alert>
+    <Icon name="Info" />
+    <AlertTitle>Invite pending</AlertTitle>
+    <AlertDescription>
+      The invite will expire in 24 hours.
+    </AlertDescription>
+    <AlertAction>
+      <Button variant="outline" size="sm">Resend</Button>
+    </AlertAction>
+  </Alert>
+</Box>
+
+```tsx
+<Alert>
+  <Icon name="Info" />
+  <AlertTitle>Invite pending</AlertTitle>
+  <AlertDescription>The invite will expire in 24 hours.</AlertDescription>
+  <AlertAction>
+    <Button variant="outline" size="sm">Resend</Button>
+  </AlertAction>
+</Alert>
+```
+
+## Customization
+
+Every alert slot accepts `sx`, a typed StyleX style merged last. There is no
+`className` or raw `style`; broader changes should go through tokens or owned
+source.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  subtle: {
+    backgroundColor: colors["background-muted"],
+  },
+})
+
+<Alert sx={styles.subtle}>
+  <AlertTitle>Subtle alert</AlertTitle>
+  <AlertDescription>Token-backed overrides stay on-system.</AlertDescription>
+</Alert>
+```
+
+## API Reference
+
+| Component          | Prop      | Type                         | Default     |
+| ------------------ | --------- | ---------------------------- | ----------- |
+| `Alert`            | `variant` | `"default" \| "destructive"` | `"default"` |
+| `Alert`            | `sx`      | `StyleXStyles`               | —           |
+| `AlertTitle`       | `sx`      | `StyleXStyles`               | —           |
+| `AlertDescription` | `sx`      | `StyleXStyles`               | —           |
+| `AlertAction`      | `sx`      | `StyleXStyles`               | —           |
+
+All alert slots forward standard `div` props except `className`, `style`, and
+`color`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Alert>
+      <AlertTitle>تم حفظ التغييرات</AlertTitle>
+      <AlertDescription>يظهر النص والإجراء بالترتيب الصحيح في RTL.</AlertDescription>
+    </Alert>
+  </Box>
+</DirectionProvider>
+

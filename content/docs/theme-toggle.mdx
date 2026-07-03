@@ -1,0 +1,52 @@
+---
+title: Theme Toggle
+description: Site-chrome control that cycles the color theme — light → dark → system — persisting the choice and honoring the OS preference.
+---
+
+# Theme Toggle
+
+A small control that cycles the active color theme through `light`, `dark`, and
+`system`, showing the current selection. It is the site chrome that powers this
+docs site's own theming. Built on the owned `Button` primitive (`variant="ghost"`,
+`size="sm"`) and the `useTheme` hook — no `className`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ThemeToggle />
+</Box>
+
+## Usage
+
+```tsx
+import { ThemeToggle } from "@/components/theme-toggle"
+```
+
+```tsx
+<ThemeToggle />
+```
+
+## How it works
+
+`ThemeToggle` reads the stored preference from `useTheme` and, on click,
+advances to the next theme in the cycle:
+
+```tsx
+const themes = ["light", "dark", "system"] as const
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length]
+
+  return (
+    <Button variant="ghost" size="sm" onClick={() => setTheme(nextTheme)}>
+      {/* current icon + label */}
+    </Button>
+  )
+}
+```
+
+- **light** / **dark** — force that theme regardless of the OS setting.
+- **system** — follow the operating system's `prefers-color-scheme`.
+
+The selection is persisted in `localStorage` (key `vite-ui-theme`) and applied
+to `document.documentElement` via `useTheme`, using a View Transition when the
+browser supports it and the user has not requested reduced motion.

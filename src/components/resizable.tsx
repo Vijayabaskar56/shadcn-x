@@ -13,6 +13,7 @@ import {
   focusRing,
   spacing,
 } from "../styles/tokens.stylex"
+import { useDirection } from "./direction"
 import { Icon } from "./icon"
 
 const u = spacing["--spacing"]
@@ -92,6 +93,17 @@ const styles = stylex.create({
         "translateY(-50%)",
     },
   },
+  // `when.ancestor('[dir="rtl"]')` can't be used: the `dir` attribute lives on
+  // <html>, which never carries our StyleX marker, so that branch emits no
+  // usable CSS. Apply the flip via a JS conditional keyed off `useDirection`.
+  // Kept orientation-aware so vertical groups keep their vertical centering.
+  hitAreaRtl: {
+    transform: {
+      default: "translateX(50%)",
+      [stylex.when.ancestor('[data-orientation="vertical"]')]:
+        "translateY(-50%)",
+    },
+  },
   grip: {
     zIndex: 10,
     display: "flex",
@@ -118,7 +130,7 @@ type ResizablePanelGroupProps = Omit<
   ResizablePrimitive.GroupProps,
   "className" | "style" | "orientation"
 > & {
-  direction?: ResizableOrientation
+  orientation?: ResizableOrientation
   sx?: StyleXStyles
 }
 
@@ -136,19 +148,19 @@ type ResizableHandleProps = Omit<
 }
 
 function ResizablePanelGroup({
-  direction = "horizontal",
+  orientation = "horizontal",
   sx,
   ...props
 }: ResizablePanelGroupProps) {
   return (
     <ResizablePrimitive.Group
       data-slot="resizable-panel-group"
-      data-orientation={direction}
-      orientation={direction}
+      data-orientation={orientation}
+      orientation={orientation}
       {...stylex.props(
         styles.panelGroup,
-        direction === "horizontal" && styles.panelGroupHorizontal,
-        direction === "vertical" && styles.panelGroupVertical,
+        orientation === "horizontal" && styles.panelGroupHorizontal,
+        orientation === "vertical" && styles.panelGroupVertical,
         stylex.defaultMarker(),
         sx
       )}
@@ -167,6 +179,7 @@ function ResizableHandle({
   children,
   ...props
 }: ResizableHandleProps) {
+  const direction = useDirection()
   return (
     <ResizablePrimitive.Separator
       data-slot="resizable-handle"
@@ -175,7 +188,10 @@ function ResizableHandle({
     >
       <HandleHitArea
         data-slot="resizable-handle-hit-area"
-        {...stylex.props(styles.hitArea)}
+        {...stylex.props(
+          styles.hitArea,
+          direction === "rtl" && styles.hitAreaRtl
+        )}
       />
       {withHandle ? (
         <HandleGrip

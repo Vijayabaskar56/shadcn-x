@@ -9,6 +9,8 @@ import * as stylex from "@stylexjs/stylex"
 import * as LucideIcons from "lucide-react"
 import { cloneElement, createElement } from "react"
 
+import { useDirection } from "./direction"
+
 type IconSize = "s" | "m" | "l"
 type IconPosition = "inline-start" | "inline-end"
 
@@ -34,14 +36,12 @@ const styles = stylex.create({
   s: { width: "0.75rem", height: "0.75rem" },
   m: { width: "1rem", height: "1rem" },
   l: { width: "1.25rem", height: "1.25rem" },
-  // Directional icons (arrows, chevrons, carets) mirror in RTL. Applied via
-  // stylex.when.ancestor so every icon flips when the document is RTL — no
-  // per-icon opt-in, no parser needed.
+  // Directional icons (arrows, chevrons, carets) mirror in RTL. `when.ancestor`
+  // can't be used here: the `dir` attribute lives on <html>, which never carries
+  // our StyleX marker, so that branch emits no usable CSS. Instead we apply this
+  // static flip via a JS conditional keyed off the `useDirection` hook.
   flipRtl: {
-    transform: {
-      default: "none",
-      [stylex.when.ancestor('[dir="rtl"]')]: "scaleX(-1)",
-    },
+    transform: "scaleX(-1)",
   },
 })
 
@@ -74,7 +74,14 @@ type CommonIconProps = {
   sx?: StyleXStyles
 } & Omit<
   ReactSVGProps<SVGSVGElement>,
-  "ref" | "color" | "width" | "height" | "name" | "children"
+  | "ref"
+  | "color"
+  | "width"
+  | "height"
+  | "name"
+  | "children"
+  | "className"
+  | "style"
 >
 
 // Two mutually-exclusive modes: `name` (resolve from the bound library, type-safe
@@ -103,6 +110,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
     sx,
     ...rest
   }: IconProps<TLib>) {
+    const direction = useDirection()
     const injected = {
       ...stylex.props(
         // `base` always applies (flexShrink + pointerEvents + default sizing);
@@ -110,7 +118,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
         // sized icon keeps its size and doesn't auto-shrink in xs buttons.
         styles.base,
         size && sizeStyles[size],
-        flipRtl && styles.flipRtl,
+        flipRtl && direction === "rtl" && styles.flipRtl,
         stylex.defaultMarker(),
         sx
       ),

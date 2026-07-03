@@ -1,0 +1,115 @@
+---
+title: Skeleton
+description: Displays a placeholder while content is loading.
+---
+
+# Skeleton
+
+`Skeleton` is a single-slot loading placeholder. It keeps shadcn's public API
+shape, renders `data-slot="skeleton"`, and replaces `className` sizing with the
+typed `sx` StyleX override.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Box display="flex" gap="m" alignItems="center">
+    <Skeleton sx={{ width: "3rem", height: "3rem", borderRadius: "9999px" }} />
+    <Box display="grid" gap="s" sx={{ flex: 1 }}>
+      <Skeleton sx={{ height: "1rem", width: "45%" }} />
+      <Skeleton sx={{ height: "1rem", width: "75%" }} />
+    </Box>
+  </Box>
+</Box>
+
+## Usage
+
+```tsx
+import { Skeleton } from "@/components/skeleton"
+```
+
+```tsx
+<Skeleton sx={styles.line} />
+```
+
+## Examples
+
+### Text
+
+Use `Skeleton` for text rows and other content placeholders. The component does
+not prescribe dimensions, matching shadcn; dimensions belong in `sx`.
+
+<Box display="grid" gap="s" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Skeleton sx={{ height: "1rem", width: "100%" }} />
+  <Skeleton sx={{ height: "1rem", width: "92%" }} />
+  <Skeleton sx={{ height: "1rem", width: "64%" }} />
+</Box>
+
+```tsx
+<Skeleton sx={styles.line} />
+<Skeleton sx={styles.shortLine} />
+```
+
+### Card
+
+Compose skeletons to mirror the eventual layout.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Skeleton sx={{ height: "10rem", width: "100%" }} />
+  <Box display="grid" gap="s">
+    <Skeleton sx={{ height: "1rem", width: "60%" }} />
+    <Skeleton sx={{ height: "1rem", width: "85%" }} />
+  </Box>
+</Box>
+
+```tsx
+<Skeleton sx={styles.media} />
+<Skeleton sx={styles.title} />
+<Skeleton sx={styles.description} />
+```
+
+## Customization
+
+`Skeleton` accepts `sx`, a typed StyleX style merged last. Use it for the shape
+and size that shadcn would normally express through `className`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { borderRadius, spacing } from "@/styles/tokens.stylex"
+
+const u = spacing["--spacing"]
+
+const styles = stylex.create({
+  avatar: {
+    width: `calc(${u} * 12)`,
+    height: `calc(${u} * 12)`,
+    borderRadius: borderRadius.full,
+  },
+  line: {
+    height: `calc(${u} * 4)`,
+    width: "100%",
+  },
+})
+
+<Skeleton sx={styles.avatar} />
+```
+
+## API Reference
+
+### Skeleton
+
+| Prop | Type | Default |
+| ---- | ---- | ------- |
+| `sx` | `StyleXStyles` | — |
+
+All native `<div>` props except `className`, `style`, and `color` are forwarded.
+Renders a `<div>` with `data-slot="skeleton"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" flexDirection="column" gap="s">
+      <Skeleton sx={{ width: "75%", height: "1rem" }} />
+      <Skeleton sx={{ width: "50%", height: "1rem" }} />
+    </Box>
+  </Box>
+</DirectionProvider>
+

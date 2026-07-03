@@ -22,6 +22,10 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     width: "100%",
+    // Establish the container so `responsive` Fields can switch layout at the
+    // `@md` breakpoint (matches the reference's `@container/field-group`).
+    containerType: "inline-size",
+    containerName: "field-group",
   },
   field: {
     display: "flex",
@@ -33,6 +37,18 @@ const styles = stylex.create({
   fieldHorizontal: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  // Vertical by default, switching to horizontal once the enclosing
+  // FieldGroup container reaches the `@md` breakpoint (28rem).
+  fieldResponsive: {
+    flexDirection: {
+      default: "column",
+      "@container field-group (min-width: 28rem)": "row",
+    },
+    alignItems: {
+      default: null,
+      "@container field-group (min-width: 28rem)": "center",
+    },
   },
   fieldContent: {
     display: "flex",
@@ -80,7 +96,7 @@ const styles = stylex.create({
     fontWeight: fontWeight.regular,
   },
   errorList: {
-    marginLeft: spacing.l,
+    marginInlineStart: spacing.l,
     display: "flex",
     flexDirection: "column",
     gap: spacing.xs,
@@ -100,14 +116,21 @@ const LiTag = "li" as const
 
 function FieldSet({
   sx,
+  disabled,
   ...props
 }: React.ComponentPropsWithoutRef<"fieldset"> & {
   sx?: StyleXStyles
 }) {
+  // When disabled we both natively disable the fieldset AND carry the
+  // data-disabled="true" + stylex.defaultMarker() so a descendant Label's
+  // `stylex.when.ancestor('[data-disabled="true"]')` dim/pointer-events branches
+  // actually emit (marker + matching attribute are both required — see MEMORY).
   return (
     <FieldSetTag
       data-slot="field-set"
-      {...stylex.props(styles.fieldSet, sx)}
+      disabled={disabled}
+      data-disabled={disabled ? "true" : undefined}
+      {...stylex.props(styles.fieldSet, disabled && stylex.defaultMarker(), sx)}
       {...props}
     />
   )
@@ -146,26 +169,39 @@ function FieldGroup({
   )
 }
 
-type Orientation = "vertical" | "horizontal"
+type Orientation = "vertical" | "horizontal" | "responsive"
 
 function Field({
   sx,
   orientation = "vertical" as Orientation,
+  disabled,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & {
   orientation?: Orientation
+  disabled?: boolean
   sx?: StyleXStyles
 }) {
+  const orientationStyle =
+    orientation === "horizontal"
+      ? styles.fieldHorizontal
+      : orientation === "responsive"
+        ? styles.fieldResponsive
+        : styles.fieldVertical
+
+  // The Field is a <div> (no native disabled), so disabling is styling-only:
+  // data-disabled="true" + stylex.defaultMarker() let a descendant Label's
+  // `stylex.when.ancestor('[data-disabled="true"]')` branches emit (matching
+  // shadcn's `group-data-[disabled=true]/field:opacity-50`).
   return (
     <DivTag
       role="group"
       data-slot="field"
       data-orientation={orientation}
+      data-disabled={disabled ? "true" : undefined}
       {...stylex.props(
         styles.field,
-        orientation === "vertical"
-          ? styles.fieldVertical
-          : styles.fieldHorizontal,
+        orientationStyle,
+        disabled && stylex.defaultMarker(),
         sx
       )}
       {...props}
@@ -211,7 +247,7 @@ function FieldTitle({
 }) {
   return (
     <DivTag
-      data-slot="field-title"
+      data-slot="field-label"
       {...stylex.props(styles.fieldTitle, sx)}
       {...props}
     />
@@ -244,6 +280,7 @@ function FieldSeparator({
   return (
     <DivTag
       data-slot="field-separator"
+      data-content={!!children}
       {...stylex.props(styles.fieldSeparator, sx)}
       {...props}
     >

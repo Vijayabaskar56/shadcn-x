@@ -112,12 +112,23 @@ describe("NativeSelect", () => {
     }
   })
 
-  it("accepts a typed sx prop and renders", () => {
+  it("applies the typed sx prop to the select element (not the wrapper)", () => {
+    const { unmount } = render(
+      <NativeSelect aria-label="Plain">
+        <NativeSelectOption value="a">A</NativeSelectOption>
+      </NativeSelect>
+    )
+    const plainClassName = screen.getByRole("combobox").className
+    unmount()
+
     render(
       <NativeSelect aria-label="Styled" sx={sx.custom}>
         <NativeSelectOption value="a">A</NativeSelectOption>
       </NativeSelect>
     )
-    expect(screen.getByRole("combobox").parentElement?.className).not.toBe("")
+    const styledSelect = screen.getByRole("combobox")
+    // sx merges onto the select itself, so its class list changes.
+    expect(styledSelect.className).not.toBe("")
+    expect(styledSelect.className).not.toBe(plainClassName)
   })
 })

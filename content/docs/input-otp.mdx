@@ -138,7 +138,7 @@ const styles = stylex.create({
 | `onChange`         | `(value: string) => void`    | —       |
 | `onComplete`       | `() => void`                 | —       |
 | `disabled`         | `boolean`                    | —       |
-| `pattern`          | `RegExp`                     | —       |
+| `pattern`          | `string`                     | —       |
 | `sx`               | `StyleXStyles`               | —       |
 
 ### InputOTPSlot
@@ -150,3 +150,19 @@ const styles = stylex.create({
 ### InputOTPGroup, InputOTPSeparator
 
 Accept standard HTML props and `sx`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <InputOTP maxLength={4}>
+      <InputOTPGroup>
+        <InputOTPSlot index={0} />
+        <InputOTPSlot index={1} />
+        <InputOTPSlot index={2} />
+        <InputOTPSlot index={3} />
+      </InputOTPGroup>
+    </InputOTP>
+  </Box>
+</DirectionProvider>
+

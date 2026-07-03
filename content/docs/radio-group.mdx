@@ -140,3 +140,17 @@ All other Base UI `RadioGroup` props are forwarded. Renders a `<div>` with
 All other Base UI `Radio` props are forwarded. Renders a `<span>` with
 `data-slot="radio-group-item"` and an indicator with
 `data-slot="radio-group-indicator"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <RadioGroup defaultValue="monthly">
+      <Box display="flex" alignItems="center" gap="s">
+        <RadioGroupItem value="monthly" id="rtl-monthly" />
+        <Label htmlFor="rtl-monthly">شهري</Label>
+      </Box>
+    </RadioGroup>
+  </Box>
+</DirectionProvider>
+

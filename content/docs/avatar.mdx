@@ -1,0 +1,181 @@
+---
+title: Avatar
+description: Displays a user image with fallback, group, badge, and count slots.
+---
+
+# Avatar
+
+`Avatar` wraps Base UI's avatar behavior with shadcn's slot API and shadcn-x
+StyleX tokens. It supports `Avatar`, `AvatarImage`, `AvatarFallback`,
+`AvatarGroup`, `AvatarGroupCount`, and `AvatarBadge`.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Avatar>
+    <AvatarImage src="/avatar.jpg" alt="Vijay" />
+    <AvatarFallback>VB</AvatarFallback>
+    <AvatarBadge />
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>SC</AvatarFallback>
+  </Avatar>
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@/components/avatar"
+```
+
+```tsx
+<Avatar>
+  <AvatarImage src="/avatar.jpg" alt="Vijay" />
+  <AvatarFallback>VB</AvatarFallback>
+</Avatar>
+```
+
+## Examples
+
+### Sizes
+
+Use `size="sm" | "default" | "lg"` to match shadcn's avatar scale.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Avatar size="sm">
+    <AvatarFallback>SM</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>DF</AvatarFallback>
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>LG</AvatarFallback>
+  </Avatar>
+</Box>
+
+```tsx
+<Avatar size="sm">
+  <AvatarFallback>SM</AvatarFallback>
+</Avatar>
+<Avatar>
+  <AvatarFallback>DF</AvatarFallback>
+</Avatar>
+<Avatar size="lg">
+  <AvatarFallback>LG</AvatarFallback>
+</Avatar>
+```
+
+### Badge
+
+Place `AvatarBadge` inside `Avatar` for a status indicator. The badge size tracks
+the avatar size through context.
+
+<Box display="flex" alignItems="center" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Avatar size="sm">
+    <AvatarFallback>SM</AvatarFallback>
+    <AvatarBadge />
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>ON</AvatarFallback>
+    <AvatarBadge />
+  </Avatar>
+  <Avatar size="lg">
+    <AvatarFallback>LG</AvatarFallback>
+    <AvatarBadge />
+  </Avatar>
+</Box>
+
+```tsx
+<Avatar>
+  <AvatarImage src="/avatar.jpg" alt="Vijay" />
+  <AvatarFallback>VB</AvatarFallback>
+  <AvatarBadge />
+</Avatar>
+```
+
+### Group
+
+Use `AvatarGroup` and `AvatarGroupCount` to display a compact team stack.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <AvatarGroup>
+    <Avatar>
+      <AvatarFallback>VB</AvatarFallback>
+    </Avatar>
+    <Avatar>
+      <AvatarFallback>SC</AvatarFallback>
+    </Avatar>
+    <Avatar>
+      <AvatarFallback>AK</AvatarFallback>
+    </Avatar>
+    <AvatarGroupCount>+4</AvatarGroupCount>
+  </AvatarGroup>
+</Box>
+
+```tsx
+<AvatarGroup>
+  <Avatar>
+    <AvatarFallback>VB</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarFallback>SC</AvatarFallback>
+  </Avatar>
+  <AvatarGroupCount>+4</AvatarGroupCount>
+</AvatarGroup>
+```
+
+## Customization
+
+Every public slot accepts `sx`, a typed StyleX style merged last. Use tokens for
+theme decisions and keep broader changes in owned source.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  status: {
+    backgroundColor: colors.success,
+  },
+})
+
+<Avatar>
+  <AvatarFallback>VB</AvatarFallback>
+  <AvatarBadge sx={styles.status} />
+</Avatar>
+```
+
+## API Reference
+
+| Component            | Prop   | Type                                | Default     |
+| -------------------- | ------ | ----------------------------------- | ----------- |
+| `Avatar`             | `size` | `"default" \| "sm" \| "lg"`         | `"default"` |
+| `Avatar`             | `sx`   | `StyleXStyles`                      | —           |
+| `AvatarImage`        | `sx`   | `StyleXStyles`                      | —           |
+| `AvatarFallback`     | `delay`| `number`                            | —           |
+| `AvatarFallback`     | `sx`   | `StyleXStyles`                      | —           |
+| `AvatarBadge`        | `sx`   | `StyleXStyles`                      | —           |
+| `AvatarGroup`        | `sx`   | `StyleXStyles`                      | —           |
+| `AvatarGroupCount`   | `sx`   | `StyleXStyles`                      | —           |
+
+`Avatar`, `AvatarImage`, and `AvatarFallback` forward Base UI avatar props
+except `className`, `style`, and `color`. The group, count, and badge slots
+forward standard host props except `className`, `style`, and `color`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <AvatarGroup>
+      <Avatar><AvatarFallback>سا</AvatarFallback></Avatar>
+      <Avatar><AvatarFallback>نو</AvatarFallback></Avatar>
+      <AvatarGroupCount>+3</AvatarGroupCount>
+    </AvatarGroup>
+  </Box>
+</DirectionProvider>
+

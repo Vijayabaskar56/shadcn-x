@@ -27,7 +27,7 @@ const styles = stylex.create({
     borderWidth: 1,
     borderStyle: "solid",
     backgroundColor: {
-      default: `light-dark(transparent, color-mix(in oklch, ${colors.input}, transparent 70%))`,
+      default: colors["background-input"],
     },
     boxShadow: {
       default: boxShadow.s,

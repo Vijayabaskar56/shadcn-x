@@ -78,6 +78,40 @@ Pass `variant` to the group to style all items consistently.
 </ToggleGroup>
 ```
 
+### Sizes
+
+The toggle group supports three sizes: `sm`, `default`, and `lg`. Pass `size` to
+the group to apply it to every item.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <ToggleGroup size="sm">
+    <ToggleGroupItem value="a">A</ToggleGroupItem>
+    <ToggleGroupItem value="b">B</ToggleGroupItem>
+    <ToggleGroupItem value="c">C</ToggleGroupItem>
+  </ToggleGroup>
+  <ToggleGroup size="default">
+    <ToggleGroupItem value="a">A</ToggleGroupItem>
+    <ToggleGroupItem value="b">B</ToggleGroupItem>
+    <ToggleGroupItem value="c">C</ToggleGroupItem>
+  </ToggleGroup>
+  <ToggleGroup size="lg">
+    <ToggleGroupItem value="a">A</ToggleGroupItem>
+    <ToggleGroupItem value="b">B</ToggleGroupItem>
+    <ToggleGroupItem value="c">C</ToggleGroupItem>
+  </ToggleGroup>
+</Box>
+
+```tsx
+<ToggleGroup size="sm">
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+</ToggleGroup>
+<ToggleGroup size="lg">
+  <ToggleGroupItem value="a">A</ToggleGroupItem>
+  <ToggleGroupItem value="b">B</ToggleGroupItem>
+</ToggleGroup>
+```
+
 ### Vertical orientation
 
 <Box display="flex" justifyContent="center" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
@@ -124,3 +158,16 @@ are forwarded. Renders a `<div>` with `data-slot="toggle-group"`.
 | `sx`               | `StyleXStyles`                  | —           |
 
 Every item renders a `<button>` with `data-slot="toggle-group-item"`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <ToggleGroup type="single" defaultValue="center">
+      <ToggleGroupItem value="start">بداية</ToggleGroupItem>
+      <ToggleGroupItem value="center">وسط</ToggleGroupItem>
+      <ToggleGroupItem value="end">نهاية</ToggleGroupItem>
+    </ToggleGroup>
+  </Box>
+</DirectionProvider>
+

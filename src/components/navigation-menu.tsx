@@ -336,6 +336,11 @@ function NavigationMenuTrigger({
           {...stylex.props(
             styles.trigger,
             state.open && styles.triggerOpen,
+            // The chevron (a descendant) rotates via
+            // stylex.when.ancestor("[data-popup-open]"); the compiled selector
+            // is `:where(.x-default-marker[data-popup-open] *)`, so the trigger
+            // must carry the marker class or the rotation silently no-ops.
+            stylex.defaultMarker(),
             sx
           )}
           {...triggerProps}

@@ -98,6 +98,12 @@ describe("InputGroupInput", () => {
     render(<InputGroupInput placeholder="Enter name" />)
     expect(screen.getByPlaceholderText("Enter name")).toBeInTheDocument()
   })
+
+  it("applies the control reset styles and still accepts a typed sx prop", () => {
+    render(<InputGroupInput aria-label="Name" sx={sx.custom} />)
+    // The seamless-control reset + user sx are both wired through as classes.
+    expect(screen.getByRole("textbox", { name: "Name" }).className).not.toBe("")
+  })
 })
 
 describe("InputGroupTextarea", () => {

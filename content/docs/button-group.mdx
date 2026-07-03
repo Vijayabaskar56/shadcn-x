@@ -195,3 +195,17 @@ its other props are forwarded.
 > The flush look is produced by each child reacting to the group with
 > `stylex.when.ancestor` — no distance selectors, no `className`. Off-system
 > styling is not expressible here.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <ButtonGroup>
+      <Button variant="outline">الأول</Button>
+      <Button variant="outline">الثاني</Button>
+      <ButtonGroupSeparator />
+      <Button variant="outline">الثالث</Button>
+    </ButtonGroup>
+  </Box>
+</DirectionProvider>
+

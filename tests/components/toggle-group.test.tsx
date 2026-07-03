@@ -91,6 +91,39 @@ describe("ToggleGroup", () => {
     )
   })
 
+  it("reflects the outline variant on the group and its items", () => {
+    render(
+      <ToggleGroup variant="outline">
+        <ToggleGroupItem value="a">A</ToggleGroupItem>
+      </ToggleGroup>
+    )
+    expect(screen.getByRole("group")).toHaveAttribute("data-variant", "outline")
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "data-variant",
+      "outline"
+    )
+  })
+
+  it("reflects the sm size on the group and its items", () => {
+    render(
+      <ToggleGroup size="sm">
+        <ToggleGroupItem value="a">A</ToggleGroupItem>
+      </ToggleGroup>
+    )
+    expect(screen.getByRole("group")).toHaveAttribute("data-size", "sm")
+    expect(screen.getByRole("button")).toHaveAttribute("data-size", "sm")
+  })
+
+  it("reflects the lg size on the group and its items", () => {
+    render(
+      <ToggleGroup size="lg">
+        <ToggleGroupItem value="a">A</ToggleGroupItem>
+      </ToggleGroup>
+    )
+    expect(screen.getByRole("group")).toHaveAttribute("data-size", "lg")
+    expect(screen.getByRole("button")).toHaveAttribute("data-size", "lg")
+  })
+
   it("applies the pressed style when an item is selected (uncontrolled)", async () => {
     render(
       <ToggleGroup multiple>

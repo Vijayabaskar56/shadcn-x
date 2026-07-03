@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react"
 
 import * as stylex from "@stylexjs/stylex"
+import { Line, LineChart, XAxis } from "recharts"
 
 import {
   Accordion,
@@ -9,6 +10,12 @@ import {
   AccordionTrigger,
 } from "@/components/accordion"
 import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/alert"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -16,19 +23,39 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogOverlay,
   AlertDialogPortal,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/alert-dialog"
 import { AspectRatio } from "@/components/aspect-ratio"
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+} from "@/components/avatar"
+import { Badge } from "@/components/badge"
 import { Box } from "@/components/box"
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/breadcrumb"
 import { Button } from "@/components/button"
 import {
   ButtonGroup,
   ButtonGroupSeparator,
   ButtonGroupText,
 } from "@/components/button-group"
+import { Calendar } from "@/components/calendar"
 import {
   Card,
   CardAction,
@@ -38,6 +65,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/carousel"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/chart"
 import { Checkbox } from "@/components/checkbox"
 import {
   Collapsible,
@@ -195,6 +234,7 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@/components/item"
+import { Kbd, KbdGroup } from "@/components/kbd"
 import { Label } from "@/components/label"
 import { Link } from "@/components/link"
 import {
@@ -231,6 +271,15 @@ import {
   NavigationMenuViewport,
 } from "@/components/navigation-menu"
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/pagination"
+import {
   Popover,
   PopoverContent,
   PopoverDescription,
@@ -238,6 +287,13 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/popover"
+import {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "@/components/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/radio-group"
 import {
   ResizableHandle,
@@ -294,7 +350,10 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/sidebar"
+import { Skeleton } from "@/components/skeleton"
 import { Slider } from "@/components/slider"
+import { Toaster } from "@/components/sonner"
+import { Spinner } from "@/components/spinner"
 import { Switch } from "@/components/switch"
 import {
   Table,
@@ -494,11 +553,30 @@ export const mdxComponents = {
   Button,
   Text,
   Link,
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
   AspectRatio,
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
+  Badge,
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  Calendar,
   Card,
   CardAction,
   CardContent,
@@ -506,9 +584,19 @@ export const mdxComponents = {
   CardFooter,
   CardHeader,
   CardTitle,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
   Label,
   Icon,
   Image,
+  Line,
+  LineChart,
   Input,
   Textarea,
   ButtonGroup,
@@ -550,6 +638,7 @@ export const mdxComponents = {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogOverlay,
   AlertDialogPortal,
   AlertDialogTitle,
@@ -644,6 +733,18 @@ export const mdxComponents = {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
   Sheet,
   SheetClose,
   SheetContent,
@@ -677,6 +778,7 @@ export const mdxComponents = {
   SidebarProvider,
   SidebarSeparator,
   SidebarTrigger,
+  Skeleton,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -718,6 +820,8 @@ export const mdxComponents = {
   InputOTPGroup,
   InputOTPSlot,
   InputOTPSeparator,
+  Kbd,
+  KbdGroup,
   NativeSelect,
   NativeSelectOption,
   NativeSelectOptGroup,
@@ -739,6 +843,8 @@ export const mdxComponents = {
   SelectTrigger,
   SelectValue,
   Slider,
+  Spinner,
+  Toaster,
   Switch,
   Table,
   TableHeader,
@@ -755,6 +861,7 @@ export const mdxComponents = {
   Toggle,
   ToggleGroup,
   ToggleGroupItem,
+  XAxis,
 
   // Headings — ids/anchors are added by rehype-slug + autolink at compile time.
   h1: (props: HeadingProps) => (

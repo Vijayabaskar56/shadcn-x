@@ -69,7 +69,7 @@ export const toggleStyles = stylex.create({
     borderColor: colors.input,
     color: {
       default: colors["text-primary"],
-      ":hover": colors["primary-foreground"],
+      ":hover": colors["accent-foreground"],
     },
     boxShadow: {
       default: boxShadow.s,
@@ -78,7 +78,7 @@ export const toggleStyles = stylex.create({
   },
   pressed: {
     backgroundColor: colors.accent,
-    color: colors["primary-foreground"],
+    color: colors["accent-foreground"],
   },
   sizeDefault: {
     height: `calc(${u} * 9)`,

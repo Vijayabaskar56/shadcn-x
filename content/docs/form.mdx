@@ -192,6 +192,34 @@ const {
 
 Throws if called outside a `<FormField>`.
 
+## Customization
+
+Every subcomponent that renders a styled element (`FormItem`, `FormLabel`,
+`FormDescription`, `FormMessage`) accepts a typed `sx` prop (`StyleXStyles`),
+merged **last** so it wins over the base styles — no `className`/`style`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { spacing, colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  // Tighten the vertical rhythm of a field.
+  tightItem: { gap: spacing.xs },
+  // Emphasize a label.
+  strongLabel: { color: colors["text-primary"], letterSpacing: "0.02em" },
+})
+
+<FormItem sx={styles.tightItem}>
+  <FormLabel sx={styles.strongLabel}>Email</FormLabel>
+  <FormControl>
+    <Input {...field} type="email" />
+  </FormControl>
+</FormItem>
+```
+
+For a wholesale re-theme, drive the underlying tokens with
+`stylex.createTheme` on an ancestor rather than restyling each field.
+
 ## API Reference
 
 ### Form
@@ -251,3 +279,20 @@ All native `<p>` props are forwarded. Renders nothing when there is no error.
 > `aria-describedby` / `aria-invalid` / `htmlFor` automatically, an agent
 > building a form lands on an accessible, styled, validated form — no wiring
 > required.
+
+## RTL
+
+Form subcomponents inherit direction from an ancestor `DirectionProvider` /
+`dir="rtl"` — labels, controls, and descriptions flip automatically because
+they lay out with logical properties.
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <FormItem>
+      <FormLabel>اسم الفريق</FormLabel>
+      <FormControl><Input placeholder="فريق التصميم" /></FormControl>
+      <FormDescription>حقول النموذج ترث اتجاه RTL.</FormDescription>
+    </FormItem>
+  </Box>
+</DirectionProvider>
+

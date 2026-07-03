@@ -1,0 +1,144 @@
+---
+title: Progress
+description: Displays the status of a task that takes a long time.
+---
+
+# Progress
+
+`Progress` displays the completion state for a task. It uses Base UI for
+accessible progress semantics and StyleX tokens for the root, track, indicator,
+label, and value slots.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Progress value={62} aria-label="Documentation progress" />
+</Box>
+
+## Usage
+
+```tsx
+import {
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "@/components/progress"
+```
+
+```tsx
+<Progress value={62} aria-label="Upload progress" />
+```
+
+## Examples
+
+### Basic
+
+`Progress` follows the Base UI shadcn reference and renders a default
+`ProgressTrack` with a `ProgressIndicator` after any children.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Progress value={33} aria-label="Install progress" />
+</Box>
+
+```tsx
+<Progress value={33} aria-label="Install progress" />
+```
+
+### With Label
+
+Use `ProgressLabel` and `ProgressValue` for a visible task label and formatted
+value.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Progress value={78}>
+    <ProgressLabel>Export data</ProgressLabel>
+    <ProgressValue />
+  </Progress>
+</Box>
+
+```tsx
+<Progress value={78}>
+  <ProgressLabel>Export data</ProgressLabel>
+  <ProgressValue />
+</Progress>
+```
+
+### Custom Value Format
+
+Pass Base UI's `format` options or render a custom `ProgressValue` child.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Progress value={45} max={60} format={{ style: "unit", unit: "minute" }}>
+    <ProgressLabel>Minutes processed</ProgressLabel>
+    <ProgressValue />
+  </Progress>
+</Box>
+
+```tsx
+<Progress value={45} max={60} format={{ style: "unit", unit: "minute" }}>
+  <ProgressLabel>Minutes processed</ProgressLabel>
+  <ProgressValue />
+</Progress>
+```
+
+### Indeterminate
+
+Use `value={null}` when the task is active but the amount completed is unknown.
+
+<Box display="grid" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Progress value={null} aria-label="Processing request" />
+</Box>
+
+```tsx
+<Progress value={null} aria-label="Processing request" />
+```
+
+## Customization
+
+Each public slot accepts `sx`, a typed StyleX style merged last. Use it for
+slot-level adjustments instead of `className` or raw `style`.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const styles = stylex.create({
+  track: {
+    backgroundColor: colors["background-muted"],
+  },
+})
+
+<Progress value={45}>
+  <ProgressTrack sx={styles.track}>
+    <ProgressIndicator />
+  </ProgressTrack>
+</Progress>
+```
+
+## API Reference
+
+| Component           | Prop    | Type              | Default |
+| ------------------- | ------- | ----------------- | ------- |
+| `Progress`          | `value` | `number \| null`  | —       |
+| `Progress`          | `min`   | `number`          | `0`     |
+| `Progress`          | `max`   | `number`          | `100`   |
+| `Progress`          | `sx`    | `StyleXStyles`    | —       |
+| `ProgressTrack`     | `sx`    | `StyleXStyles`    | —       |
+| `ProgressIndicator` | `sx`    | `StyleXStyles`    | —       |
+| `ProgressLabel`     | `sx`    | `StyleXStyles`    | —       |
+| `ProgressValue`     | `sx`    | `StyleXStyles`    | —       |
+
+All slots forward their corresponding Base UI props except `className`, `style`,
+and `color`. `Progress` renders a `<div role="progressbar">` with
+`data-slot="progress"` and automatically includes a default track and indicator.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Progress value={60}>
+      <ProgressTrack><ProgressIndicator /></ProgressTrack>
+    </Progress>
+  </Box>
+</DirectionProvider>
+

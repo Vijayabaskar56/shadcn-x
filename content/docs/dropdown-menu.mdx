@@ -322,3 +322,18 @@ etc.).
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button variant="outline">القائمة</Button>} />
+      <DropdownMenuContent>
+        <DropdownMenuItem>الملف الشخصي</DropdownMenuItem>
+        <DropdownMenuItem>الإعدادات</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </Box>
+</DirectionProvider>
+

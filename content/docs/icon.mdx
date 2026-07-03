@@ -186,3 +186,15 @@ typed to that library's icon names.
 > `Icon` retires the raw `<svg>` element — the `no-raw-html` guardrail now points
 > `<svg>` at `Icon`. Use a library icon or wrap your own SVG component with
 > `createIcon`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" gap="s" alignItems="center">
+      <Icon name="ChevronRight" flipRtl />
+      <Text>سهم يتبدل في RTL</Text>
+    </Box>
+  </Box>
+</DirectionProvider>
+

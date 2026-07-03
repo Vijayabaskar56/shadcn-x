@@ -9,6 +9,7 @@ import {
   borderRadius,
   colors,
   duration,
+  focusRing,
   fontWeight,
 } from "../styles/tokens.stylex"
 
@@ -23,12 +24,15 @@ const styles = stylex.create({
     cursor: "pointer",
     borderRadius: borderRadius.s,
     textUnderlineOffset: "4px",
-    transitionProperty: "color, text-decoration-color",
+    transitionProperty: "color, text-decoration-color, box-shadow",
     transitionDuration: duration.fast,
-    outlineColor: colors.ring,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: { default: 0, ":focus-visible": 2 },
-    outlineOffset: 2,
+    // Focus ring uses the shared focusRing.ring token (derived from `ring`) via
+    // boxShadow — matching Button/Input — instead of hardcoded outline values.
+    outline: "none",
+    boxShadow: {
+      default: null,
+      ":focus-visible": focusRing.ring,
+    },
   },
   // The prose/inline link: accent-colored and underlined, matching the
   // repo's existing anchor convention (see docs MDX anchor).

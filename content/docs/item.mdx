@@ -205,9 +205,13 @@ or below the main row.
 
 ## Customization
 
-`Item` and every item slot accept `sx`, a typed StyleX style merged last. There
-is no `className`; broader visual changes should go through tokens or owned
-source.
+There is no `className`. Customize in this order:
+
+1. **`variant` / `size`** — the closed, on-system prop surface.
+2. **`sx`** — a typed `StyleXStyles` merged last, so it wins. Useful for a
+   one-off border, color, or spacing tweak on `Item` or any slot.
+3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
+   (e.g. `colors`, `borderRadius`), scoped to the wrapper you apply it to.
 
 ```tsx
 import * as stylex from "@stylexjs/stylex"
@@ -224,6 +228,30 @@ const styles = stylex.create({
     <ItemTitle>Selected item</ItemTitle>
   </ItemContent>
 </Item>
+```
+
+To theme every `Item` in a region at once, override the token values with
+`createTheme` and apply the returned class to a wrapper — the change cascades to
+all items inside it, without touching the owned source:
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const itemTheme = stylex.createTheme(colors, {
+  "border-primary": colors.accent,
+  "background-muted": "color-mix(in oklch, var(--accent), transparent 85%)",
+})
+
+<div {...stylex.props(itemTheme)}>
+  <ItemGroup>
+    <Item variant="outline">
+      <ItemContent>
+        <ItemTitle>Themed item</ItemTitle>
+      </ItemContent>
+    </Item>
+  </ItemGroup>
+</div>
 ```
 
 ## API Reference
@@ -247,3 +275,18 @@ const styles = stylex.create({
 
 All slots forward their matching DOM props except `className`, `style`, and
 `color`. `ItemSeparator` forwards `Separator` props.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Item>
+      <ItemContent>
+        <ItemTitle>عنصر RTL</ItemTitle>
+        <ItemDescription>تتبع المسافات اتجاه الكتابة.</ItemDescription>
+      </ItemContent>
+      <ItemActions><Button size="sm">فتح</Button></ItemActions>
+    </Item>
+  </Box>
+</DirectionProvider>
+

@@ -137,3 +137,15 @@ Each part forwards all native props for its element (`colSpan`, `rowSpan`,
 > The `Table` family retires the raw `table`/`thead`/`tbody`/`tfoot`/`tr`/`th`/
 > `td`/`caption` elements — the `no-raw-html` guardrail now points each at its
 > `Table*` primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Table>
+      <TableHeader><TableRow><TableHead>الاسم</TableHead><TableHead>الحالة</TableHead></TableRow></TableHeader>
+      <TableBody><TableRow><TableCell>مشروع</TableCell><TableCell>نشط</TableCell></TableRow></TableBody>
+    </Table>
+  </Box>
+</DirectionProvider>
+

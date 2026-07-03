@@ -101,6 +101,40 @@ const styles = stylex.create({
 > Because `Box` emits atomic StyleX classes, repeated token combinations are
 > deduplicated across your whole app.
 
+## Props
+
+`Box` accepts every prop below plus the standard HTML attributes of the element
+selected via `as` (minus the ones it types itself: `color`, `width`, `height`,
+`display`, `flex`, `order`, `overflow`, and the banned `className` / `style`).
+
+| Prop                                                   | Type                                                                                                 | Description                                                                       |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `as`                                                   | `div` `span` `section` `nav` `article` `main` `aside` `header` `footer` `ul` `ol` `li` `form` `fieldset` `time` `figure` `figcaption` `blockquote` `pre` `code` `table` `th` `td` `hr` | Host element to render. Defaults to `div`.                                        |
+| `sx`                                                   | `StyleXStyles`                                                                                        | Typed StyleX override, merged last so it wins over token props.                   |
+| `display`                                              | `flex` `grid` `inline-flex` `block` `inline` `inline-block` `none`                                    | CSS `display`.                                                                     |
+| `flexDirection`                                        | `row` `column` `row-reverse` `column-reverse`                                                         | CSS `flex-direction`.                                                             |
+| `flexWrap`                                             | `wrap` `nowrap` `wrap-reverse`                                                                        | CSS `flex-wrap`.                                                                  |
+| `alignItems`                                           | `start` `end` `center` `stretch` `baseline`                                                           | CSS `align-items`.                                                                |
+| `justifyContent`                                       | `start` `end` `center` `between` `around` `evenly`                                                    | CSS `justify-content`.                                                            |
+| `gap`                                                  | spacing token (`none`…`5xl`)                                                                          | Gap between flex/grid children.                                                   |
+| `padding` / `paddingX` / `paddingY`                    | spacing token (`none`…`5xl`)                                                                          | Padding on all / inline / block axes.                                             |
+| `margin`                                               | spacing token (`none`…`5xl`)                                                                          | Margin on all sides.                                                              |
+| `backgroundColor`                                      | color token or `transparent`                                                                         | Background color.                                                                 |
+| `color`                                                | color token                                                                                          | Text color.                                                                       |
+| `borderColor`                                          | color token or `transparent`                                                                         | Border color.                                                                     |
+| `borderRadius`                                         | `none` `s` `m` `l` `xl` `full`                                                                        | Corner radius.                                                                    |
+| `boxShadow`                                            | `none` `s` `m` `l` `xl`                                                                               | Drop shadow.                                                                      |
+| `fontSize`                                             | `xs` `s` `m` `l` `xl` `2xl` `3xl`                                                                     | Font size.                                                                        |
+| `fontWeight`                                           | `regular` `medium` `semibold` `bold`                                                                  | Font weight.                                                                      |
+| `width` / `height`                                     | `full` `auto`                                                                                         | Sizing.                                                                           |
+| `minHeight`                                            | `string`                                                                                              | Minimum height (routed through a StyleX dynamic style, not raw inline `style`).   |
+| `position`                                             | `static` `relative` `absolute` `fixed` `sticky`                                                      | CSS `position`.                                                                   |
+| `overflow`                                             | `visible` `hidden` `scroll` `auto` `clip`                                                             | CSS `overflow`.                                                                   |
+| `textAlign`                                            | `start` `center` `end`                                                                                | CSS `text-align`.                                                                |
+| `flex`                                                 | `none` `1` `auto`                                                                                     | CSS `flex` shorthand.                                                             |
+| `flexGrow` / `flexShrink` / `order`                    | `number`                                                                                              | Dynamic flex/order values (routed through StyleX dynamic styles).                 |
+| `border` / `borderTop` / `borderBottom` / `borderLeft` / `borderRight` | `boolean`                                                                            | Toggle a 1px token-colored border on the given side(s).                           |
+
 ## Theming
 
 Every token is a CSS variable, so re-theming is global and requires **no changes
@@ -138,3 +172,15 @@ const brand = stylex.createTheme(colors, {
 > [!NOTE]
 > Because Box (and every shadcn-x component) only reads tokens, one variable
 > change re-themes the whole tree — no hardcoded values to hunt down.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" gap="m" padding="l" border borderColor="border-primary" borderRadius="m">
+      <Box padding="s" backgroundColor="background-muted" borderRadius="s">البداية</Box>
+      <Box padding="s" backgroundColor="background-muted" borderRadius="s">النهاية</Box>
+    </Box>
+  </Box>
+</DirectionProvider>
+

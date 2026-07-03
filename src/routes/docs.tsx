@@ -3,6 +3,7 @@ import { Link, Outlet, createFileRoute } from "@tanstack/react-router"
 
 import { Box } from "@/components/box"
 import { DocsSidebar } from "@/components/docs/docs-sidebar"
+import { ThemeSelect } from "@/components/theme-select"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 import { colors } from "../styles/tokens.stylex"
@@ -71,7 +72,14 @@ function DocsLayout() {
             docs
           </Link>
         </Box>
-        <Box as="div" sx={styles.spacer}>
+        <Box
+          as="div"
+          display="flex"
+          alignItems="center"
+          gap="m"
+          sx={styles.spacer}
+        >
+          <ThemeSelect />
           <ThemeToggle />
         </Box>
       </Box>

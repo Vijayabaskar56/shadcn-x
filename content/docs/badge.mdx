@@ -1,0 +1,132 @@
+---
+title: Badge
+description: Displays a badge or status label.
+---
+
+# Badge
+
+A compact status label styled with StyleX design tokens. It matches shadcn's
+Badge variants while keeping customization on-system through `variant`, `sx`,
+and token re-theming.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge>Default</Badge>
+  <Badge variant="secondary">Secondary</Badge>
+  <Badge variant="destructive">Destructive</Badge>
+  <Badge variant="outline">Outline</Badge>
+  <Badge variant="ghost">Ghost</Badge>
+  <Badge variant="link" render={<Link to="/docs/$" params={{ _splat: "badge" }} />}>Link</Badge>
+</Box>
+
+## Usage
+
+```tsx
+import { Badge } from "@/components/badge"
+```
+
+```tsx
+<Badge variant="outline">Badge</Badge>
+```
+
+## Variants
+
+### Default
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge>Badge</Badge>
+</Box>
+
+```tsx
+<Badge>Badge</Badge>
+```
+
+### Secondary
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge variant="secondary">Badge</Badge>
+</Box>
+
+```tsx
+<Badge variant="secondary">Badge</Badge>
+```
+
+### Destructive
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge variant="destructive">Badge</Badge>
+</Box>
+
+```tsx
+<Badge variant="destructive">Badge</Badge>
+```
+
+### Outline
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge variant="outline">Badge</Badge>
+</Box>
+
+```tsx
+<Badge variant="outline">Badge</Badge>
+```
+
+### Ghost
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge variant="ghost">Badge</Badge>
+</Box>
+
+```tsx
+<Badge variant="ghost">Badge</Badge>
+```
+
+### Link
+
+Use Base UI's `render` prop to render a badge as a link or another component.
+
+<Box padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <Badge variant="link" render={<Link to="/docs/$" params={{ _splat: "button" }} />}>Button docs</Badge>
+</Box>
+
+```tsx
+<Badge variant="link" render={<Link to="/docs/$" params={{ _splat: "button" }} />}>
+  Button docs
+</Badge>
+```
+
+## Customization
+
+`Badge` does not accept `className` or `style`. Use `variant` first, then `sx`
+for typed per-instance StyleX overrides, and `createTheme` to re-skin tokens for
+a subtree.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  uppercase: { textTransform: "uppercase" },
+})
+
+<Badge sx={styles.uppercase}>Preview</Badge>
+```
+
+## API Reference
+
+| Prop      | Type                                                                         | Default     |
+| --------- | ---------------------------------------------------------------------------- | ----------- |
+| `variant` | `"default" \| "secondary" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` |
+| `sx`      | `StyleXStyles`                                                               | —           |
+
+All other Base UI `useRender` span props are forwarded, including `render`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" gap="s" alignItems="center">
+      <Badge>نشط</Badge>
+      <Badge variant="secondary">RTL</Badge>
+    </Box>
+  </Box>
+</DirectionProvider>
+

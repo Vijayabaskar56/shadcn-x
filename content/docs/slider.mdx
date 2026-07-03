@@ -124,3 +124,12 @@ const styles = stylex.create({
 
 All other Base UI `Slider.Root` props are forwarded. Renders a `<div>` with
 `data-slot="slider"`, containing sub-slots for control, track, range, and thumb.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Slider defaultValue={[40]} />
+  </Box>
+</DirectionProvider>
+

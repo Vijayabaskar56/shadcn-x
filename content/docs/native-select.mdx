@@ -104,7 +104,9 @@ Two sizes: `default` and `sm`.
 
 1. **`size` prop** — the first-choice knob (above).
 2. **`sx`** — a typed, per-instance override that accepts StyleX styles only and
-   merges last, so it wins.
+   merges last on the `<select>` element, so it wins. Because it targets the
+   select itself, it reaches the control's visual surface (border, background,
+   padding, radius) as well as sizing.
 3. **`createTheme`** — re-skin a whole subtree by overriding token *values*
    (border, background, ring color).
 
@@ -118,6 +120,25 @@ const styles = stylex.create({
 <NativeSelect aria-label="Wide" sx={styles.wide}>
   <NativeSelectOption value="a">Option</NativeSelectOption>
 </NativeSelect>
+```
+
+To re-skin the border, focus ring, and surface color, override the token
+*values* with `createTheme` and apply the theme to any ancestor `Box`:
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@/styles/tokens.stylex"
+
+const brand = stylex.createTheme(colors, {
+  input: "light-dark(oklch(0.55 0.2 250), oklch(0.7 0.2 250))",
+  ring: "light-dark(oklch(0.55 0.2 250), oklch(0.7 0.2 250))",
+})
+
+<Box sx={brand}>
+  <NativeSelect aria-label="Branded">
+    <NativeSelectOption value="a">Option</NativeSelectOption>
+  </NativeSelect>
+</Box>
 ```
 
 ## API Reference
@@ -151,3 +172,15 @@ All native `<option>` props are forwarded. Renders an
 
 All native `<optgroup>` props are forwarded. Renders an
 `<optgroup data-slot="native-select-optgroup">`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <NativeSelect defaultValue="rtl">
+      <NativeSelectOption value="rtl">RTL</NativeSelectOption>
+      <NativeSelectOption value="ltr">LTR</NativeSelectOption>
+    </NativeSelect>
+  </Box>
+</DirectionProvider>
+

@@ -1,0 +1,120 @@
+---
+title: Kbd
+description: Displays a keyboard key or shortcut sequence.
+---
+
+# Kbd
+
+Displays a keyboard key or shortcut sequence with the same compact shape shadcn
+uses for shortcuts in menus, tooltips, and command palettes.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <KbdGroup>
+    <Kbd>⌘</Kbd>
+    <Kbd>K</Kbd>
+  </KbdGroup>
+
+  <Kbd>Esc</Kbd>
+
+</Box>
+
+## Usage
+
+```tsx
+import { Kbd, KbdGroup } from "@/components/kbd"
+```
+
+```tsx
+<KbdGroup>
+  <Kbd>⌘</Kbd>
+  <Kbd>K</Kbd>
+</KbdGroup>
+```
+
+## Examples
+
+Use `Kbd` for single keys and `KbdGroup` for shortcuts made from multiple keys.
+`KbdGroup` intentionally mirrors shadcn's API and renders the same host element
+as the individual key.
+
+<Box display="flex" alignItems="center" gap="m" flexWrap="wrap" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+
+  <Kbd>Enter</Kbd>
+
+  <KbdGroup>
+    <Kbd>Ctrl</Kbd>
+    <Kbd>C</Kbd>
+  </KbdGroup>
+
+  <KbdGroup>
+    <Kbd>Shift</Kbd>
+    <Kbd>?</Kbd>
+  </KbdGroup>
+
+</Box>
+
+```tsx
+<Kbd>Enter</Kbd>
+
+<KbdGroup>
+  <Kbd>Ctrl</Kbd>
+  <Kbd>C</Kbd>
+</KbdGroup>
+
+<KbdGroup>
+  <Kbd>Shift</Kbd>
+  <Kbd>?</Kbd>
+</KbdGroup>
+```
+
+## Customization
+
+`Kbd` and `KbdGroup` do not accept `className` or `style`. Customize them
+on-system with `sx` or by re-theming the tokens they consume.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  shortcut: {
+    opacity: 0.8,
+  },
+})
+
+<KbdGroup sx={styles.shortcut}>
+  <Kbd>⌘</Kbd>
+  <Kbd>B</Kbd>
+</KbdGroup>
+```
+
+## API Reference
+
+### Kbd
+
+| Prop | Type | Default |
+| ---- | ---- | ------- |
+| `sx` | `StyleXStyles` | — |
+
+Matches shadcn's `KbdGroup` API and forwards standard `div` props except
+`className` and `style`, while rendering the same `kbd` host as the reference.
+
+### KbdGroup
+
+| Prop | Type | Default |
+| ---- | ---- | ------- |
+| `sx` | `StyleXStyles` | — |
+
+Forwards standard `kbd` element props except `className` and `style`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <KbdGroup>
+      <Kbd>Ctrl</Kbd>
+      <Kbd>K</Kbd>
+    </KbdGroup>
+  </Box>
+</DirectionProvider>
+

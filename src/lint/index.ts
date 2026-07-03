@@ -1,6 +1,7 @@
 import { definePlugin, eslintCompatPlugin } from "@oxlint/plugins"
 
 import { noClassNameStyle } from "./rules/no-className-style.ts"
+import { noPhysicalStylexProperties } from "./rules/no-physical-stylex-properties.ts"
 import { noRawDesignValues } from "./rules/no-raw-design-values.ts"
 import { noRawHtml } from "./rules/no-raw-html.ts"
 import { noStylexAtoms } from "./rules/no-stylex-atoms.ts"
@@ -19,6 +20,7 @@ export const plugin = eslintCompatPlugin(
     rules: {
       "no-raw-html": noRawHtml,
       "no-className-style": noClassNameStyle,
+      "no-physical-stylex-properties": noPhysicalStylexProperties,
       "no-raw-design-values": noRawDesignValues,
       "no-stylex-atoms": noStylexAtoms,
     },
@@ -31,6 +33,7 @@ export const recommended = {
   rules: {
     "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "error",
+    "shadcn-x/no-physical-stylex-properties": "error",
     "shadcn-x/no-raw-design-values": "error",
     "shadcn-x/no-stylex-atoms": "error",
   },

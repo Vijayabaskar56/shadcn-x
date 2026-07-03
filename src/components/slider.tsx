@@ -9,6 +9,7 @@ import {
   boxShadow,
   colors,
   duration,
+  focusRing,
   spacing,
 } from "../styles/tokens.stylex"
 
@@ -57,11 +58,13 @@ const styles = stylex.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: colors.primary,
-    backgroundColor: `light-dark(white, ${colors["background-primary"]})`,
+    backgroundColor: colors["background-primary"],
     boxShadow: {
       default: boxShadow.s,
-      ":hover": `0 0 0 4px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
-      ":focus-visible": `${boxShadow.s}, 0 0 0 4px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
+      // shadcn's `ring-4` on the thumb (a larger touch-target ring), derived from
+      // the shared `ring` token via the `largeRing` focus-ring variant.
+      ":hover": focusRing.largeRing,
+      ":focus-visible": `${boxShadow.s}, ${focusRing.largeRing}`,
     },
     transitionProperty: "color, background-color, box-shadow",
     transitionDuration: duration.fast,

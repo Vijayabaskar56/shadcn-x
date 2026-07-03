@@ -24,6 +24,10 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
   })) as unknown as typeof window.matchMedia
 }
 
+if (typeof window !== "undefined") {
+  window.scrollTo = () => {}
+}
+
 // jsdom has no layout, so scroll/pointer-capture APIs are absent — cmdk scrolls
 // the active item into view, vaul captures the pointer while dragging. Stub them
 // so overlay tests don't throw on mount/interaction.

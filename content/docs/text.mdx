@@ -132,3 +132,15 @@ Props of the rendered host element are forwarded. Sets `data-slot="text"` and
 > `colors`); line-height and letter-spacing are per-variant typographic
 > measurements, baked into the variant the same way `Button` bakes in per-size
 > dimensions. The public surface stays the closed `variant` menu.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Box display="flex" flexDirection="column" gap="s">
+      <Text variant="h3">عنوان RTL</Text>
+      <Text>فقرة تستخدم محاذاة البداية حسب الاتجاه.</Text>
+    </Box>
+  </Box>
+</DirectionProvider>
+

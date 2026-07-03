@@ -16,6 +16,9 @@ ruleTester.run("no-raw-html", plugin.rules["no-raw-html"] as never, {
     { code: "const a = <Box />" },
     // A host element with no primitive yet is allowed (ADR-0003: ban only what we cover).
     { code: "const a = <video />" },
+    // `<form>` stays allowed: `Form` is the react-hook-form provider (no DOM), so
+    // it does not retire the `<form>` element.
+    { code: "const a = <form />" },
     // The banned list is configurable; an empty map bans nothing.
     { code: "const a = <div />", options: [{ elements: {} }] },
   ],
@@ -102,6 +105,12 @@ ruleTester.run("no-raw-html", plugin.rules["no-raw-html"] as never, {
       code: "const a = <hr />",
       errors: [
         { messageId: "rawHtml", data: { tag: "hr", primitive: "Separator" } },
+      ],
+    },
+    {
+      code: "const a = <kbd />",
+      errors: [
+        { messageId: "rawHtml", data: { tag: "kbd", primitive: "Kbd" } },
       ],
     },
   ],

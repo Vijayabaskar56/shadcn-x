@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url"
 import contentCollections from "@content-collections/vite"
 import babel from "@rolldown/plugin-babel"
 import stylex from "@stylexjs/unplugin"
@@ -24,6 +25,14 @@ const config = defineConfig({
     stylex.vite({
       useCSSLayers: true,
       enableLTRRTLComments: true,
+      // Enables StyleX theming APIs (createTheme + cross-file variable
+      // resolution). The default themeFileExtension (`.stylex`) must be kept —
+      // imports are written extensionless (`tokens.stylex`) and the resolver
+      // matches the `.stylex` suffix, then tries `.ts` via getPossibleFilePaths.
+      unstable_moduleResolution: {
+        type: "commonJS",
+        rootDir: fileURLToPath(new URL(".", import.meta.url)),
+      },
       lightningcssOptions: { targets: cssTargets },
     }),
     devtools(),

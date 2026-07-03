@@ -1,0 +1,198 @@
+---
+title: Breadcrumb
+description: Displays the path to the current resource using links and separators.
+---
+
+# Breadcrumb
+
+A navigation trail for hierarchy and location. It matches shadcn's Breadcrumb
+slot surface while keeping links and customization on-system through `render`,
+`Icon`, and typed `sx`.
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/" />}>Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/docs/$" params={{ _splat: "components" }} />}>Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+
+## Usage
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/breadcrumb"
+```
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Docs</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Examples
+
+### Basic
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/" />}>Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Docs</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/" />}>Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Docs</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Custom Separator
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/" />}>Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/docs/$" params={{ _splat: "components" }} />}>Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator>/</BreadcrumbSeparator>
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+
+```tsx
+<BreadcrumbSeparator>/</BreadcrumbSeparator>
+```
+
+### Collapsed
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/" />}>Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+
+```tsx
+<BreadcrumbItem>
+  <BreadcrumbEllipsis />
+</BreadcrumbItem>
+```
+
+### Router Links
+
+Use Base UI's `render` prop to render `BreadcrumbLink` as the local `Link`
+primitive or a framework-specific link component.
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink render={<Link to="/docs/$" params={{ _splat: "button" }} />}>Button</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+
+```tsx
+<BreadcrumbLink render={<Link to="/docs/$" params={{ _splat: "button" }} />}>
+  Button
+</BreadcrumbLink>
+```
+
+## Customization
+
+Breadcrumb components do not accept `className` or `style`. Use `sx` for typed
+per-instance StyleX overrides, and use token themes to re-skin the trail for a
+subtree.
+
+```tsx
+import * as stylex from "@stylexjs/stylex"
+
+const styles = stylex.create({
+  quiet: { opacity: 0.8 },
+})
+
+<BreadcrumbList sx={styles.quiet}>
+  {/* items */}
+</BreadcrumbList>
+```
+
+## API Reference
+
+| Component               | Props                      | Notes                                      |
+| ----------------------- | -------------------------- | ------------------------------------------ |
+| `Breadcrumb`            | nav props, `sx`            | Sets `aria-label="breadcrumb"` by default. |
+| `BreadcrumbList`        | ol props, `sx`             | Wraps the ordered list of items.           |
+| `BreadcrumbItem`        | li props, `sx`             | Wraps a link, page, or ellipsis.           |
+| `BreadcrumbLink`        | Base UI anchor props, `sx` | Supports `render` for router links.        |
+| `BreadcrumbPage`        | span props, `sx`           | Sets `aria-current="page"`.                |
+| `BreadcrumbSeparator`   | li props, `sx`             | Defaults to a chevron icon.                |
+| `BreadcrumbEllipsis`    | span props, `sx`           | Includes an a11y-only `More` label.        |
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem><BreadcrumbLink>الرئيسية</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbPage>الإعدادات</BreadcrumbPage></BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </Box>
+</DirectionProvider>
+

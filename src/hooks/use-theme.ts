@@ -38,19 +38,24 @@ function useStoredTheme(): Theme {
 function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement
 
-  const style = document.createElement("style")
-  style.textContent = "*, *::before, *::after { transition: none !important; }"
-  document.head.appendChild(style)
+  const update = () => {
+    root.classList.remove("light", "dark")
+    root.classList.add(resolved)
+    root.style.colorScheme = resolved
+  }
 
-  root.classList.remove("light", "dark")
-  root.classList.add(resolved)
-  root.style.colorScheme = resolved
+  const doc = document as Document & {
+    startViewTransition?: (cb: () => void) => { finished: Promise<void> }
+  }
+  const prefersReducedMotion =
+    typeof matchMedia !== "undefined" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches
 
-  void root.offsetHeight
-
-  requestAnimationFrame(() => {
-    if (style.parentNode) document.head.removeChild(style)
-  })
+  if (doc.startViewTransition && !prefersReducedMotion) {
+    doc.startViewTransition(update)
+  } else {
+    update()
+  }
 }
 
 function getSystemTheme() {

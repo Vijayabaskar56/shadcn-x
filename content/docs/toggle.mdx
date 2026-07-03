@@ -120,5 +120,15 @@ All other [Base UI toggle props](https://base-ui.com/react/components/toggle)
 are forwarded. Renders a `<button>` with `data-slot="toggle"`.
 
 > [!NOTE]
-> `Toggle` retires the raw `<button>` for toggle use — the `no-raw-html`
-> guardrail now points toggle buttons at `Toggle`.
+> The `no-raw-html` guardrail maps raw `<button>` to the general-purpose
+> `Button` primitive. `Toggle` is the specialized primitive for two-state
+> toggle buttons — reach for it when you need pressed/unpressed behavior.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Toggle defaultPressed>مفعل</Toggle>
+  </Box>
+</DirectionProvider>
+

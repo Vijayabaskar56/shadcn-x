@@ -14,6 +14,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/command"
+import { DirectionProvider } from "@/components/direction"
 
 const sx = stylex.create({
   custom: { opacity: 0.5 },
@@ -215,5 +216,41 @@ describe("Command", () => {
     expect(
       screen.getByText("Search for a command to run...")
     ).toBeInTheDocument()
+  })
+
+  it("flips the dialog horizontal transform for RTL via useDirection", () => {
+    // `when.ancestor('[dir="rtl"]')` can't emit usable CSS here (the marker would
+    // have to live on <html>, which we don't render), so direction is resolved in
+    // JS: the RTL and LTR renders must land on different transform styles, which
+    // StyleX materializes as different classNames on the dialog content.
+    const { unmount } = render(
+      <DirectionProvider dir="ltr">
+        <CommandDialog defaultOpen>
+          <Command>
+            <CommandInput placeholder="Search" />
+          </Command>
+        </CommandDialog>
+      </DirectionProvider>
+    )
+    const ltrClass = document
+      .querySelector('[data-slot="dialog-content"]')
+      ?.getAttribute("class")
+    expect(ltrClass).toBeTruthy()
+    unmount()
+
+    render(
+      <DirectionProvider dir="rtl">
+        <CommandDialog defaultOpen>
+          <Command>
+            <CommandInput placeholder="Search" />
+          </Command>
+        </CommandDialog>
+      </DirectionProvider>
+    )
+    const rtlClass = document
+      .querySelector('[data-slot="dialog-content"]')
+      ?.getAttribute("class")
+    expect(rtlClass).toBeTruthy()
+    expect(rtlClass).not.toBe(ltrClass)
   })
 })

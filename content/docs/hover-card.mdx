@@ -162,3 +162,17 @@ props](https://base-ui.com/react/components/preview-card) (`open`,
 
 All other props (native attributes, `render`, etc.) are forwarded to the
 underlying Base UI primitive.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <HoverCard>
+      <HoverCardTrigger render={<Button variant="link">تفاصيل المستخدم</Button>} />
+      <HoverCardContent>
+        <Text>محتوى البطاقة يظهر بمحاذاة RTL.</Text>
+      </HoverCardContent>
+    </HoverCard>
+  </Box>
+</DirectionProvider>
+

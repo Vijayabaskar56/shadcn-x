@@ -3,6 +3,8 @@
 import type { StyleXStyles } from "@stylexjs/stylex"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import {
@@ -12,9 +14,9 @@ import {
   useFormState,
 } from "react-hook-form"
 
-import { Box } from "@/components/box"
+import { Label } from "@/components/label"
 
-import { colors, fontSize, fontWeight, spacing } from "../styles/tokens.stylex"
+import { colors, fontSize, spacing } from "../styles/tokens.stylex"
 
 // ─── Form (FormProvider alias) ───────────────────────────────────────────────
 
@@ -110,27 +112,10 @@ function FormItem({ children, sx, ...props }: FormItemProps) {
 
 // ─── FormLabel ───────────────────────────────────────────────────────────────
 
+// FormLabel renders the on-system `Label` primitive (which already carries the
+// base typography + disabled reactivity via markers — matching shadcn, whose
+// FormLabel renders `<Label>`). We layer only the error color on top.
 const formLabelStyles = stylex.create({
-  base: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: spacing.s,
-    fontSize: fontSize.s,
-    fontWeight: fontWeight.medium,
-    lineHeight: 1,
-    color: colors["text-primary"],
-    userSelect: "none",
-    opacity: {
-      default: 1,
-      [stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
-      [stylex.when.siblingBefore(":disabled")]: 0.5,
-    },
-    pointerEvents: {
-      default: null,
-      [stylex.when.ancestor('[data-disabled="true"]')]: "none",
-      [stylex.when.siblingBefore(":disabled")]: "none",
-    },
-  },
   error: {
     color: colors.destructive,
   },
@@ -143,51 +128,52 @@ type FormLabelProps = {
   "className" | "style" | "color"
 >
 
-const FormLabelTag = "label" as const
-
 function FormLabel({ sx, ...props }: FormLabelProps) {
   const { error, formItemId } = useFormField()
   return (
-    <FormLabelTag
+    <Label
       data-slot="form-label"
       data-error={!!error}
       htmlFor={formItemId}
-      {...stylex.props(
-        formLabelStyles.base,
-        error && formLabelStyles.error,
-        sx
-      )}
+      sx={[error && formLabelStyles.error, sx]}
       {...props}
     />
   )
 }
 
-// ─── FormControl (uses Box instead of Slot.Root) ─────────────────────────────
+// ─── FormControl (Slot-equivalent: merges wiring into its child) ──────────────
 
 type FormControlProps = {
-  children?: React.ReactNode
+  children: React.ReactElement
 } & Omit<
   React.ComponentPropsWithoutRef<"div">,
   "className" | "style" | "color" | "children"
 >
 
+// Mirrors shadcn's `Slot.Root`: rather than wrapping the control in an extra
+// element, we merge the accessibility wiring (`id`, `aria-describedby`,
+// `aria-invalid`) directly into the single child via Base UI's `useRender` +
+// `mergeProps`. This keeps `htmlFor`/`id` pointing at the real control so the
+// FormLabel actually focuses it.
 function FormControl({ children, ...props }: FormControlProps) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
-  return (
-    <Box
-      as="div"
-      data-slot="form-control"
-      id={formItemId}
-      aria-describedby={
-        !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    >
-      {children}
-    </Box>
-  )
+  // Extracted to a variable (not inlined) so TS's excess-property check on object
+  // literals doesn't reject the `data-slot` key — matching the mergeProps pattern
+  // in badge/breadcrumb/item/sidebar.
+  const ownProps = {
+    "data-slot": "form-control",
+    id: formItemId,
+    "aria-describedby": !error
+      ? formDescriptionId
+      : `${formDescriptionId} ${formMessageId}`,
+    "aria-invalid": !!error,
+  }
+
+  return useRender({
+    render: children,
+    props: mergeProps<"div">(ownProps, props),
+  })
 }
 
 // ─── FormDescription ─────────────────────────────────────────────────────────

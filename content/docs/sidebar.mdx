@@ -275,3 +275,22 @@ const styles = stylex.create({
 |                        | `isActive`    | `boolean`                                          | `false`      |
 
 All sidebar slots omit raw `className` and `style`; use `sx` instead.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <SidebarProvider>
+      <Sidebar side="right" variant="floating" collapsible="none">
+        <SidebarHeader>القائمة</SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem><SidebarMenuButton>لوحة التحكم</SidebarMenuButton></SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset><Box padding="m">محتوى RTL</Box></SidebarInset>
+    </SidebarProvider>
+  </Box>
+</DirectionProvider>
+

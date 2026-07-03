@@ -62,6 +62,10 @@ describe("Select", () => {
       "data-slot",
       "select-value"
     )
+    // The truncation/flex styling lives on the SelectValue element itself
+    // (matching shadcn's *:data-[slot=select-value]:… rules), so it carries a
+    // StyleX class rather than relying on a when.descendant selector.
+    expect(screen.getByTestId("value").className).not.toBe("")
   })
 
   it("renders the chevron icon in trigger", () => {

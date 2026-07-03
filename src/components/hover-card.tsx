@@ -45,7 +45,9 @@ const styles = stylex.create({
   },
 })
 
-const HoverCard = PreviewCardPrimitive.Root
+function HoverCard(props: PreviewCardPrimitive.Root.Props) {
+  return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />
+}
 
 type HoverCardTriggerProps = Omit<
   PreviewCardPrimitive.Trigger.Props,

@@ -7,7 +7,7 @@ import { Button } from "@/components/button"
 import { Input } from "@/components/input"
 import { Textarea } from "@/components/textarea"
 
-import { colors, fontSize } from "../styles/tokens.stylex"
+import { colors, fontSize, spacing } from "../styles/tokens.stylex"
 
 const styles = stylex.create({
   group: {
@@ -47,12 +47,26 @@ const styles = stylex.create({
     color: colors["text-secondary"],
     fontSize: fontSize.s,
   },
+  // The control sits *inside* the group's own border/background, so it resets
+  // its own chrome to blend in seamlessly: flex-1 to fill, no border/radius,
+  // transparent background, and no shadow (which also drops the focus ring —
+  // the group owns focus styling). Merged as `sx` (last) so it overrides the
+  // Input/Textarea base. Matches shadcn's InputGroupInput reset.
   control: {
     flex: 1,
+    borderWidth: 0,
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    boxShadow: "none",
   },
   textareaControl: {
     flex: 1,
     resize: "none",
+    borderWidth: 0,
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    boxShadow: "none",
+    paddingBlock: spacing.m, // py-3
   },
 })
 
@@ -155,7 +169,13 @@ function InputGroupInput({
 }: React.ComponentPropsWithoutRef<typeof Input> & {
   sx?: StyleXStyles
 }) {
-  return <Input data-slot="input-group-control" sx={sx} {...props} />
+  return (
+    <Input
+      data-slot="input-group-control"
+      sx={[styles.control, sx]}
+      {...props}
+    />
+  )
 }
 
 function InputGroupTextarea({
@@ -164,7 +184,13 @@ function InputGroupTextarea({
 }: React.ComponentPropsWithoutRef<typeof Textarea> & {
   sx?: StyleXStyles
 }) {
-  return <Textarea data-slot="input-group-control" sx={sx} {...props} />
+  return (
+    <Textarea
+      data-slot="input-group-control"
+      sx={[styles.textareaControl, sx]}
+      {...props}
+    />
+  )
 }
 
 export {

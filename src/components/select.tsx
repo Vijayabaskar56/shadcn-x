@@ -31,7 +31,7 @@ const styles = stylex.create({
       default: colors.input,
       ":focus-visible": colors.ring,
     },
-    backgroundColor: `light-dark(transparent, color-mix(in oklch, ${colors.input}, transparent 70%))`,
+    backgroundColor: colors["background-input"],
     paddingInline: spacing.m,
     paddingBlock: `calc(${u} * 2)`,
     fontSize: fontSize.s,
@@ -64,15 +64,18 @@ const styles = stylex.create({
   triggerSizeSm: {
     height: `calc(${u} * 8)`,
   },
-  triggerSelectValue: {
-    [stylex.when.descendant('[data-slot="select-value"]')]: {
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-      display: "flex",
-      alignItems: "center",
-      gap: `calc(${u} * 2)`,
-    },
+  // shadcn applies *:data-[slot=select-value]:{line-clamp-1,flex,items-center,gap-2}
+  // — i.e. to the SelectValue element itself, not the trigger. Styling it here
+  // directly (rather than via when.descendant on the trigger) is both correct and
+  // marker-free: a when.descendant would require SelectValue to carry
+  // defaultMarker() to emit any CSS at all.
+  selectValue: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    display: "flex",
+    alignItems: "center",
+    gap: `calc(${u} * 2)`,
   },
   positioner: {
     isolation: "isolate",
@@ -178,7 +181,7 @@ function SelectValue({ sx, ...props }: SelectValueProps) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      {...stylex.props(sx)}
+      {...stylex.props(styles.selectValue, sx)}
       {...props}
     />
   )
@@ -206,7 +209,6 @@ function SelectTrigger({
         styles.trigger,
         size === "default" && styles.triggerSizeDefault,
         size === "sm" && styles.triggerSizeSm,
-        styles.triggerSelectValue,
         sx
       )}
       {...props}

@@ -20,7 +20,7 @@ conventions.
 | `FieldGroup`       | `div`            | `field-group`                 |
 | `FieldContent`     | `div`            | `field-content`               |
 | `FieldLabel`       | `label`          | `field-label`                 |
-| `FieldTitle`       | `div`            | `field-title`                 |
+| `FieldTitle`       | `div`            | `field-label`                 |
 | `FieldDescription` | `p`              | `field-description`           |
 | `FieldSeparator`   | `div`            | `field-separator` / `field-separator-content` |
 | `FieldError`       | `div`            | `field-error`                 |
@@ -71,6 +71,33 @@ import { Field, FieldLabel, FieldContent, FieldDescription, FieldError } from "@
     <Input id="name" placeholder="Ada Lovelace" />
   </FieldContent>
 </Field>
+```
+
+### Responsive orientation
+
+`orientation="responsive"` starts vertical and switches to horizontal once the
+enclosing `FieldGroup` reaches the `@md` (28rem) container-query breakpoint.
+
+<Box display="flex" flexDirection="column" gap="m" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+  <FieldGroup>
+    <Field orientation="responsive">
+      <FieldLabel htmlFor="username">Username</FieldLabel>
+      <FieldContent>
+        <Input id="username" placeholder="ada" />
+      </FieldContent>
+    </Field>
+  </FieldGroup>
+</Box>
+
+```tsx
+<FieldGroup>
+  <Field orientation="responsive">
+    <FieldLabel htmlFor="username">Username</FieldLabel>
+    <FieldContent>
+      <Input id="username" placeholder="ada" />
+    </FieldContent>
+  </Field>
+</FieldGroup>
 ```
 
 ### With error
@@ -162,7 +189,7 @@ render as a list.
 
 | Prop          | Type                  | Default      |
 | ------------- | --------------------- | ------------ |
-| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` |
+| `orientation` | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` |
 | `sx`          | `StyleXStyles`        | —            |
 
 All forwarded `<div>` props are accepted.
@@ -182,3 +209,16 @@ If `children` is provided, it renders as-is. Otherwise renders from `errors`.
 `FieldLabel`, `FieldSet`, `FieldLegend`, `FieldGroup`, `FieldContent`,
 `FieldTitle`, `FieldDescription`, and `FieldSeparator` all accept standard HTML
 props and `sx`.
+
+## RTL
+
+<DirectionProvider dir="rtl">
+  <Box dir="rtl" display="block" padding="l" backgroundColor="background-card" borderRadius="m" border borderColor="border-primary">
+    <Field>
+      <FieldLabel>البريد الإلكتروني</FieldLabel>
+      <Input placeholder="name@example.com" />
+      <FieldDescription>سنستخدمه لإرسال التنبيهات.</FieldDescription>
+    </Field>
+  </Box>
+</DirectionProvider>
+

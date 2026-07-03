@@ -58,7 +58,7 @@ describe("RadioGroup", () => {
     expect(onValueChange).toHaveBeenCalledWith("b", expect.any(Object))
   })
 
-  it("renders every size without error", () => {
+  it("renders without error", () => {
     render(
       <RadioGroup aria-label="Fruit">
         <RadioGroupItem value="a" />

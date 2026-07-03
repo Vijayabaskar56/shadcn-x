@@ -62,7 +62,9 @@ const styles = stylex.create({
   },
 })
 
-const Tooltip = TooltipPrimitive.Root
+function Tooltip(props: TooltipPrimitive.Root.Props) {
+  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+}
 
 type TooltipProviderProps = Omit<
   TooltipPrimitive.Provider.Props,

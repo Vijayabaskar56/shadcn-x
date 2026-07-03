@@ -42,7 +42,10 @@ const styles = stylex.create({
     zIndex: 50,
     display: "grid",
     width: "calc(100% - 2rem)",
-    transform: "translate(-50%, -50%)",
+    transform: {
+      default: "translate(-50%, -50%)",
+      [stylex.when.ancestor('[dir="rtl"]')]: "translate(50%, -50%)",
+    },
     gap: spacing.l,
     borderRadius: borderRadius.l,
     borderWidth: 1,
@@ -69,6 +72,20 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     gap: spacing.s,
+  },
+
+  // size-16 muted square that centers an icon/media in the header. Icons are
+  // sized on-system via the `Icon` component (which sizes itself), so no
+  // descendant svg selector is needed here.
+  media: {
+    marginBottom: `calc(${u} * 2)`, // mb-2
+    display: "inline-flex",
+    width: "4rem", // size-16
+    height: "4rem",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: borderRadius.m, // rounded-md
+    backgroundColor: colors["background-muted"], // bg-muted
   },
 
   footer: {
@@ -198,6 +215,22 @@ function AlertDialogFooter({ sx, ...props }: AlertDialogFooterProps) {
   )
 }
 
+type AlertDialogMediaProps = Omit<
+  ComponentPropsWithoutRef<typeof Box<"div">>,
+  "as"
+>
+
+function AlertDialogMedia({ sx, ...props }: AlertDialogMediaProps) {
+  return (
+    <Box
+      as="div"
+      data-slot="alert-dialog-media"
+      sx={[styles.media, sx]}
+      {...props}
+    />
+  )
+}
+
 type AlertDialogTitleProps = Omit<
   AlertDialogPrimitive.Title.Props,
   "className" | "style"
@@ -270,6 +303,7 @@ export {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogOverlay,
   AlertDialogPortal,
   AlertDialogTitle,
@@ -283,6 +317,7 @@ export type {
   AlertDialogDescriptionProps,
   AlertDialogFooterProps,
   AlertDialogHeaderProps,
+  AlertDialogMediaProps,
   AlertDialogOverlayProps,
   AlertDialogPortalProps,
   AlertDialogTitleProps,
