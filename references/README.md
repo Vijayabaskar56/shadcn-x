@@ -20,6 +20,20 @@ component — specifically the **Base UI variants** under:
 references/ui/apps/v4/registry/bases/base/ui/
 ```
 
+## `references/base-ui` — Base UI reference
+
+```sh
+references/base-ui -> /Users/vijayabaskar/work/references/base-ui
+```
+
+The Base UI component library source. Authoritative reference for the primitives,
+props, and behavior of the components this library wraps. Key paths:
+
+```
+references/base-ui/packages/react/  # React component package sources
+references/base-ui/docs/            # official docs site
+```
+
 ## `references/coss` — coss.com/ui (formerly Origin UI)
 
 ```sh
@@ -41,8 +55,9 @@ references/coss/packages/ui/    # shared UI components package
 2. Link them:
 
    ```sh
-   ln -s /path/to/your/references/ui   references/ui
-   ln -s /path/to/your/references/coss references/coss
+   ln -s /path/to/your/references/ui      references/ui
+   ln -s /path/to/your/references/coss    references/coss
+   ln -s /path/to/your/references/base-ui references/base-ui
    ```
 
 3. Verify:
@@ -50,6 +65,7 @@ references/coss/packages/ui/    # shared UI components package
    ```sh
    ls references/ui/apps/v4/registry/bases/base/ui/
    ls references/coss/apps/ui/
+   ls references/base-ui/packages/react/
    ```
 
 If a symlink is missing, `create-component` and any other reference-reading

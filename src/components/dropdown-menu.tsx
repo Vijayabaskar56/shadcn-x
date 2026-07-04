@@ -12,6 +12,7 @@ import {
   colors,
   fontSize,
   fontWeight,
+  scroll,
   spacing,
 } from "../styles/tokens.stylex"
 
@@ -39,7 +40,7 @@ const styles = stylex.create({
     maxHeight: "var(--available-height)",
     minWidth: `calc(${u} * 32)`, // min-w-[8rem]
     overflowX: "hidden",
-    overflowY: "auto",
+    overflowY: scroll.auto,
     borderRadius: borderRadius.m, // rounded-md
     borderWidth: 1,
     borderStyle: "solid",

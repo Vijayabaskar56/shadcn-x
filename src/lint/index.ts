@@ -1,6 +1,7 @@
 import { definePlugin, eslintCompatPlugin } from "@oxlint/plugins"
 
 import { noClassNameStyle } from "./rules/no-className-style.ts"
+import { noManualOverflow } from "./rules/no-manual-overflow.ts"
 import { noPhysicalStylexProperties } from "./rules/no-physical-stylex-properties.ts"
 import { noRawDesignValues } from "./rules/no-raw-design-values.ts"
 import { noRawHtml } from "./rules/no-raw-html.ts"
@@ -20,6 +21,7 @@ export const plugin = eslintCompatPlugin(
     rules: {
       "no-raw-html": noRawHtml,
       "no-className-style": noClassNameStyle,
+      "no-manual-overflow": noManualOverflow,
       "no-physical-stylex-properties": noPhysicalStylexProperties,
       "no-raw-design-values": noRawDesignValues,
       "no-stylex-atoms": noStylexAtoms,
@@ -33,6 +35,7 @@ export const recommended = {
   rules: {
     "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "error",
+    "shadcn-x/no-manual-overflow": "error",
     "shadcn-x/no-physical-stylex-properties": "error",
     "shadcn-x/no-raw-design-values": "error",
     "shadcn-x/no-stylex-atoms": "error",

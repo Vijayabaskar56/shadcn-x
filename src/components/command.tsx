@@ -20,6 +20,7 @@ import {
   colors,
   fontSize,
   fontWeight,
+  scroll,
   spacing,
 } from "../styles/tokens.stylex"
 
@@ -86,7 +87,7 @@ const styles = stylex.create({
     minHeight: 0,
     scrollPaddingBlock: spacing.xs,
     overflowX: "hidden",
-    overflowY: "auto",
+    overflowY: scroll.auto,
   },
 
   // py-6 text-center text-sm

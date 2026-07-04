@@ -42,6 +42,7 @@ function App() {
         <Box display="flex" alignItems="center" gap="m">
           <Button
             variant="ghost"
+            nativeButton={false}
             render={<Link to="/docs/$" params={{ _splat: "introduction" }} />}
           >
             Docs

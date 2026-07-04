@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Box } from "@/components/box"
 import { Image } from "@/components/image"
 import { Link } from "@/components/link"
+import { ScrollArea } from "@/components/scroll-area"
 import { Separator } from "@/components/separator"
 import { Text } from "@/components/text"
 import { registryMdxComponents } from "@/docs/registry"
@@ -110,7 +111,6 @@ const styles = stylex.create({
     marginTop: "1.5rem",
     marginBottom: "1.5rem",
     width: "100%",
-    overflowX: "auto",
   },
   table: {
     width: "100%",
@@ -219,7 +219,9 @@ export const mdxComponents = {
   pre: (props: Without<"pre">) => <Box as="pre" sx={styles.pre} {...props} />,
   table: (props: Without<"table">) => (
     <Box as="div" sx={styles.tableWrap}>
-      <Box as="table" sx={styles.table} {...props} />
+      <ScrollArea>
+        <Box as="table" sx={styles.table} {...props} />
+      </ScrollArea>
     </Box>
   ),
   th: (props: Without<"th">) => <Box as="th" sx={styles.th} {...props} />,

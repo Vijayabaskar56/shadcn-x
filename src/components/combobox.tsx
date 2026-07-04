@@ -17,6 +17,7 @@ import {
   duration,
   focusRing,
   fontSize,
+  scroll,
   spacing,
 } from "../styles/tokens.stylex"
 
@@ -114,7 +115,7 @@ const styles = stylex.create({
     maxHeight: "var(--available-height)",
     width: "var(--anchor-width)",
     overflowX: "hidden",
-    overflowY: "auto",
+    overflowY: scroll.auto,
     borderRadius: borderRadius.m,
     borderWidth: 1,
     borderStyle: "solid",
@@ -125,7 +126,7 @@ const styles = stylex.create({
   },
 
   list: {
-    overflowY: "auto",
+    overflowY: scroll.auto,
     overscrollBehavior: "contain",
     padding: spacing.xs,
   },

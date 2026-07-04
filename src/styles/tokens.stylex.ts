@@ -168,3 +168,16 @@ export const focusRing = stylex.defineVars({
   // re-skins it too — only the ring thickness differs.
   largeRing: `0 0 0 4px color-mix(in oklch, ${colors.ring}, transparent 50%)`,
 })
+
+// Scrollable overflow values. The `no-manual-overflow` lint rule bans raw
+// `'auto'`/`'scroll'` strings in stylex.create — using these tokens is the
+// deliberate opt-in. They document intent at the call site (`overflow:
+// scroll.auto`) and centralize the decision. The canonical consumer is a
+// Base UI positioned popup (Menu.Popup, Select.Popup, Combobox.Popup …),
+// which Base UI expects to set its own `overflowY: auto` alongside
+// `maxHeight: var(--available-height)`. Standalone scroll containers should
+// reach for `<ScrollArea>` instead.
+export const scroll = stylex.defineConsts({
+  auto: "auto",
+  scroll: "scroll",
+})

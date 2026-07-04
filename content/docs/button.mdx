@@ -117,10 +117,19 @@ Use Base UI's `render` prop to give button styling to a router link. Note that
 Base UI's `Button` applies `role="button"`, so prefer this for in-app navigation
 controls rather than primary document links.
 
+When the rendered element is not a native `<button>` (an `<a>`, a `div`, …),
+pass `nativeButton={false}` so Base UI drops the native button semantics it
+can't honor on a non-button host (form submission, the `disabled` attribute).
+Without it Base UI logs a development warning.
+
 ```tsx
 import { Link } from "@tanstack/react-router"
 
-<Button variant="ghost" render={<Link to="/docs/$" params={{ _splat: "box" }} />}>
+<Button
+  variant="ghost"
+  nativeButton={false}
+  render={<Link to="/docs/$" params={{ _splat: "box" }} />}
+>
   Docs
 </Button>
 ```

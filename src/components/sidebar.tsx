@@ -15,6 +15,7 @@ import type { VariantKey } from "@/components/variants"
 import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
 import { Input } from "@/components/input"
+import { ScrollArea } from "@/components/scroll-area"
 import { Separator } from "@/components/separator"
 import {
   Sheet,
@@ -242,13 +243,15 @@ const styles = stylex.create({
     gap: spacing.s,
     padding: spacing.s,
   },
+  // SidebarContent wraps its children in <ScrollArea>; this wrapper only needs
+  // to establish the flex height chain (flex:1, minHeight:0) so the ScrollArea
+  // can fill the available height and scroll within it.
   content: {
     display: "flex",
     minHeight: 0,
     flex: 1,
     flexDirection: "column",
     gap: spacing.s,
-    overflow: "auto",
   },
   contentIcon: {
     overflow: "hidden",
@@ -339,6 +342,7 @@ const styles = stylex.create({
       ":hover": colors["background-muted"],
       ":active": colors["background-muted"],
     },
+    textDecorationLine: "none",
     textAlign: "start",
     fontSize: fontSize.s,
     outline: "none",
@@ -500,6 +504,12 @@ const styles = stylex.create({
   separator: {
     width: "auto",
     marginInline: spacing.s,
+  },
+  // The ScrollArea inside SidebarContent fills the available height (flex:1,
+  // minHeight:0) so it can scroll within the constrained sidebar column.
+  contentScroll: {
+    flex: 1,
+    minHeight: 0,
   },
 })
 
@@ -917,7 +927,7 @@ type SidebarContentProps = CleanDivProps & {
   sx?: StyleXStyles
 }
 
-function SidebarContent({ sx, ...props }: SidebarContentProps) {
+function SidebarContent({ sx, children, ...props }: SidebarContentProps) {
   const { state } = useSidebar()
 
   return (
@@ -930,7 +940,9 @@ function SidebarContent({ sx, ...props }: SidebarContentProps) {
         sx
       )}
       {...props}
-    />
+    >
+      <ScrollArea sx={styles.contentScroll}>{children}</ScrollArea>
+    </Div>
   )
 }
 

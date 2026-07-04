@@ -1,89 +1,59 @@
-import * as stylex from "@stylexjs/stylex"
-import { Link } from "@tanstack/react-router"
-
-import { Box } from "@/components/box"
-import { Text } from "@/components/text"
-import { docsNav } from "@/docs/docs-config"
+import { Link, useRouterState } from "@tanstack/react-router"
 
 import {
-  colors,
-  fontSize,
-  spacing,
-  borderRadius,
-  fontWeight,
-} from "../../styles/tokens.stylex"
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/sidebar"
+import { docsNav } from "@/docs/docs-config"
 
-const styles = stylex.create({
-  label: {
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-  },
-  link: {
-    display: "block",
-    borderRadius: borderRadius.l,
-    paddingInline: spacing.s,
-    paddingBlock: "6px",
-    color: {
-      default: colors["muted-foreground"],
-      ":hover": colors["text-primary"],
-    },
-    backgroundColor: {
-      default: "transparent",
-      ":hover": colors["background-muted"],
-    },
-    transitionProperty: "color, background-color",
-    transitionDuration: "150ms",
-  },
-  sectionLabel: {
-    fontSize: fontSize.xs,
-    fontWeight: fontWeight.semibold,
-    color: colors["text-secondary"],
-    paddingInline: spacing.s,
-    letterSpacing: "0.05em",
-    textTransform: "uppercase",
-  },
-  linkActive: {
-    backgroundColor: colors["background-muted"],
-    color: colors["text-primary"],
-    fontWeight: fontWeight.medium,
-  },
-})
-
+/**
+ * Sidebar navigation for the docs. Uses the `Sidebar*` primitives so the
+ * nav structure (section labels, menu items, active state) matches the
+ * component library's visual language. Items render as `<a>` via
+ * `SidebarMenuButton render={<Link />}` — no `Link` variant styling needed;
+ * the sidebar primitives provide their own hover/active tokens.
+ *
+ * Scrolling is handled by the wrapping `SidebarContent` in `docs.tsx`
+ * (overflow: auto, flex: 1, min-height: 0) — the sidebar scrolls
+ * independently of the page.
+ */
 export function DocsSidebar() {
+  const splat = useRouterState({
+    select: (state) => state.location.pathname,
+  })
+
   return (
-    <Box
-      as="nav"
-      display="flex"
-      flexDirection="column"
-      gap="xl"
-      aria-label="Docs"
-    >
+    <>
       {docsNav.map((section) => (
-        <Box
-          as="div"
-          key={section.label}
-          display="flex"
-          flexDirection="column"
-          gap="xs"
-        >
-          <Text variant="small" sx={styles.sectionLabel}>
-            {section.label}
-          </Text>
-          {section.items.map((item) => (
-            <Link key={item.slug} to="/docs/$" params={{ _splat: item.slug }}>
-              {({ isActive }) => (
-                <Box
-                  as="span"
-                  fontSize="s"
-                  sx={isActive ? [styles.link, styles.linkActive] : styles.link}
-                >
-                  {item.label}
-                </Box>
-              )}
-            </Link>
-          ))}
-        </Box>
+        <SidebarGroup key={section.label}>
+          <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {section.items.map((item) => {
+                const itemPath = `/docs/${item.slug}`
+                const isActive = splat === itemPath
+
+                return (
+                  <SidebarMenuItem key={item.slug}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      render={
+                        <Link to="/docs/$" params={{ _splat: item.slug }} />
+                      }
+                    >
+                      {item.label}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       ))}
-    </Box>
+    </>
   )
 }

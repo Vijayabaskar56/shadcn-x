@@ -87,6 +87,7 @@ export default defineConfig({
     // no-stylex-atoms is prevention, not migration — we never imported atoms, so
     // any arbitrary-value atom import is a hard error from the start (ADR-0002).
     "shadcn-x/no-stylex-atoms": "error",
+    "shadcn-x/no-manual-overflow": "error",
   },
   settings: {
     "jsx-a11y": {

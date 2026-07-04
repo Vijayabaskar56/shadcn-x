@@ -3,6 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 import * as stylex from "@stylexjs/stylex"
 
 import { Box } from "@/components/box"
+import { ScrollArea } from "@/components/scroll-area"
 
 import {
   colors,
@@ -115,19 +116,16 @@ export type TableCaptionProps = TableComponentProps<"caption">
 function Table({ sx, ...props }: TableProps) {
   return (
     // shadcn wraps <table> in a relative, full-width, horizontally-scrollable
-    // container so wide tables pan instead of overflowing the page.
-    <Box
-      as="div"
-      overflow="auto"
-      width="full"
-      position="relative"
-      data-slot="table-container"
-    >
-      <TableTag
-        data-slot="table"
-        {...stylex.props(styles.table, sx)}
-        {...props}
-      />
+    // container so wide tables pan instead of overflowing the page. ScrollArea
+    // provides the styled horizontal scroll surface.
+    <Box as="div" width="full" position="relative" data-slot="table-container">
+      <ScrollArea>
+        <TableTag
+          data-slot="table"
+          {...stylex.props(styles.table, sx)}
+          {...props}
+        />
+      </ScrollArea>
     </Box>
   )
 }
