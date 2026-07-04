@@ -1,6 +1,7 @@
 import { definePlugin, eslintCompatPlugin } from "@oxlint/plugins"
 
 import { noClassNameStyle } from "./rules/no-className-style.ts"
+import { noLongCommentRuns } from "./rules/no-long-comment-runs.ts"
 import { noManualOverflow } from "./rules/no-manual-overflow.ts"
 import { noPhysicalStylexProperties } from "./rules/no-physical-stylex-properties.ts"
 import { noRawDesignValues } from "./rules/no-raw-design-values.ts"
@@ -19,6 +20,7 @@ export const plugin = eslintCompatPlugin(
   definePlugin({
     meta: { name: "shadcn-x" },
     rules: {
+      "no-long-comment-runs": noLongCommentRuns,
       "no-raw-html": noRawHtml,
       "no-className-style": noClassNameStyle,
       "no-manual-overflow": noManualOverflow,
@@ -33,6 +35,7 @@ export const plugin = eslintCompatPlugin(
 export const recommended = {
   plugins: { "shadcn-x": plugin },
   rules: {
+    "shadcn-x/no-long-comment-runs": "error",
     "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "error",
     "shadcn-x/no-manual-overflow": "error",

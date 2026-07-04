@@ -64,9 +64,8 @@ const styles = stylex.create({
     gap: spacing.s,
   },
 
-  // size-16 muted square that centers an icon/media in the header. Icons are
-  // sized on-system via the `Icon` component (which sizes itself), so no
-  // descendant svg selector is needed here.
+  // size-16 muted square centers icon/media in header; Icon component sizes
+  // itself → no descendant svg selector needed.
   media: {
     marginBottom: `calc(${u} * 2)`, // mb-2
     display: "inline-flex",
@@ -100,9 +99,8 @@ const styles = stylex.create({
 
 const sizes = defineVariants(
   stylex.create({
-    // Per-size maxWidth — a component dimension decision (shadcn's max-w-lg /
-    // max-w-xs), not a cross-cutting theme token. The closed `size` prop is the
-    // menu; these literals are the size *decision*.
+    // Per-size maxWidth — component dimension decision, not theme token; closed
+    // `size` prop is the menu, literals are the size decision.
     default: {
       maxWidth: "32rem", // max-w-lg
     },

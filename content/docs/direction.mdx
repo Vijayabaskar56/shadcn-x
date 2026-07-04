@@ -23,9 +23,9 @@ function App() {
 }
 ```
 
-Direction defaults to `"ltr"` when omitted. `DirectionProvider` wraps Base UI's own `DirectionProvider` (so Base UI components adjust their behavior) and adds a shadcn-x enhancement: it renders a boxless (`display: contents`) wrapper carrying the `dir` attribute, so all components inside respond via CSS logical properties. The direction is **scoped to the subtree** — it never touches the rest of the page.
+Direction defaults to `"ltr"` when omitted. `DirectionProvider` wraps Base UI's own `DirectionProvider` (so Base UI components adjust their behavior) and adds a shadcn-x enhancement: it renders a boxless (`display: contents`) wrapper carrying the `dir` attribute, so all components inside respond via CSS logical properties. The direction is **scoped to the subtree** — it never touches the rest of the page, so it's safe to use inside docs previews and other inline examples.
 
-For an app-wide RTL layout, also set `dir` on the document root (e.g. `<html dir="rtl">`) so portaled overlays and the page scrollbar follow too.
+For an app-wide RTL layout, pass `global` so the provider also sets `dir` on `<html>`. This is what lets portaled overlays (Dialog, Sheet) — which mount at the end of `<body>`, outside the subtree — inherit the direction. Use `global` only at the app root; a scoped preview with `global` would flip the whole page.
 
 ## Props
 

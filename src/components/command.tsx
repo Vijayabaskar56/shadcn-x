@@ -28,11 +28,8 @@ import {
 // of it, so they re-scale with the spacing token — matching Tailwind/shadcn.
 const u = spacing["--spacing"]
 
-// Ported from shadcn's Command (cmdk). Behavior/a11y — combobox filtering,
-// keyboard navigation, the listbox/option roles, the selected/active state —
-// come from cmdk's primitives; each style maps a Tailwind class to a token
-// (comments name the original utility). cmdk spreads `...props` onto the
-// elements it renders, so the `stylex.props` className/style land on them.
+// Ported from shadcn Command (cmdk). Behavior from cmdk primitives; each
+// style maps a Tailwind class to a token; cmdk spreads ...props → stylex.props land on elements.
 const styles = stylex.create({
   root: {
     // flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground
@@ -103,9 +100,7 @@ const styles = stylex.create({
     padding: spacing.xs,
     color: colors["text-primary"],
   },
-  // The group-heading look shadcn applies to [cmdk-group-heading], expressed as
-  // a styled <CommandLabel> the consumer renders inside the group (cmdk's own
-  // `heading` prop renders an unstyled element StyleX can't reach at a distance).
+  // Group heading via styled <CommandLabel>; cmdk's `heading` prop renders unstyled element unreachable by StyleX
   label: {
     paddingInline: spacing.s,
     paddingBlock: `calc(${u} * 1.5)`,
@@ -121,10 +116,8 @@ const styles = stylex.create({
     backgroundColor: colors["border-primary"],
   },
 
-  // relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5
-  // text-sm outline-hidden select-none. data-[selected=true]:bg-accent can't be
-  // expressed in StyleX (self attribute selectors are dropped — ADR-0002), so
-  // the active-row highlight is :hover-only, matching our Select/Combobox items.
+  // Item: relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm;
+  // data-[selected=true]:bg-accent → StyleX drops self data-attr sel → :hover-only
   item: {
     position: "relative",
     display: "flex",
@@ -143,9 +136,8 @@ const styles = stylex.create({
     },
     color: colors["text-primary"],
   },
-  // data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50.
-  // Self attribute selectors don't compile, so the component reads `disabled`
-  // and applies this conditionally (the attribute is still set by cmdk).
+  // data-[disabled=true]: pointer-events-none opacity-50; StyleX drops self
+  // data-attr sel → component reads `disabled` prop and applies conditionally.
   itemDisabled: {
     pointerEvents: "none",
     opacity: 0.5,
@@ -159,13 +151,8 @@ const styles = stylex.create({
     color: colors["muted-foreground"],
   },
 
-  // CommandDialog: position the palette at the top third (matches shadcn's Base
-  // UI flavor: top-1/3 translate-y-0) with no padding; merged last over our
-  // DialogContent defaults (which center + pad). The horizontal translate flips
-  // for RTL, but `when.ancestor('[dir="rtl"]')` can't emit usable CSS here —
-  // the marker would have to live on <html> (where DirectionProvider sets dir),
-  // which we don't render, so the branch no-ops. We resolve direction in JS via
-  // `useDirection` and pick the matching transform object instead.
+  // CommandDialog: palette at top-1/3, no padding, overrides DialogContent
+  // defaults. RTL flip via `useDirection` JS (not when.ancestor — <html> unreachable).
   dialogContent: {
     overflow: "hidden",
     padding: 0,
@@ -178,11 +165,8 @@ const styles = stylex.create({
     transform: "translate(50%, 0)",
   },
 
-  // Visually-hidden yet screen-reader-available — the canonical sr-only pattern
-  // (Tailwind's `.sr-only`). Used for the CommandDialog's a11y-only header
-  // (shadcn applies `className="sr-only"` there): the Title/Description satisfy
-  // Base UI's dialog-name requirement without adding visible chrome to the
-  // palette. These literals are an a11y utility, not a theme decision.
+  // sr-only pattern for CommandDialog's a11y-only header; Title/Description
+  // satisfy Base UI dialog-name requirement without visible chrome.
   srOnly: {
     position: "absolute",
     width: "1px",

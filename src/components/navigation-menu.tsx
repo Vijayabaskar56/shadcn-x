@@ -20,18 +20,8 @@ import {
 // of it, so they re-scale with the spacing token — matching Tailwind/shadcn.
 const u = spacing["--spacing"]
 
-// Ported from shadcn's navigation-menu (canonical + Base UI flavor). Behavior
-// and accessibility — hover/click to open, roving focus, portal positioning,
-// content tweening through the shared viewport — come from
-// `@base-ui/react/navigationMenu`. shadcn's subcomponent names are preserved
-// (NavigationMenu, List, Item, Trigger, Content, Link, Indicator, Viewport);
-// the Base UI `Positioner` is exposed as `NavigationMenuViewport` to match the
-// shadcn API. Appearance is a closed set of token-bound styles customizable
-// only via the typed `sx` prop (merged last). Never accepts className.
-//
-// Self data-attribute selectors don't compile in StyleX (e.g. `[data-state]` is
-// silently dropped), so trigger/link open-or-active styling is driven by
-// reading Base UI's exposed state instead — the sanctioned composition path.
+// Ported from shadcn nav-menu on Base UI: subcomps map 1:1, Positioner
+// → NavigationMenuViewport. Self data-attr sel drop → use Base UI state.
 const styles = stylex.create({
   // group/navigation-menu relative flex max-w-max flex-1 items-center
   // justify-center
@@ -59,11 +49,7 @@ const styles = stylex.create({
     position: "relative",
   },
 
-  // group inline-flex h-9 w-max items-center justify-center rounded-md
-  // bg-background px-4 py-2 text-sm font-medium outline-none transition
-  // hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent
-  // focus-visible:text-accent-foreground focus-visible:ring-[3px]
-  // disabled:pointer-events-none disabled:opacity-50
+  // Trigger: group inline-flex h-9 w-max items-center rounded-md bg-background px-4 py-2 text-sm; hover/focus:bg-accent; focus-visible:ring; disabled:opacity-50 pointer-events-none
   trigger: {
     display: "inline-flex",
     height: `calc(${u} * 9)`, // h-9
@@ -98,20 +84,14 @@ const styles = stylex.create({
     cursor: "pointer",
   },
 
-  // data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground —
-  // the open trigger is dimmed to accent. StyleX can't key off its own
-  // data-attributes, so this is applied by reading Base UI's `open` state
-  // (see NavigationMenuTrigger's `render` prop).
+  // data-[state=open]:bg-accent/50 — StyleX drops self data-attr sel → use Base UI `open` state
   triggerOpen: {
     backgroundColor: `color-mix(in oklch, ${colors["background-muted"]}, transparent 50%)`,
     color: colors["text-secondary"],
   },
 
-  // ChevronDown: relative top-[1px] ml-1 size-3 transition duration-300
-  // group-data-[state=open]:rotate-180. size-3 = 0.75rem (Icon size="s"). The
-  // trigger carries `data-popup-open` (set by Base UI); the chevron, a
-  // descendant, reacts to it via stylex.when.ancestor — the type-safe
-  // equivalent of `group-data-[state=open]:rotate-180`.
+  // Chevron: relative top-[1px] ml-1; size-3 = 0.75rem = Icon size="s";
+  // group-data-[state=open]:rotate-180 → stylex.when.ancestor("[data-popup-open]")
   chevron: {
     position: "relative",
     top: "1px",
@@ -124,10 +104,8 @@ const styles = stylex.create({
     },
   },
 
-  // top-0 left-0 w-full p-2 pr-2.5 md:absolute md:w-auto. The content is moved
-  // into the shared viewport by Base UI; we provide its box + the directional
-  // slide tween (Base UI toggles data-starting-style/data-ending-style; we keep
-  // the content positioned so the viewport animates around it).
+  // Content: top-0 left-0 w-full p-2 pr-2.5; md:absolute md:w-auto; Base UI
+  // moves it into shared viewport + provides slide tween via data-starting-style
   content: {
     position: "relative",
     width: {
@@ -145,9 +123,7 @@ const styles = stylex.create({
     zIndex: 50,
   },
 
-  // The visible viewport box: origin-top-center relative mt-1.5 overflow-hidden
-  // rounded-md border bg-popover text-popover-foreground shadow. Base UI sets
-  // `--transform-origin`; we align the popup's transform origin to it.
+  // Popup: origin-top-center relative mt-1.5 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow; Base UI sets `--transform-origin`
   popup: {
     position: "relative",
     marginTop: `calc(${u} * 1.5)`, // mt-1.5
@@ -196,9 +172,7 @@ const styles = stylex.create({
     boxShadow: boxShadow.m, // shadow-md
   },
 
-  // flex flex-col gap-1 rounded-sm p-2 text-sm outline-none
-  // hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent
-  // focus-visible:text-accent-foreground focus-visible:ring-[3px]
+  // Link: flex flex-col gap-1 rounded-sm p-2 text-sm; hover/focus-visible:bg-accent focus-visible:ring
   link: {
     display: "flex",
     flexDirection: "column",
@@ -225,22 +199,15 @@ const styles = stylex.create({
     transitionDuration: duration.fast,
   },
 
-  // data-[active=true]:bg-accent/50 ... :hover:bg-accent :focus:bg-accent — the
-  // current-page link is tinted. `active` is a Base UI Link prop (not just
-  // internal state), so we read it and apply this conditionally.
+  // data-[active=true]:bg-accent/50; `active` is Base UI Link prop → apply conditionally
   linkActive: {
     backgroundColor: `color-mix(in oklch, ${colors["background-muted"]}, transparent 50%)`,
     color: colors["text-secondary"],
   },
 })
 
-// Variable tags so the two raw host elements we render ourselves — the
-// trigger's <button> (rendered via the Trigger `render` prop so we can read
-// Base UI's exposed `open` state, which StyleX can't key off as a self
-// data-attribute) and the indicator's decorative <div> arrow — aren't flagged
-// by the `no-raw-html` rule. This is the same technique Box/Textarea/Label/
-// Field/Link use internally; every other host element (nav/ul/li/a) is rendered
-// by a Base UI primitive, not by us.
+// Variable tags so DivTag/ButtonTag aren't flagged by `no-raw-html`; same
+// technique Box/Textarea/Label/Field/Link use. All other hosts from Base UI.
 const DivTag = "div" as const
 const ButtonTag = "button" as const
 
@@ -326,20 +293,15 @@ function NavigationMenuTrigger({
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
       {...props}
-      // `render` as a function reads Base UI's exposed `open` state — the
-      // sanctioned way to style a self state StyleX can't key on (its own
-      // data-attributes are silently dropped). We spread the primitive's
-      // resolved props (ref, handlers, aria, data-*) onto the button and apply
-      // the open tint + chevron from `state.open`.
+      // `render` reads Base UI `open` state (StyleX drops self data-attr sel)
+      // → spread resolved props + apply open tint/chevron from `state.open`.
       render={(triggerProps, state) => (
         <ButtonTag
           {...stylex.props(
             styles.trigger,
             state.open && styles.triggerOpen,
-            // The chevron (a descendant) rotates via
-            // stylex.when.ancestor("[data-popup-open]"); the compiled selector
-            // is `:where(.x-default-marker[data-popup-open] *)`, so the trigger
-            // must carry the marker class or the rotation silently no-ops.
+            // Chevron rotates via stylex.when.ancestor("[data-popup-open]");
+            // trigger must carry defaultMarker or rotation no-ops.
             stylex.defaultMarker(),
             sx
           )}
@@ -377,10 +339,8 @@ type NavigationMenuViewportProps = Omit<
   sx?: StyleXStyles
 }
 
-// The shared viewport (shadcn name) built on Base UI's
-// Portal → Positioner → Popup → Viewport. The Positioner anchors + animates
-// against the active trigger; the Popup is the visible box (token-styled); the
-// Viewport clips the active content during the directional slide.
+// Shared viewport = Base UI Portal → Positioner → Popup → Viewport; clips
+// active content during directional slide.
 function NavigationMenuViewport({
   side = "bottom",
   sideOffset = 8,

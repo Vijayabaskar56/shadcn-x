@@ -18,9 +18,7 @@ import { describe, expect, it } from "vitest"
 
 import type { BoxAllowedTag } from "@/element-coverage"
 
-// Import every component module a coverage entry points into, so we can
-// assert each `primitive` name is a real export. Adding a primitive to the
-// table means adding its module here — that is the point.
+// Import every component module a coverage entry points into; assert each `primitive` name is a real export.
 import * as boxModule from "@/components/box"
 import * as buttonModule from "@/components/button"
 import * as fieldModule from "@/components/field"
@@ -193,9 +191,7 @@ describe("Box as= permitted subset", () => {
   })
 })
 
-// Type-level pin: Box's `as=` union is derived from the table and must equal
-// the documented exception list exactly (compile error here = the table and
-// this test disagree).
+// Type-level pin: Box `as=` union derived from table must equal documented exception list (compile error = table/test disagree).
 type Eq<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false
 type ExpectedBoxAllowedTag =
   | "div"

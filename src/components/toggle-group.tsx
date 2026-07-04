@@ -20,9 +20,8 @@ type ToggleGroupContextValue = {
   size?: Size
   spacing: number
   orientation: "horizontal" | "vertical"
-  // The group's current value, so each item can derive its pressed state. StyleX
-  // can't key off the self `[data-pressed]` attribute, and per-item local state
-  // would desync when the group deselects an item, so items derive from this.
+  // Items derive pressed state from group value; per-item local state would
+  // desync on group deselection, and StyleX drops self `[data-pressed]`.
   value: readonly string[]
 }
 

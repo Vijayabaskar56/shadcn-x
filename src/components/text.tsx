@@ -7,11 +7,8 @@ import type { VariantKey } from "./variants"
 import { colors, fontSize, fontWeight, spacing } from "../styles/tokens.stylex"
 import { defineVariants } from "./variants"
 
-// shadcn ships typography as utility classes, not a component. Text is the
-// on-system primitive that carries those same decisions as a closed `variant`
-// menu — semantic name in, tokens out — so an agent lands on-system by default.
-// `as` may retarget the host element (Box already retires this tag set, so the
-// guardrail is unchanged). The default per variant is the semantic element.
+// shadcn: typography as utilities, not component. Text = on-system primitive:
+// variant prop: semantic name in, tokens out. `as` retargets host element.
 type AsElement =
   | "p"
   | "span"
@@ -30,10 +27,8 @@ type AsElement =
 
 const variants = defineVariants(
   stylex.create({
-    // line-height / letter-spacing / font-style are typographic measurements (the
-    // per-variant decision), not cross-cutting theme knobs — literals here, the
-    // same way Button hardcodes per-size height/gap. Color, font-size and
-    // font-weight are theme tokens and MUST come from tokens.stylex.
+    // line-height/letter-spacing/font-style: per-variant typographic literals
+    // (like Button per-size height/gap). Color/font-size/font-weight: theme tokens.
     h1: {
       fontSize: fontSize["4xl"], // text-4xl
       fontWeight: fontWeight.extrabold, // font-extrabold

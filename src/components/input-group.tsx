@@ -47,11 +47,8 @@ const styles = stylex.create({
     color: colors["text-secondary"],
     fontSize: fontSize.s,
   },
-  // The control sits *inside* the group's own border/background, so it resets
-  // its own chrome to blend in seamlessly: flex-1 to fill, no border/radius,
-  // transparent background, and no shadow (which also drops the focus ring —
-  // the group owns focus styling). Merged as `sx` (last) so it overrides the
-  // Input/Textarea base. Matches shadcn's InputGroupInput reset.
+  // Control resets chrome inside group border/background: flex-1, no border/radius,
+  // transparent bg, no shadow; sx merged last overrides Input/Textarea base.
   control: {
     flex: 1,
     borderWidth: 0,

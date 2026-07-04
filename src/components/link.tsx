@@ -16,10 +16,8 @@ import {
 } from "../styles/tokens.stylex"
 import { defineVariants } from "./variants"
 
-// shadcn has no Link component — its examples drop to a raw `<a>` or the
-// framework's link. This is the on-system primitive: it wraps TanStack Router's
-// type-safe Link (via createLink, so `to`/`params`/`search`/`preload` keep their
-// full type safety) and styles it with StyleX tokens. No className, no raw <a>.
+// shadcn: no Link component. Wraps TanStack Router's type-safe Link (createLink)
+// — to/params/search/preload keep full type safety. StyleX tokens, no raw <a>.
 const styles = stylex.create({
   base: {
     cursor: "pointer",
@@ -66,12 +64,7 @@ type LinkBaseProps = Omit<
   sx?: StyleXStyles
 }
 
-// The styled anchor handed to createLink. TanStack injects the resolved routing
-// props (href, onClick, data-status, …); we add our token styling. Spread order
-// matches every sibling primitive: explicit attrs → stylex.props → consumer
-// props (className/style are omitted, so styling can't be clobbered).
-// Rendered via a variable tag (like Box) so this — the primitive that *defines*
-// the on-system anchor — isn't flagged by its own `no-raw-html` rule.
+// Styled anchor for createLink. TanStack routing props → spread order: explicit attrs → stylex.props → consumer props. Variable tag avoids no-raw-html.
 const Anchor = "a" as const
 
 const LinkBase = React.forwardRef<HTMLAnchorElement, LinkBaseProps>(
@@ -90,10 +83,8 @@ const LinkBase = React.forwardRef<HTMLAnchorElement, LinkBaseProps>(
 
 const CreatedLink = createLink(LinkBase)
 
-// The plain-anchor form: for URLs the router doesn't own — external sites,
-// same-page hash anchors, mailto/tel. Passing `href` opts out of router
-// resolution (`to`/`params` are unavailable in this form); the anchor keeps
-// the same token styling, variants and `sx` surface.
+// Plain-anchor form for external URLs (sites, hash, mailto/tel). `href` opts
+// out of router resolution; same styling/variants/sx surface.
 type PlainLinkProps = LinkBaseProps & {
   href: string
   to?: never

@@ -19,13 +19,9 @@ type IconPosition = "inline-start" | "inline-end"
 const styles = stylex.create({
   base: {
     flexShrink: 0,
-    // shadcn's [&_svg]:pointer-events-none — icons are decorative; clicks pass
-    // through to the host control (Button/Link). Applied to every icon (the base
-    // is always applied; a `size` only overlays width/height).
+    // [&_svg]:pointer-events-none — decorative icons; clicks pass to host control; base always applied, size overlays
     pointerEvents: "none",
-    // Default 1rem (shadcn's [&_svg:not([class*='size-'])]:size-4); auto-shrink
-    // inside an xs button via stylex.when.ancestor (the button carries a marker +
-    // data-size). An explicit `size` overrides this (and prevents the shrink).
+    // Default 1rem; auto-shrinks in xs button via stylex.when.ancestor; explicit `size` overrides
     width: {
       default: "1rem",
       [stylex.when.ancestor('[data-size="xs"]')]: "0.75rem",
@@ -35,10 +31,8 @@ const styles = stylex.create({
       [stylex.when.ancestor('[data-size="xs"]')]: "0.75rem",
     },
   },
-  // Directional icons (arrows, chevrons, carets) mirror in RTL. `when.ancestor`
-  // can't be used here: the `dir` attribute lives on <html>, which never carries
-  // our StyleX marker, so that branch emits no usable CSS. Instead we apply this
-  // static flip via a JS conditional keyed off the `useDirection` hook.
+  // Directional icons mirror in RTL; `when.ancestor` can't reach <html> dir →
+  // JS conditional flip via `useDirection` hook.
   flipRtl: {
     transform: "scaleX(-1)",
   },
@@ -54,9 +48,7 @@ const sizes = defineVariants(
 
 type IconSize = VariantKey<typeof sizes>
 
-// A library is any record of named icon components (lucide-react, tabler, a
-// custom set, …). `IconName` narrows the keys to the component-valued ones, so
-// `name` only autocompletes real icons — not a library's utility exports.
+// Library = record of named icon components; IconName narrows to component-valued keys so `name` autocompletes real icons only
 type IconLibrary = Record<string, unknown>
 type IconName<TLib extends IconLibrary> = {
   [K in keyof TLib]: TLib[K] extends ComponentType<ReactSVGProps<SVGSVGElement>>
@@ -87,9 +79,7 @@ type CommonIconProps = {
   | "style"
 >
 
-// Two mutually-exclusive modes: `name` (resolve from the bound library, type-safe
-// to that library's icon names) OR `children` (pass any icon element through —
-// keeps the source library's own variant props fully typed; the easiest BYO).
+// Two modes: `name` (type-safe library icon) OR `children` (pass any icon element; fully typed BYO)
 type IconProps<TLib extends IconLibrary> =
   | (CommonIconProps & { name: IconName<TLib>; children?: never })
   | (CommonIconProps & { name?: undefined; children: ReactElement })
@@ -117,8 +107,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
     const injected = {
       ...stylex.props(
         // `base` always applies (flexShrink + pointerEvents + default sizing);
-        // an explicit `size` overlays width/height and, being later, wins — so a
-        // sized icon keeps its size and doesn't auto-shrink in xs buttons.
+        // explicit `size` overlays width/height and wins (prevents xs shrink).
         styles.base,
         sizes(size),
         flipRtl && direction === "rtl" && styles.flipRtl,

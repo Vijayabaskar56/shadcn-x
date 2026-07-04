@@ -57,11 +57,8 @@ const styles = stylex.create({
     },
   },
 
-  // Group focus-raise: lift a focused button above its neighbors so its focus
-  // ring isn't clipped by the adjacent (overlapping) borders. The edge math
-  // (radius flattening + inner-border collapse) is shared with ButtonGroupText —
-  // see `groupItemEdges` (imported). A Button raises on `:focus-visible`
-  // (it is itself focusable); a non-focusable text chip raises on `:focus-within`.
+  // Group focus-raise: lift focused button above neighbors → ring not clipped.
+  // Edge math via groupItemEdges. Button: :focus-visible; text chip: :focus-within.
   groupFocus: {
     position: {
       default: null,
@@ -73,9 +70,8 @@ const styles = stylex.create({
     },
   },
 
-  // aria-invalid:border-destructive + aria-invalid:ring-destructive/20. Self
-  // attribute selectors don't compile in StyleX, so the component reads
-  // aria-invalid and applies this conditionally (the attribute is still set).
+  // aria-invalid:border-destructive + ring-destructive. StyleX can't self-select
+  // → component reads aria-invalid, applies conditionally (attribute still set).
   invalid: {
     borderColor: colors.destructive,
     boxShadow: {
@@ -140,12 +136,8 @@ const variants = defineVariants(
 
 const sizes = defineVariants(
   stylex.create({
-    // Sizes ported from shadcn new-york-v4. Heights/paddings/gap are multiples of
-    // `--spacing` (re-scale with the spacing knob, like shadcn's utilities). The
-    // side holding an icon tightens its padding (has-[>svg]:px-N) via
-    // stylex.when.descendant on [data-icon]. Radius + gap come from `base`
-    // (shadcn base = rounded-md gap-2); a size only overrides what differs. Icon
-    // auto-shrink in xs/icon-xs is handled by <Icon> reacting to data-size="xs".
+    // Sizes from shadcn new-york-v4: multiples of --spacing → re-scale. Icon side
+    // padding via when.descendant [data-icon]; Icon auto-shrink via data-size.
     default: {
       height: `calc(${u} * 9)`, // h-9
       // px-4, tightened to px-3 on the side that holds an icon (has-[>svg]:px-3)
@@ -238,10 +230,8 @@ function Button({ variant, size, sx, ...props }: ButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="button"
-      // data-size + data-variant let consumers/tests target a button's state,
-      // and let an <Icon> child observe the button via stylex.when.ancestor
-      // (auto-shrink in xs); the marker lets the button observe an <Icon>
-      // descendant via stylex.when.descendant (padding).
+      // data-size/data-variant: consumers target state; <Icon> observes via
+      // when.ancestor (auto-shrink). Marker: button observes <Icon> via when.descendant.
       data-size={sizes.resolve(size)}
       data-variant={variants.resolve(variant)}
       {...stylex.props(

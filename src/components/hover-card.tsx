@@ -10,13 +10,7 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// Ported from shadcn's hover-card (Base UI flavor). Behavior/a11y — hover open/
-// close delay, portal rendering, anchor positioning, focus management — come
-// from `@base-ui/react/preview-card` (Base UI ships hover-card as "Preview
-// Card"); we expose it under the shadcn `HoverCard` name. No variants/sizes — a
-// structural overlay like Popover; appearance is a closed set of styles
-// customizable only via the typed `sx` prop (merged last). Never accepts
-// className.
+// Ported from shadcn hover-card. Behavior/a11y from @base-ui/react/preview-card. Closed appearance via sx; no className.
 const styles = stylex.create({
   // `isolate z-50` on the positioner — matches shadcn/Base UI reference so the
   // hover card stacks above page content without capturing inherited stacking.
@@ -26,8 +20,7 @@ const styles = stylex.create({
   },
 
   // w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md
-  // outline-hidden origin-(--transform-origin) (canonical shadcn appearance,
-  // expressed in tokens).
+  // outline-hidden origin-(--transform-origin); canonical shadcn in tokens.
   content: {
     width: "16rem", // w-64
     borderRadius: borderRadius.m, // rounded-md

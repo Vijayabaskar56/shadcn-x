@@ -42,8 +42,20 @@ describe("DirectionProvider", () => {
     expect(probe).toHaveTextContent("rtl")
     // The subtree wrapper carries `dir` (scopes the flip, correct under SSR).
     expect(probe.closest("[dir='rtl']")).not.toBeNull()
-    // And <html> gets `dir` so portaled overlays — which mount outside this
-    // subtree — inherit the direction too (see the Dialog/Sheet cases below).
+    // Without `global`, the provider MUST NOT touch <html> — otherwise docs
+    // previews would flip the whole page. Portaled overlays opt in via `global`.
+    expect(document.documentElement).not.toHaveAttribute("dir")
+  })
+
+  it("sets <html dir> only when `global` is opted in (app-root provider)", () => {
+    render(
+      <DirectionProvider dir="rtl" global>
+        <DirectionProbe />
+      </DirectionProvider>
+    )
+
+    // With `global`, <html> gets `dir` so portaled overlays — which mount
+    // outside this subtree — inherit the direction too.
     expect(document.documentElement).toHaveAttribute("dir", "rtl")
   })
 
@@ -89,7 +101,7 @@ describe("DirectionProvider", () => {
 
   it("renders centered overlays under RTL", () => {
     render(
-      <DirectionProvider dir="rtl">
+      <DirectionProvider dir="rtl" global>
         <Dialog defaultOpen>
           <DialogTrigger>Open</DialogTrigger>
           <DialogContent>
@@ -102,15 +114,13 @@ describe("DirectionProvider", () => {
     const content = screen.getByRole("dialog")
     expect(content).toHaveAttribute("data-slot", "dialog-content")
     expect(screen.getByText("RTL dialog")).toBeInTheDocument()
-    // The dialog is portaled to <body>, outside the provider's subtree — it must
-    // still inherit RTL from an ancestor (<html dir="rtl">) so its logical
-    // properties resolve right-to-left.
+    // Dialog portaled to <body>, outside provider's subtree — must inherit RTL from ancestor <html dir="rtl">.
     expect(content.closest("[dir='rtl']")).not.toBeNull()
   })
 
   it("renders edge overlays under RTL", () => {
     render(
-      <DirectionProvider dir="rtl">
+      <DirectionProvider dir="rtl" global>
         <Sheet defaultOpen>
           <SheetTrigger>Open</SheetTrigger>
           <SheetContent side="right">

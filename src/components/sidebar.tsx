@@ -62,9 +62,8 @@ type SidebarContextProps = {
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
-// The active side is a prop of `Sidebar`, not the provider, so it is shared
-// with descendants (notably `SidebarRail`) through a dedicated context rather
-// than a distance selector.
+// Side's prop of `Sidebar`, not provider; shared with descendants via dedicated
+// context (not distance selector).
 const SidebarSideContext = React.createContext<SidebarSide>("left")
 
 function useSidebar() {
@@ -243,9 +242,8 @@ const styles = stylex.create({
     gap: spacing.s,
     padding: spacing.s,
   },
-  // SidebarContent wraps its children in <ScrollArea>; this wrapper only needs
-  // to establish the flex height chain (flex:1, minHeight:0) so the ScrollArea
-  // can fill the available height and scroll within it.
+  // SidebarContent wraps children in <ScrollArea>. Wrapper: flex:1, minHeight:0
+  // → ScrollArea fills available height and scrolls.
   content: {
     display: "flex",
     minHeight: 0,
@@ -397,11 +395,8 @@ const styles = stylex.create({
     cursor: "pointer",
   },
   menuActionHover: {
-    // On desktop the action is hidden until the row (menu-item) is hovered or
-    // focused, or the action itself is hovered/focused. The menu-item is the
-    // only marked ancestor in the sidebar, so a bare `when.ancestor` observes
-    // it. It's nested inside the media query so it wins over the `0` default at
-    // that width (bare `when.*` has lower specificity than a media query).
+    // Desktop: action hidden until row (menu-item) or action hovered/focused.
+    // Nested in media query to win over `0` default (when.* < media specificity).
     opacity: {
       default: 1,
       "@media (min-width: 768px)": {
@@ -941,7 +936,9 @@ function SidebarContent({ sx, children, ...props }: SidebarContentProps) {
       )}
       {...props}
     >
-      <ScrollArea sx={styles.contentScroll}>{children}</ScrollArea>
+      <ScrollArea sx={styles.contentScroll} scrollFade scrollbarGutter>
+        {children}
+      </ScrollArea>
     </Div>
   )
 }
@@ -1194,9 +1191,8 @@ function SidebarMenuSkeleton({
   sx,
   ...props
 }: SidebarMenuSkeletonProps) {
-  // Derive a stable 50–90% width from the instance id so the varied skeleton
-  // widths agree between the server and client renders (a fresh Math.random()
-  // per render would trip a hydration mismatch).
+  // Stable 50–90% width from instance id → varied skeleton widths match
+  // server/client renders (Math.random() per render → hydration mismatch).
   const id = React.useId()
   const width = React.useMemo(() => {
     let hash = 0

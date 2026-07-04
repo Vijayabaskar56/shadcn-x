@@ -10,18 +10,11 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// The single spacing knob (CSS `--spacing`); the arrow size and vertical
-// padding are multiples of it, so they re-scale with the spacing token —
-// matching Tailwind/shadcn sizing.
+// Single spacing knob; arrow size + vertical padding re-scale with `--spacing`
 const u = spacing["--spacing"]
 
-// Ported from shadcn's tooltip (Base UI flavor). Like Popover, this is a
-// structural overlay — no visual variants/sizes; appearance is a closed set of
-// styles customizable only via the typed `sx` prop (merged last). Behavior/a11y
-// (portal, anchor positioning, hover/focus delay, dismiss) come from
-// `@base-ui/react/tooltip`. The inverted surface (`bg-foreground text-background`)
-// matches shadcn: solid dark in light mode, solid light in dark mode, via the
-// `light-dark()` text/background tokens.
+// Ported from shadcn tooltip on Base UI. Structural overlay, no variants;
+// inverted surface via light-dark() text/background tokens.
 const styles = stylex.create({
   // `isolate z-50` on the positioner — matches shadcn/Base UI reference so the
   // tooltip stacks above page content without capturing inherited stacking.
@@ -48,10 +41,7 @@ const styles = stylex.create({
     transformOrigin: "var(--transform-origin)",
   },
 
-  // shadcn canonical arrow: size-2.5 rotate-45 rounded-[2px] bg-foreground. The
-  // CSS `rotate` property (not `transform`) is used so it composes with Base
-  // UI's inline positioning `transform` on the same element. Base UI positions
-  // and `aria-hidden`s the arrow; we only style its appearance.
+  // Arrow: size-2.5 rotate-45 rounded-[2px] bg-foreground; CSS `rotate` composes with Base UI `transform`
   arrow: {
     width: `calc(${u} * 2.5)`, // size-2.5 (10px)
     height: `calc(${u} * 2.5)`,
@@ -119,11 +109,8 @@ function TooltipContent({
   sx,
   ...props
 }: TooltipContentProps) {
-  // The Arrow is a child of the Positioner (Base UI's Floating UI floating
-  // element), not the Popup, so its absolute `arrowStyles` anchor to the
-  // positioned positioner and `children` flows through `...props` to the Popup
-  // untouched. It shares the Popup's inverted surface color, so they read as one
-  // shape.
+  // Arrow lives under Positioner (not Popup) so it anchors to positioned
+  // element; shares Popup's inverted surface so they read as one shape.
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner

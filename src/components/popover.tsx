@@ -15,10 +15,8 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// Ported from shadcn's popover (Base UI flavor). No variants/sizes — a
-// structural overlay like Dialog; appearance is a closed set of styles
-// customizable only via the typed `sx` prop (merged last). Behavior/a11y
-// (portal, positioning, focus) come from `@base-ui/react/popover`.
+// Structural overlay like Dialog; no variants — closed styles via typed `sx` prop.
+// Behavior/a11y from @base-ui/react/popover.
 const styles = stylex.create({
   // `isolate z-50` on the positioner — matches shadcn/Base UI reference so the
   // popover stacks above page content without capturing inherited stacking.

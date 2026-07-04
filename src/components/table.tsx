@@ -15,11 +15,8 @@ import {
 
 const u = spacing["--spacing"]
 
-// Ported from shadcn's table. shadcn leans on descendant selectors
-// ([&_tr:last-child]:border-0, [&_tr]:border-b); the on-system equivalent is
-// stylex.when.ancestor + a marker — the section (tbody/tfoot) carries the
-// marker, and TableRow reacts. The checkbox pseudo-rules ([&:has([role=checkbox])])
-// are omitted until a Checkbox primitive exists.
+// Ported from shadcn table; descendant selectors → stylex.when.ancestor +
+// marker on tbody/tfoot; TableRow reacts. Checkbox rules omitted (no Checkbox yet).
 const styles = stylex.create({
   table: {
     width: "100%", // w-full
@@ -46,10 +43,7 @@ const styles = stylex.create({
       default: null,
       ":hover": `color-mix(in oklch, ${colors["background-muted"]}, transparent 50%)`, // hover:bg-muted/50
     },
-    // border-b on every row, DROPPED on the last row of a body/footer section so
-    // the table doesn't end on a doubled line (shadcn's
-    // [&_tr:last-child]:border-0). The section carries a marker + data-slot; the
-    // row observes it via stylex.when.ancestor and zeroes its border when last.
+    // border-b on every row; last-row border zeroed via stylex.when.ancestor observing section marker
     borderBottomWidth: {
       default: 1,
       [stylex.when.ancestor('[data-slot="table-body"]')]: {
@@ -86,8 +80,7 @@ const styles = stylex.create({
   },
 })
 
-// Variable tags so the primitive that *defines* the on-system elements isn't
-// flagged by its own `no-raw-html` rule.
+// Variable tags so on-system host elements aren't flagged by `no-raw-html`
 const TableTag = "table" as const
 const HeaderTag = "thead" as const
 const BodyTag = "tbody" as const
@@ -115,9 +108,7 @@ export type TableCaptionProps = TableComponentProps<"caption">
 
 function Table({ sx, ...props }: TableProps) {
   return (
-    // shadcn wraps <table> in a relative, full-width, horizontally-scrollable
-    // container so wide tables pan instead of overflowing the page. ScrollArea
-    // provides the styled horizontal scroll surface.
+    // shadcn wraps <table> in horizontal-scroll container → ScrollArea serves this
     <Box as="div" width="full" position="relative" data-slot="table-container">
       <ScrollArea>
         <TableTag

@@ -18,10 +18,8 @@ import {
 // it, so they re-scale with the spacing token — matching Tailwind/shadcn sizing.
 const u = spacing["--spacing"]
 
-// Ported 1:1 from shadcn's canonical input. Behavior/a11y (incl. Field
-// integration + a typed `onValueChange`) come from Base UI's Input primitive;
-// each style maps a Tailwind class to a token (comments name the original
-// utility). (Textarea stays a native element — Base UI ships no textarea.)
+// Ported from shadcn input on Base UI Input. Each style maps Tailwind class
+// to a token. Textarea stays native (Base UI ships none).
 const styles = stylex.create({
   base: {
     display: "flex",
@@ -67,9 +65,7 @@ const styles = stylex.create({
     opacity: { default: 1, ":disabled": 0.5 },
     pointerEvents: { default: null, ":disabled": "none" },
   },
-  // aria-invalid:border-destructive + aria-invalid:ring-destructive/20. Self
-  // attribute selectors don't compile in StyleX, so the component reads
-  // aria-invalid and applies this conditionally (the attribute is still set).
+  // aria-invalid:border-destructive → StyleX drops self data-attr sel → read aria-invalid, apply conditionally
   invalid: {
     borderColor: colors.destructive,
     boxShadow: {
@@ -77,9 +73,7 @@ const styles = stylex.create({
       ":focus-visible": `${boxShadow.s}, ${focusRing.invalidRing}`,
     },
   },
-  // Hide the native up/down spinners Chrome/Safari render on <input type="number">
-  // (`appearance: textfield` covers Firefox; the ::-webkit-*-spin-button rules
-  // cover WebKit). Applied only when type="number" — a no-op on every other type.
+  // Hide native number spinners: appearance:textfield (Firefox) + ::-webkit-*-spin-button (WebKit)
   number: {
     appearance: "textfield",
     "::-webkit-inner-spin-button": {
@@ -91,9 +85,7 @@ const styles = stylex.create({
       margin: 0,
     },
   },
-  // <input type="file">: style the native file-picker button (shadcn's file:*
-  // utilities) so it isn't the browser-default chunky control — inline-flex,
-  // transparent, sized to match the field. Applied only when type="file".
+  // <input type="file">: style native file-picker button → inline-flex, transparent, field-sized
   file: {
     "::file-selector-button": {
       display: "inline-flex", // file:inline-flex
@@ -108,9 +100,7 @@ const styles = stylex.create({
   },
 })
 
-// Rendered via the Base UI Input primitive (a component identifier, not a raw
-// `<input>` tag) so this — the primitive that *defines* the on-system input —
-// isn't flagged by its own `no-raw-html` rule.
+// Rendered via Base UI Input primitive (not raw `<input>`) so `no-raw-html` doesn't flag it
 type InputProps = Omit<
   InputPrimitive.Props,
   "className" | "style" | "color"

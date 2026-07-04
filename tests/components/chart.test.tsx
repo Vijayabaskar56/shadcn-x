@@ -1,13 +1,11 @@
 import type { ComponentProps, ReactNode } from "react"
 
-import { render } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
-import { Line, LineChart } from "recharts"
 import * as stylex from "@stylexjs/stylex"
+import { render } from "@testing-library/react"
+import { Line, LineChart } from "recharts"
+import { describe, expect, it, vi } from "vitest"
 
-// jsdom has no layout, so Recharts' ResponsiveContainer measures 0x0 and never
-// renders its children. Replace it with a passthrough so the tooltip/legend
-// content (which reads ChartContainer's context) actually mounts.
+// jsdom has no layout → Recharts' ResponsiveContainer measures 0x0. Mock it so tooltip/legend content mounts.
 vi.mock("recharts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("recharts")>()
   return {
@@ -113,7 +111,10 @@ describe("ChartTooltipContent", () => {
   }
 
   it("renders nothing when inactive", () => {
-    const { container } = renderTooltip({ active: false, payload: tooltipPayload })
+    const { container } = renderTooltip({
+      active: false,
+      payload: tooltipPayload,
+    })
     expect(container.querySelector('[data-slot="chart-tooltip"]')).toBeNull()
   })
 
@@ -208,7 +209,12 @@ describe("ChartTooltipContent", () => {
 
 describe("ChartLegendContent", () => {
   const legendPayload = [
-    { value: "desktop", dataKey: "desktop", color: "rebeccapurple", type: "line" },
+    {
+      value: "desktop",
+      dataKey: "desktop",
+      color: "rebeccapurple",
+      type: "line",
+    },
   ]
 
   function renderLegend(props: Record<string, unknown>) {

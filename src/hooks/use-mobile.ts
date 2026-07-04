@@ -11,9 +11,7 @@ function getIsMobile() {
 }
 
 function useIsMobile() {
-  // Start from a stable value so the server render and the first client render
-  // agree (avoids a hydration mismatch on mobile viewports); the effect below
-  // corrects it right after mount.
+  // Start from stable value to avoid hydration mismatch; effect corrects after mount.
   const [isMobile, setIsMobile] = React.useState(false)
 
   React.useEffect(() => {

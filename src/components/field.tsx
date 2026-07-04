@@ -121,10 +121,8 @@ function FieldSet({
 }: React.ComponentPropsWithoutRef<"fieldset"> & {
   sx?: StyleXStyles
 }) {
-  // When disabled we both natively disable the fieldset AND carry the
-  // data-disabled="true" + stylex.defaultMarker() so a descendant Label's
-  // `stylex.when.ancestor('[data-disabled="true"]')` dim/pointer-events branches
-  // actually emit (marker + matching attribute are both required — see MEMORY).
+  // Native disabled + data-disabled="true" + defaultMarker() so descendant
+  // Label's when.ancestor branches emit (both required).
   return (
     <FieldSetTag
       data-slot="field-set"
@@ -188,10 +186,8 @@ function Field({
         ? styles.fieldResponsive
         : styles.fieldVertical
 
-  // The Field is a <div> (no native disabled), so disabling is styling-only:
-  // data-disabled="true" + stylex.defaultMarker() let a descendant Label's
-  // `stylex.when.ancestor('[data-disabled="true"]')` branches emit (matching
-  // shadcn's `group-data-[disabled=true]/field:opacity-50`).
+  // Field is <div> (no native disabled); data-disabled + defaultMarker() let
+  // descendant Label's when.ancestor branches emit (shadcn's opacity-50 pattern).
   return (
     <DivTag
       role="group"

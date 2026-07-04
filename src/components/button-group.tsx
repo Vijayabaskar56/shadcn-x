@@ -22,19 +22,16 @@ import { defineVariants } from "./variants"
 const u = spacing["--spacing"]
 
 const styles = stylex.create({
-  // Root container. The flush look (collapsed inner corners + shared borders)
-  // is NOT applied here via distance selectors — instead each on-system child
-  // (Button, ButtonGroupText) reacts to this container's data-orientation via
-  // stylex.when.ancestor and flattens its own adjacent edges. See `groupItem`.
+  // Flush look (collapsed corners + shared borders) via children reacting to
+  // data-orientation (when.ancestor) — not distance selectors. See `groupItem`.
   group: {
     display: "inline-flex",
     width: "fit-content",
     alignItems: "stretch",
   },
 
-  // ButtonGroupText — a non-interactive label/affordance that sits flush in the
-  // group (e.g. "1 of 10", a unit suffix). Mirrors shadcn's bg-muted bordered
-  // chip; tokens only.
+  // ButtonGroupText: non-interactive label/affordance (e.g. "1 of 10"). Mirrors
+  // shadcn's bg-muted bordered chip; tokens only.
   text: {
     display: "inline-flex",
     alignItems: "center",
@@ -51,10 +48,8 @@ const styles = stylex.create({
     borderRadius: borderRadius.l,
   },
 
-  // Focus-raise for the (non-focusable) text chip: lift it above neighbors when
-  // a focusable descendant is focused, so the ring isn't clipped. The edge math
-  // (radius flattening + inner-border collapse) is shared with Button — see
-  // `groupItemEdges` (imported).
+  // Focus-raise text chip: lift above neighbors when descendant focused → ring
+  // not clipped. Edge math shared with Button via groupItemEdges.
   groupFocus: {
     position: {
       default: null,
@@ -108,9 +103,8 @@ function ButtonGroup({ orientation, sx, ...props }: ButtonGroupProps) {
       data-slot="button-group"
       // data-orientation is what each child observes via stylex.when.ancestor.
       data-orientation={orientations.resolve(orientation)}
-      // The marker is REQUIRED: children observe the group via
-      // stylex.when.ancestor, which compiles to `.x-default-marker[...] *` — so
-      // the ancestor must carry both the marker class and data-orientation.
+      // Marker REQUIRED: when.ancestor compiles to `.x-default-marker[...] *` →
+      // ancestor must carry marker class + data-orientation.
       sx={[styles.group, orientations(orientation), stylex.defaultMarker(), sx]}
       {...props}
     />
@@ -121,10 +115,8 @@ type ButtonGroupTextProps = useRender.ComponentProps<"div"> & {
   sx?: StyleXStyles
 }
 
-// Polymorphic via Base UI's `render` prop: by default a <div>, but `render={
-// <label/>}` (or any element) re-targets the host while keeping the styling,
-// data-slot, and group-reactive edges. mergeProps composes our className with
-// the consumer's render element.
+// Polymorphic via `render` prop: default <div>, `render={<label/>}` retargets
+// host while keeping styling/data-slot/group edges. mergeProps composes className.
 function ButtonGroupText({ sx, render, ...props }: ButtonGroupTextProps) {
   const ownProps = {
     "data-slot": "button-group-text",

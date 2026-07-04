@@ -8,10 +8,8 @@ import { mdxComponents } from "@/components/docs/mdx-components"
 
 import { colors } from "../../styles/tokens.stylex"
 
-// Container styling for the docs prose region. Replaces Tailwind's `prose`
-// classes. The per-element typography lives in `mdxComponents`; the global
-// `[data-prose]` rules in `globals.css` still provide the heading-anchor reset,
-// scroll-margin, and shiki/callout chrome.
+// Docs prose container styling (replaces Tailwind prose). Per-element
+// typography in mdxComponents; [data-prose] rules in globals.css own chrome.
 const styles = stylex.create({
   prose: {
     maxWidth: "none",

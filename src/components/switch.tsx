@@ -105,10 +105,8 @@ function Switch({
   onCheckedChange,
   ...props
 }: SwitchProps) {
-  // Base UI's Switch is uncontrolled by default (`defaultChecked`, no `checked`),
-  // and StyleX can't key the on-state off the self `[data-checked]` attribute
-  // (silently dropped). So track the live state in JS — controlled `checked`
-  // wins when provided, otherwise the local mirror updated via onCheckedChange.
+  // Switch uncontrolled by default; StyleX drops self `[data-checked]`.
+  // Track state in JS — controlled `checked` wins, else local mirror via onCheckedChange.
   const [internal, setInternal] = useState(defaultChecked ?? false)
   const isChecked = checked ?? internal
 

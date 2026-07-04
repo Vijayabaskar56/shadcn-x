@@ -292,19 +292,16 @@ const styles = stylex.create({
     borderColor: colors["border-primary"],
   },
 
-  // Dynamic styles for runtime numeric/string values. Keeping these inside the
-  // StyleX pipeline (a CSS-var atomic class + the var set inline) means `sx`
-  // (merged last) can still override them — the previous raw inline `style`
-  // bypass meant the props always beat `sx`, violating the "sx wins" contract.
+  // Dynamic numeric/string values via StyleX pipeline (CSS-var atomic class +
+  // var inline) so `sx` merged last can still override — preserves "sx wins".
   flexGrow: (value) => ({ flexGrow: value }),
   flexShrink: (value) => ({ flexShrink: value }),
   order: (value) => ({ order: value }),
   minHeight: (value) => ({ minHeight: value }),
 })
 
-// Derived from the element-coverage table (single source of truth for which
-// tags Box still renders and why — e.g. table/th/td/hr are MDX prose infra
-// only). To allow or retire a tag, edit `src/element-coverage.ts`.
+// Derived from element-coverage table; edit src/element-coverage.ts to
+// allow/retire a tag (table/th/td/hr are MDX prose infra only).
 type AllowedElement = BoxAllowedTag
 
 type BoxProps<E extends AllowedElement = "div"> = {

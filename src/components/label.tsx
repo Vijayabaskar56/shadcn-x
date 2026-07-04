@@ -4,9 +4,8 @@ import * as stylex from "@stylexjs/stylex"
 
 import { colors, fontSize, fontWeight, spacing } from "../styles/tokens.stylex"
 
-// shadcn's Base UI label is a standalone styled `<label>` (Base UI's own
-// Field.Label couples to a Field.Root). We match that: a plain label carrying
-// `data-slot="label"` for targeting, and on-system disabled reactivity.
+// Standalone `<label>` (Base UI Field.Label couples to Root). Plain label with
+// data-slot="label" + on-system disabled reactivity.
 const styles = stylex.create({
   base: {
     display: "inline-flex",
@@ -17,20 +16,15 @@ const styles = stylex.create({
     lineHeight: 1, // leading-none
     color: colors["text-primary"],
     userSelect: "none",
-    // shadcn dims + disables the label in two situations:
-    //  1. inside a disabled field group (`group-data-[disabled=true]`) — react
-    //     to a MARKED ancestor carrying data-disabled="true";
-    //  2. next to a disabled peer control (`peer-disabled`) — react to a MARKED
-    //     preceding sibling's native :disabled (Input/Textarea carry the marker).
-    // No distance selectors in either case.
+    // shadcn: dims label in 2 situations: (1) inside disabled field group →
+    // marked ancestor data-disabled; (2) next to disabled peer → marked sibling :disabled.
     opacity: {
       default: 1,
       [stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
       [stylex.when.siblingBefore(":disabled")]: 0.5,
     },
-    // shadcn only kills pointer events inside a disabled group
-    // (`group-data-[disabled=true]:pointer-events-none`); the peer-disabled case
-    // keeps pointer events so the not-allowed cursor can show.
+    // shadcn kills pointer events only inside disabled group
+    // (`group-data-[disabled=true]:pointer-events-none`); peer keeps them for cursor.
     pointerEvents: {
       default: null,
       [stylex.when.ancestor('[data-disabled="true"]')]: "none",

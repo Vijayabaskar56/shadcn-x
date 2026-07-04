@@ -22,13 +22,8 @@ import { defineVariants } from "./variants"
 // multiples of it, so they re-scale with the spacing token — matching shadcn.
 const u = spacing["--spacing"]
 
-// vaul's Root takes `direction` ("top" | "bottom" | "left" | "right"); it
-// reflects it onto the content DOM as `data-vaul-drawer-direction`. StyleX
-// can't react to a self attribute selector (it silently drops those keys), so
-// direction-aware positioning is selected in JS. The Root reads `direction`
-// and publishes it through context; Content/Header/Handle consume it. This
-// keeps the public API identical to shadcn (direction on Root) and stays
-// on-system (JS conditional, not a distance/attribute selector).
+// vaul Root publishes direction via context → Content/Header/Handle consume JS
+// conditional positioning (StyleX drops self attribute selectors).
 const styles = stylex.create({
   // Mirrors DialogOverlay: a fixed, isolated scrim derived from the text
   // token (shadcn's bg-black/50, expressed through our themable surface).
@@ -155,10 +150,8 @@ type Direction = VariantKey<typeof directions>
 
 const DrawerContext = createContext<Direction>(directions.resolve())
 
-// vaul's DialogProps is `Base & (WithFadeFromProps | WithoutFadeFromProps)` — a
-// discriminated union keyed on `fadeFromIndex`. A plain Omit collapses that
-// union, so the result no longer assigns back to Root. Distribute the Omit
-// across the union branches instead.
+// DialogProps is discriminated union on fadeFromIndex; distribute Omit across
+// branches so result assigns back to Root.
 type DistributiveOmit<T, K extends keyof any> = T extends any
   ? Omit<T, K>
   : never

@@ -1,9 +1,7 @@
 import { docs } from "collections/server"
 import { loader } from "fumadocs-core/source"
 
-// Server-only (`collections/server` pulls node:path): accessed exclusively from
-// the docs route's createServerFn handler, so it never reaches the client
-// bundle. Slugs stay flat filenames — `content/docs/button.mdx` -> ["button"].
+// Server-only: accessed from docs route's createServerFn, never in client bundle. Flat filenames.
 export const source = loader({
   source: docs.toFumadocsSource(),
   baseUrl: "/docs",

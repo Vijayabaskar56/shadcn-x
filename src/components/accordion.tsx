@@ -19,10 +19,8 @@ import {
 
 const HeaderTag = AccordionPrimitive.Header
 const Inner = "div" as const
-// The trigger's <button> is rendered via the Trigger `render` prop so we can
-// read Base UI's exposed `open` state (a self state StyleX can't key on). A
-// variable tag keeps the `no-raw-html` rule from flagging it — the same
-// technique navigation-menu uses.
+// Trigger's `render` prop exposes `state.open` (StyleX can't key on self state).
+// Variable tag avoids no-raw-html flag — same technique as navigation-menu.
 const ButtonTag = "button" as const
 const u = spacing["--spacing"]
 
@@ -74,10 +72,8 @@ const styles = stylex.create({
     transitionDuration: duration.fast,
     transform: "none",
   },
-  // The trigger's own expanded state is a self condition StyleX can't key off
-  // (aria-/data-attribute self keys and when.ancestor keyed on aria-expanded
-  // emit no reliable CSS). We read Base UI's exposed `state.open` from the
-  // Trigger `render` prop and apply the rotation as a JS conditional instead.
+  // Trigger's `state.open` from `render` prop → JS conditional rotation
+  // (self aria-/data-attribute & when.ancestor emit no reliable CSS).
   triggerIconOpen: {
     transform: "rotate(180deg)",
   },
@@ -139,10 +135,8 @@ function AccordionTrigger({ children, sx, ...props }: AccordionTriggerProps) {
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         {...props}
-        // `render` as a function reads Base UI's exposed `open` state — the
-        // sanctioned way to style a self state StyleX can't key on. We spread
-        // the primitive's resolved props (ref, handlers, aria, data-*) and the
-        // styles onto the button, then rotate the chevron from `state.open`.
+        // `render` fn reads `state.open`; spread primitive's resolved props +
+        // styles onto button, rotate chevron from `state.open`.
         render={(triggerProps, state) => (
           <ButtonTag {...stylex.props(styles.trigger, sx)} {...triggerProps}>
             {children}

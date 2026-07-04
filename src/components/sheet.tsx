@@ -19,12 +19,8 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// A Sheet is a slide-in Dialog — it reuses @base-ui/react/dialog for behavior
-// (portal, focus trap, scroll lock, escape-to-close) and only diverges from
-// Dialog in how the Popup is positioned: pinned to one screen edge via the
-// `side` prop instead of centered. The Portal/Backdrop/Popup/Close wiring
-// mirrors Dialog.tsx exactly; `side` drives both positioning and the edge that
-// receives a divider border.
+// Sheet: slide-in Dialog reusing @base-ui/react/dialog behavior, Popup pinned
+// to screen edge via `side` prop instead of centered; same Portal/Backdrop/etc.
 const styles = stylex.create({
   overlay: {
     position: "fixed",
@@ -34,10 +30,8 @@ const styles = stylex.create({
     backgroundColor: `color-mix(in oklch, ${colors["text-primary"]}, transparent 50%)`,
   },
 
-  // Shared content surface: a fixed, full-flex column. The `side` styles below
-  // pin it to an edge and add that edge's divider border. Sizing follows shadcn:
-  // left/right are w-3/4 capped at max-w-sm (24rem); top/bottom are full-width,
-  // height auto. Physical edges match shadcn's physical `side` semantics.
+  // Fixed full-flex column pinned to edge via `side` styles; left/right 75% max-w-sm,
+  // top/bottom full-width; physical edges match shadcn `side` semantics.
   content: {
     position: "fixed",
     zIndex: 50,

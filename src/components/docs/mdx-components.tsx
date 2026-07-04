@@ -35,9 +35,8 @@ type AnchorProps = Omit<Without<"a">, "className" | "style">
 type HeadingProps = Without<"h1">
 type CodeProps = Without<"code">
 
-// Literal values are fine here: this is docs/library infrastructure, and `sx`
-// is the sanctioned escape valve for anything the Box token props don't expose
-// (line-height, letter-spacing, em-based padding, list markers, anchors, etc.).
+// Literal values OK in docs infra; `sx` is sanctioned escape valve for
+// line-height, letter-spacing, em-based padding, list markers, anchors, etc.
 const styles = stylex.create({
   inlineCode: {
     paddingInline: "0.4em",
@@ -100,9 +99,7 @@ const styles = stylex.create({
     borderInlineStartStyle: "solid",
     fontStyle: "italic",
   },
-  // Keep `pre` minimal: shiki emits `<pre class="shiki">` and globals.css owns
-  // its background/border/padding/radius. We only add vertical rhythm so we
-  // don't fight shiki's own styling.
+  // Keep `pre` minimal: shiki + globals.css own its chrome; only add vertical rhythm.
   pre: {
     marginTop: "1.5rem",
     marginBottom: "1.5rem",
@@ -126,6 +123,9 @@ const styles = stylex.create({
     paddingBottom: "0.5rem",
     textAlign: "start",
     fontWeight: 600,
+    // Keep cells on one line → wide content overflows into ScrollArea horizontal
+    // scroll instead of wrapping or clipping.
+    whiteSpace: "nowrap",
   },
   td: {
     borderWidth: "1px",
@@ -134,6 +134,7 @@ const styles = stylex.create({
     paddingInline: "1rem",
     paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
+    whiteSpace: "nowrap",
   },
   hr: {
     // Separator already draws the 1px rule via its own base styles; only
@@ -150,9 +151,7 @@ const styles = stylex.create({
 })
 
 function MdxAnchor({ href = "", ...props }: AnchorProps) {
-  // Internal doc links go through the router (SPA navigation + intent
-  // preload); hash anchors and external URLs use Link's plain-anchor form.
-  // Both render the same on-system `Link` styling (default variant).
+  // Internal doc links → router (SPA nav + preload); hash/external → Link's plain-anchor form.
   if (href.startsWith("/docs/")) {
     return (
       <Link
@@ -219,7 +218,7 @@ export const mdxComponents = {
   pre: (props: Without<"pre">) => <Box as="pre" sx={styles.pre} {...props} />,
   table: (props: Without<"table">) => (
     <Box as="div" sx={styles.tableWrap}>
-      <ScrollArea>
+      <ScrollArea scrollFade>
         <Box as="table" sx={styles.table} {...props} />
       </ScrollArea>
     </Box>

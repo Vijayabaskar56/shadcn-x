@@ -33,13 +33,7 @@ export const noManualOverflow = defineRule({
   },
   createOnce(context: Context) {
     return {
-      // Catches overflow properties in style objects:
-      //
-      //   1. stylex.create({ root: { overflow: "auto" } })
-      //   2. <Foo sx={{ overflow: "auto" }}>   (inline sx prop, any component)
-      //
-      // Does NOT fire on plain object literals (e.g. `const config = {...}`)
-      // or on variant definitions (defineVariants(stylex.create({...}))).
+      // Catches overflow in stylex.create({overflow:"auto"}) and <Foo sx={{overflow:"auto"}}>. Skips plain object literals and variant definitions.
       Property(node: any) {
         const property = getPropertyName(node)
         if (property === null) return
@@ -67,13 +61,7 @@ export const noManualOverflow = defineRule({
         })
       },
 
-      // Catches shorthand props on ANY JSX element:
-      //
-      //   <Box overflow="auto">
-      //   <DropdownMenu overflowY="scroll">
-      //   <NewComponent overflowX="auto">
-      //
-      // Not Box-specific — fires on every component, present or future.
+      // Catches <Box overflow="auto">, <DropdownMenu overflowY="scroll"> on ANY component — not Box-specific.
       JSXAttribute(node: any) {
         const name = node.name
         if (name?.type !== "JSXIdentifier") return
@@ -160,9 +148,7 @@ function isInsideJsxAttribute(node: any): boolean {
   )
 }
 
-// True if the node sits inside `defineVariants(stylex.create({...}))`. The
-// stylex.create call is an argument to defineVariants, so we check whether the
-// stylex.create ancestor's parent is a defineVariants call.
+// True inside `defineVariants(stylex.create({...}))`: checks if parent of stylex.create ancestor is defineVariants.
 function isInsideVariantDefinition(node: any): boolean {
   const createAncestor = findAncestor(
     node,

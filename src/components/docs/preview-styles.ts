@@ -1,9 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 
-// Live-preview styles imported by content/docs/*.mdx. StyleX must be compiled
-// by the unplugin, which only transforms JS/TS modules — `stylex.create` calls
-// written inline in an .mdx file survive to runtime and throw. Docs that need
-// bespoke preview sizing import their styles from here instead.
+// stylex.create in .mdx survives to runtime (unplugin only transforms JS/TS);
+// docs needing bespoke preview sizing import styles from here.
 
 /** content/docs/resizable.mdx */
 export const resizablePreviewStyles = stylex.create({

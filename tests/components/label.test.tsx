@@ -37,9 +37,7 @@ describe("Label", () => {
   })
 
   it("renders next to a disabled peer input (peer-disabled wiring)", () => {
-    // The dim itself is a runtime CSS cascade (jsdom can't compute it), but this
-    // locks the peer scenario: a marked, disabled <Input> sibling renders
-    // alongside the <Label> without error, and both keep their data-slots.
+    // Dim is runtime CSS (jsdom can't compute) — this locks peer scenario: disabled <Input> + <Label> render without error, keep data-slots.
     render(
       <>
         <Input id="x" disabled />

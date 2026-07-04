@@ -62,9 +62,7 @@ describe("Select", () => {
       "data-slot",
       "select-value"
     )
-    // The truncation/flex styling lives on the SelectValue element itself
-    // (matching shadcn's *:data-[slot=select-value]:… rules), so it carries a
-    // StyleX class rather than relying on a when.descendant selector.
+    // Truncation/flex on SelectValue itself (matching shadcn's data-slot rules) → carries StyleX class, not when.descendant.
     expect(screen.getByTestId("value").className).not.toBe("")
   })
 

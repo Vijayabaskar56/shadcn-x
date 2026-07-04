@@ -15,9 +15,7 @@ import { mdxComponents } from "@/components/docs/mdx-components"
 
 const MdxA = mdxComponents.a
 
-// Internal doc links resolve through the router, so those cases need a
-// throwaway memory router that knows the `/docs/$` route. Hash and external
-// links use Link's plain-anchor form and need no router at all.
+// Internal doc links need a memory router with `/docs/$` route; hash/external links use plain-anchor form with no router.
 function renderWithDocsRouter(ui: ReactNode) {
   const rootRoute = createRootRoute({ component: () => <Outlet /> })
   const indexRoute = createRoute({

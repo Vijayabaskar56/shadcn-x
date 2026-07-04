@@ -82,6 +82,7 @@ export default defineConfig({
     // exercising primitives' host props) — kept at "warn" via the tests override.
     "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "warn",
+    "shadcn-x/no-long-comment-runs": "error",
     "shadcn-x/no-physical-stylex-properties": "warn",
     "shadcn-x/no-raw-design-values": "warn",
     // no-stylex-atoms is prevention, not migration — we never imported atoms, so

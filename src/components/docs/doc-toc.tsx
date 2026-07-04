@@ -2,7 +2,7 @@ import type { TOCItemType } from "fumadocs-core/toc"
 import type { ReactNode } from "react"
 
 import * as stylex from "@stylexjs/stylex"
-import { isValidElement } from "react"
+import { isValidElement, useEffect, useMemo, useState } from "react"
 
 import type { TocEntry } from "@/lib/markdown"
 
@@ -36,10 +36,57 @@ const styles = stylex.create({
     transitionProperty: "color",
     transitionDuration: "150ms",
   },
+  linkActive: {
+    // The heading currently scrolled into the viewport's top band. Full-strength
+    // text plus medium weight distinguishes it from the muted inactive links.
+    color: colors["text-primary"],
+    fontWeight: fontWeight.medium,
+  },
   linkNested: {
     paddingInlineStart: spacing.m,
   },
 })
+
+/**
+ * Track which heading is currently scrolled into the viewport's top band and
+ * return its id, so the TOC can highlight the reader's place on the page.
+ *
+ * The `rootMargin` shrinks the observer's viewport to a thin band just under
+ * the sticky header: a heading counts as "active" from when its top crosses
+ * below the header until the next heading takes its place. The first still-in-
+ * band heading (in document order) wins; when the band is empty — between two
+ * far-apart headings — the last active id is kept.
+ */
+function useActiveHeading(ids: Array<string>): string | undefined {
+  const [activeId, setActiveId] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (ids.length === 0) return
+
+    const visible = new Set<string>()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target.id)
+          else visible.delete(entry.target.id)
+        }
+        const firstVisible = ids.find((id) => visible.has(id))
+        if (firstVisible) setActiveId(firstVisible)
+      },
+      // Top edge below header; only top-third headings qualify as active.
+      // IntersectionObserver rootMargin accepts px/%, not rem.
+      { rootMargin: "-64px 0px -66% 0px", threshold: 0 }
+    )
+
+    for (const id of ids) {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    }
+    return () => observer.disconnect()
+  }, [ids])
+
+  return activeId
+}
 
 /** Flatten a fumadocs TOC title (heading JSX incl. autolink anchors) to text. */
 function nodeToText(node: ReactNode): string {
@@ -67,7 +114,10 @@ function toTocEntries(toc: Array<TOCItemType>): Array<TocEntry> {
 }
 
 export function DocToc({ toc }: { toc: Array<TOCItemType> }) {
-  const entries = toTocEntries(toc)
+  const entries = useMemo(() => toTocEntries(toc), [toc])
+  const ids = useMemo(() => entries.map((entry) => entry.id), [entries])
+  const activeId = useActiveHeading(ids)
+
   if (entries.length === 0) return null
 
   return (
@@ -88,7 +138,12 @@ export function DocToc({ toc }: { toc: Array<TOCItemType> }) {
             <Link
               href={`#${entry.id}`}
               variant="subtle"
-              sx={[styles.link, entry.depth === 3 && styles.linkNested]}
+              aria-current={entry.id === activeId ? "location" : undefined}
+              sx={[
+                styles.link,
+                entry.depth === 3 && styles.linkNested,
+                entry.id === activeId && styles.linkActive,
+              ]}
             >
               {entry.value}
             </Link>

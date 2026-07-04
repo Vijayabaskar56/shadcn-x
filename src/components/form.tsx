@@ -112,9 +112,8 @@ function FormItem({ children, sx, ...props }: FormItemProps) {
 
 // ─── FormLabel ───────────────────────────────────────────────────────────────
 
-// FormLabel renders the on-system `Label` primitive (which already carries the
-// base typography + disabled reactivity via markers — matching shadcn, whose
-// FormLabel renders `<Label>`). We layer only the error color on top.
+// FormLabel renders on-system Label (already has typography + disabled
+// reactivity via markers — matching shadcn). Layers error color only.
 const formLabelStyles = stylex.create({
   error: {
     color: colors.destructive,
@@ -150,17 +149,13 @@ type FormControlProps = {
   "className" | "style" | "color" | "children"
 >
 
-// Mirrors shadcn's `Slot.Root`: rather than wrapping the control in an extra
-// element, we merge the accessibility wiring (`id`, `aria-describedby`,
-// `aria-invalid`) directly into the single child via Base UI's `useRender` +
-// `mergeProps`. This keeps `htmlFor`/`id` pointing at the real control so the
-// FormLabel actually focuses it.
+// Mirrors shadcn Slot.Root: merge wiring (id, aria-describedby, aria-invalid)
+// into child via useRender + mergeProps (no extra wrapper).
 function FormControl({ children, ...props }: FormControlProps) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
-  // Extracted to a variable (not inlined) so TS's excess-property check on object
-  // literals doesn't reject the `data-slot` key — matching the mergeProps pattern
-  // in badge/breadcrumb/item/sidebar.
+  // Extracted to variable (not inlined) → TS excess-property check doesn't reject
+  // data-slot key. Matches mergeProps pattern in badge/breadcrumb/item/sidebar.
   const ownProps = {
     "data-slot": "form-control",
     id: formItemId,

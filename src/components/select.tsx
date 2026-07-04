@@ -65,11 +65,8 @@ const styles = stylex.create({
   triggerSizeSm: {
     height: `calc(${u} * 8)`,
   },
-  // shadcn applies *:data-[slot=select-value]:{line-clamp-1,flex,items-center,gap-2}
-  // — i.e. to the SelectValue element itself, not the trigger. Styling it here
-  // directly (rather than via when.descendant on the trigger) is both correct and
-  // marker-free: a when.descendant would require SelectValue to carry
-  // defaultMarker() to emit any CSS at all.
+  // Style SelectValue directly (not via when.descendant on trigger) —
+  // marker-free; when.descendant would need SelectValue to carry defaultMarker().
   selectValue: {
     overflow: "hidden",
     textOverflow: "ellipsis",

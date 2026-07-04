@@ -18,10 +18,7 @@ const sx = stylex.create({
   custom: { opacity: 0.5 },
 })
 
-// Link is a TanStack Router LinkComponent — it needs router context to resolve
-// `to` into an href/onClick. Render it as the index route's component inside a
-// throwaway memory router (initial entry "/"). TanStack resolves the match
-// async, so callers must `await screen.findByText(...)`.
+// Link needs router context; render as index route component inside throwaway memory router. TanStack resolves match async → use `screen.findByText(...)`.
 function renderWithRouter(ui: ReactNode) {
   const rootRoute = createRootRoute({ component: () => <Outlet /> })
   const indexRoute = createRoute({
@@ -78,9 +75,7 @@ describe("Link", async () => {
     expect((await screen.findByText("Docs")).className).not.toBe("")
   })
 
-  // The plain-anchor form (`href` instead of `to`): external URLs, in-page
-  // hash anchors, mailto. It bypasses the router entirely, so it renders
-  // without router context — which these tests prove by not providing one.
+  // Plain-anchor form (`href`): external URLs, hash anchors, mailto. Bypasses router → renders without router context.
   describe("plain-anchor form (href)", () => {
     it("renders an external URL as a styled anchor without router context", () => {
       render(<Link href="https://base-ui.com">Base UI</Link>)

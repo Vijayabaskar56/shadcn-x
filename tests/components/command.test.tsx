@@ -20,10 +20,7 @@ const sx = stylex.create({
   custom: { opacity: 0.5 },
 })
 
-// NOTE: these tests exercise the shadcn-x Command (built on `cmdk`). If `cmdk`
-// is not installed this file fails at import time — that is expected in the
-// isolated-agent phase; the orchestrator installs `cmdk` centrally before the
-// final verify run.
+// NOTE: these tests exercise shadcn-x Command (built on `cmdk`). If `cmdk` not installed, this file fails at import — expected in isolated-agent phase.
 describe("Command", () => {
   it("renders the root with data-slot", () => {
     render(
@@ -219,10 +216,7 @@ describe("Command", () => {
   })
 
   it("flips the dialog horizontal transform for RTL via useDirection", () => {
-    // `when.ancestor('[dir="rtl"]')` can't emit usable CSS here (the marker would
-    // have to live on <html>, which we don't render), so direction is resolved in
-    // JS: the RTL and LTR renders must land on different transform styles, which
-    // StyleX materializes as different classNames on the dialog content.
+    // `when.ancestor('[dir="rtl"]')` can't emit usable CSS (no `<html>` marker), so direction resolved in JS → different classNames on dialog content.
     const { unmount } = render(
       <DirectionProvider dir="ltr">
         <CommandDialog defaultOpen>

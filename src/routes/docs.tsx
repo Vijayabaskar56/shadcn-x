@@ -13,17 +13,22 @@ export const Route = createFileRoute("/docs")({ component: DocsLayout })
 
 const styles = stylex.create({
   container: {
-    marginInline: "auto",
     width: "100%",
-    maxWidth: "80rem",
-    height: "100svh",
+    minHeight: "100svh",
     display: "flex",
     flexDirection: "column",
-    overflow: "hidden",
   },
+  // Sticky header: stays pinned to the top while the page scrolls globally.
   header: {
-    flexShrink: 0,
+    position: "sticky",
+    top: 0,
     height: "3.5rem",
+    flexShrink: 0,
+    // Match the page background so scrolled content disappears under it
+    // cleanly instead of bleeding through.
+    backgroundColor: colors["background-primary"],
+    // Sticky header needs z-index: later-in-DOM content paints over it at `z-index: auto`.
+    zIndex: 50,
   },
   separator: {
     marginInline: "0.5rem",
@@ -37,12 +42,16 @@ const styles = stylex.create({
     flex: "1",
     gap: "2xl",
     paddingY: "2xl",
-    minHeight: 0,
+    alignItems: "flex-start",
   },
   sidebar: {
     // The docs sidebar should blend with the page — override the Sidebar's
     // default `background-card` to match the page background.
     backgroundColor: colors["background-primary"],
+    // Stick under header, fill remaining viewport: sidebar scrolls independently.
+    position: "sticky",
+    top: "3.5rem",
+    height: "calc(100svh - 3.5rem)",
   },
   main: {
     minWidth: 0,

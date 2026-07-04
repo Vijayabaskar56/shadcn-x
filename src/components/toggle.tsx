@@ -130,10 +130,8 @@ function Toggle({
   onPressedChange,
   ...props
 }: ToggleProps) {
-  // Base UI's Toggle is uncontrolled by default (`defaultPressed`, no `pressed`),
-  // and StyleX can't key the pressed state off the self `[data-pressed]` attribute
-  // (silently dropped). Track the live state in JS — controlled `pressed` wins
-  // when provided, otherwise the local mirror updated via onPressedChange.
+  // Toggle uncontrolled by default; StyleX drops self `[data-pressed]`.
+  // Track state in JS — controlled `pressed` wins, else local mirror via onPressedChange.
   const [internal, setInternal] = useState(defaultPressed ?? false)
   const isPressed = pressed ?? internal
 

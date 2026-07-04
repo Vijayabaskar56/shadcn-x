@@ -17,13 +17,8 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// Ported from shadcn's menubar. Behavior/a11y — a horizontal group of menus
-// (roving focus between triggers, positioning, submenu, portal) — comes from
-// Base UI's `@base-ui/react/menubar` (the container) + `@base-ui/react/menu`
-// (each menu and its parts). Appearance comes from StyleX tokens via a closed
-// prop surface (`inset`/`variant`/`sx`). No `className`/`cn`/Tailwind; shared
-// item/separator/label/shortcut styling mirrors the context-menu port so the
-// two menus read as one system.
+// Ported from shadcn menubar on Base UI menubar + menu. Closed prop surface
+// (inset/variant/sx). Shared item styling mirrors context-menu for consistency.
 
 const u = spacing["--spacing"]
 
@@ -44,12 +39,8 @@ const styles = stylex.create({
     boxShadow: boxShadow.s, // shadow-xs
   },
 
-  // Trigger — a menuitem button that opens its menu (shadcn: flex items-center
-  // rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none
-  // focus:bg-accent ...). Hover surface = background-muted, the same hover
-  // token the items use, so the bar and its menus stay consistent. The open
-  // state is reflected by Base UI's aria-expanded; self attribute selectors
-  // don't compile in StyleX, so hover carries the visible feedback here.
+  // Trigger menuitem: flex items-center rounded-sm px-2 py-1 text-sm font-medium;
+  // hover = background-muted (matches items). Self data-attr sel drop → hover-only.
   trigger: {
     display: "flex",
     alignItems: "center",
@@ -74,9 +65,7 @@ const styles = stylex.create({
     outline: "none",
   },
 
-  // Content / SubContent popup (shadcn: z-50 min-w-[12rem] rounded-md border
-  // bg-popover p-1 text-popover-foreground shadow-md). The menubar content is
-  // wider than the context menu's 8rem min-width (shadcn uses min-w-[12rem]).
+  // Content popup: z-50 min-w-[12rem] rounded-md border bg-popover p-1 shadow-md
   content: {
     position: "relative",
     maxHeight: "var(--available-height)",
@@ -94,10 +83,7 @@ const styles = stylex.create({
     outline: "none",
   },
 
-  // Shared menu item (shadcn: relative flex items-center gap-2 rounded-sm px-2
-  // py-1.5 text-sm outline-hidden select-none focus:bg-accent
-  // focus:text-accent-foreground). Hover surface = background-muted (the same
-  // hover token the context-menu items use, so the two menus stay consistent).
+  // Shared menu item: relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm; hover=background-muted
   item: {
     display: "flex",
     position: "relative",
@@ -118,9 +104,7 @@ const styles = stylex.create({
     opacity: { default: 1, ":disabled": 0.5 },
     pointerEvents: { default: null, ":disabled": "none" },
   },
-  // data-[inset]:pl-8 — self attribute selectors don't compile in StyleX, so
-  // `inset` is applied conditionally here (the data-inset attr is still set for
-  // consumers/devtools/tests).
+  // data-[inset]:pl-8 → StyleX drops self data-attr sel → `inset` applied conditionally
   itemInset: {
     paddingInlineStart: `calc(${u} * 8)`, // pl-8
   },
@@ -208,9 +192,8 @@ const styles = stylex.create({
   },
 })
 
-// Variable tag so the Shortcut primitive (a plain <span>, no Base UI
-// counterpart) isn't flagged by its own `no-raw-html` rule — the same technique
-// Field/Textarea/Label/context-menu use internally.
+// SpanTag so Shortcut (<span>) isn't flagged by `no-raw-html`;
+// same technique Field/Textarea/Label/context-menu use.
 const SpanTag = "span" as const
 
 type MenubarProps = Omit<MenubarPrimitive.Props, "className" | "style"> & {
@@ -256,10 +239,7 @@ function MenubarTrigger({ sx, ...props }: MenubarTriggerProps) {
   )
 }
 
-// Content + SubContent share the Portal > Positioner > Popup shell. The menubar
-// content drops below its trigger (shadcn defaults: align="start",
-// alignOffset=-4, sideOffset=8); submenus open to the side (side="right"),
-// matching the context-menu port.
+// Content + SubContent share Portal > Positioner > Popup; root below trigger (alignOffset=-4), submenus side
 type MenubarContentProps = Omit<
   MenuPrimitive.Popup.Props,
   "className" | "style"

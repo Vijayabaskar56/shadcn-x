@@ -2,12 +2,7 @@ import type { Context } from "@oxlint/plugins"
 
 import { defineRule } from "@oxlint/plugins"
 
-// Default banned host elements → the shadcn-x primitive that covers them,
-// derived from the single source of truth for element coverage (ADR-0003).
-// The list is curated, not exhaustive: elements with no primitive yet (e.g.
-// `form`, whose react-hook-form `Form` renders no DOM) are intentionally
-// absent and stay allowed until their primitive lands. Curation notes live
-// with the table in `src/element-coverage.ts`.
+// Default banned host elements from element-coverage.ts (ADR-0003). Curated: elements without a primitive stay allowed.
 import { DEFAULT_ELEMENTS } from "../../element-coverage.ts"
 import { perFileOption } from "../rule-kit.ts"
 

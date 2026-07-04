@@ -7,11 +7,8 @@ import type { VariantKey } from "./variants"
 import { borderRadius } from "../styles/tokens.stylex"
 import { defineVariants } from "./variants"
 
-// shadcn-x native — neither shadcn nor Base UI ships an Image component. The
-// thesis (LLM-safe) is the reason to have one: a plain `<Box as="img">` can't
-// REQUIRE `alt`, can't default aspect/fit/lazy. This primitive makes accessible,
-// well-sized images the path of least resistance. (No next/image — no blur
-// placeholder or optimization; this is a TanStack stack.)
+// shadcn-x native: <Box as="img"> can't REQUIRE alt or default aspect/fit/lazy.
+// This primitive makes accessible, well-sized images the path of least resistance.
 const styles = stylex.create({
   base: {
     display: "block",

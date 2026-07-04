@@ -13,10 +13,7 @@ import { docsPager } from "@/docs/docs-config"
 
 import { colors, spacing } from "../styles/tokens.stylex"
 
-// Resolves a slug to its compiled-doc path + head metadata on the server only
-// (`@/lib/source` reaches `collections/server`, which is node-only). The
-// TanStack Start compiler strips this handler — and the source import — from
-// the client bundle, leaving an RPC stub for client-side navigations.
+// Server-only slug resolver: src import stripped from client bundle, leaving RPC stub.
 const serverLoader = createServerFn({ method: "GET" })
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
@@ -56,6 +53,13 @@ const styles = stylex.create({
   article: {
     minWidth: 0,
   },
+  // Center the prose in a readable column (shadcn caps docs at max-w-160 = 40rem
+  // and centers with mx-auto), so lines don't stretch the full content width.
+  readable: {
+    width: "100%",
+    maxWidth: "40rem",
+    marginInline: "auto",
+  },
   nav: {
     marginTop: spacing["3xl"],
     paddingTop: spacing.xl,
@@ -77,8 +81,10 @@ const styles = stylex.create({
     },
   },
   sticky: {
+    // Stick below the 3.5rem page header (plus a little breathing room) so the
+    // "On this page" nav never slides up under — or over — the header bar.
     position: "sticky",
-    top: "2rem",
+    top: "5rem",
   },
 })
 
@@ -91,35 +97,43 @@ const clientLoader = browserCollections.docs.createClientLoader({
   component({ toc, default: Mdx }, { prev, next }: DocPageProps) {
     return (
       <Box as="div" display="flex" gap="2xl">
-        <Box as="article" flex="1" sx={styles.article}>
-          <DocMdxContent Mdx={Mdx} />
-          <Box
-            as="nav"
-            display="flex"
-            justifyContent="between"
-            borderTop
-            borderColor="border-primary"
-            fontSize="s"
-            sx={styles.nav}
-          >
-            {prev ? (
-              <Box as="span" sx={styles.navLink}>
-                <Link to="/docs/$" params={{ _splat: prev.slug }}>
-                  ← {prev.label}
-                </Link>
-              </Box>
-            ) : (
-              <Box as="span" />
-            )}
-            {next ? (
-              <Box as="span" sx={styles.navLink}>
-                <Link to="/docs/$" params={{ _splat: next.slug }}>
-                  {next.label} →
-                </Link>
-              </Box>
-            ) : (
-              <Box as="span" />
-            )}
+        <Box
+          as="div"
+          flex="1"
+          display="flex"
+          flexDirection="column"
+          sx={styles.article}
+        >
+          <Box as="article" sx={styles.readable}>
+            <DocMdxContent Mdx={Mdx} />
+            <Box
+              as="nav"
+              display="flex"
+              justifyContent="between"
+              borderTop
+              borderColor="border-primary"
+              fontSize="s"
+              sx={styles.nav}
+            >
+              {prev ? (
+                <Box as="span" sx={styles.navLink}>
+                  <Link to="/docs/$" params={{ _splat: prev.slug }}>
+                    ← {prev.label}
+                  </Link>
+                </Box>
+              ) : (
+                <Box as="span" />
+              )}
+              {next ? (
+                <Box as="span" sx={styles.navLink}>
+                  <Link to="/docs/$" params={{ _splat: next.slug }}>
+                    {next.label} →
+                  </Link>
+                </Box>
+              ) : (
+                <Box as="span" />
+              )}
+            </Box>
           </Box>
         </Box>
         <Box as="aside" sx={styles.aside}>

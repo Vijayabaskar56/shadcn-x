@@ -12,9 +12,8 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// Ported 1:1 from shadcn's canonical textarea. Each style maps a Tailwind class
-// to a token (comments name the original utility). No Base UI primitive exists
-// for textarea, so — like shadcn — this is a styled native <textarea>.
+// Ported 1:1 from shadcn: each style maps Tailwind class → token. No Base UI
+// primitive → styled native <textarea>.
 const styles = stylex.create({
   base: {
     display: "flex",
@@ -61,9 +60,8 @@ const styles = stylex.create({
     opacity: { default: 1, ":disabled": 0.5 },
     pointerEvents: { default: null, ":disabled": "none" },
   },
-  // aria-invalid:border-destructive + aria-invalid:ring-destructive/20. Self
-  // attribute selectors don't compile in StyleX, so the component reads
-  // aria-invalid and applies this conditionally (the attribute is still set).
+  // aria-invalid:border-destructive + ring-destructive. StyleX can't self-select
+  // → component reads aria-invalid, applies conditionally (attribute still set).
   invalid: {
     borderColor: colors.destructive,
     boxShadow: {

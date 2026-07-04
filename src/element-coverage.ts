@@ -109,11 +109,7 @@ export const ELEMENT_COVERAGE = [
   { tag: "select", primitive: "NativeSelect" },
   { tag: "option", primitive: "NativeSelectOption" },
   { tag: "optgroup", primitive: "NativeSelectOptGroup" },
-  // No primitive for `form`: our `Form` is the react-hook-form `FormProvider`
-  // context (it renders no DOM), so it does NOT retire the `<form>` element —
-  // you still need a real `<form onSubmit>` inside it. Like `img` before
-  // `Image`, `<form>` stays allowed (and Box renders it) until a primitive
-  // actually covers it.
+  // No primitive for `form`: `FormProvider` renders no DOM, so `<form>` stays allowed on Box until a primitive ships.
   { tag: "form", primitive: null, boxAllowed: "no-primitive-yet" },
   // `FieldSet` retires the raw tag; no call sites remain on `Box as="fieldset"`,
   // so the tag is banned and Box no longer accepts it.

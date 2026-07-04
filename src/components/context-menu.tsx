@@ -16,12 +16,8 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-// Ported from shadcn's context-menu. Behavior/a11y — right-click trigger,
-// positioning, roving focus, submenu, portal — come from Base UI's
-// `@base-ui/react/context-menu` (a menu primitive). Appearance comes from
-// StyleX tokens via a closed prop surface (`inset`/`variant`/`sx`). No
-// `className`/`cn`/Tailwind; shared item styling mirrors the dropdown-menu port
-// so the two menus read as one system.
+// Ported from shadcn context-menu on Base UI. Closed prop surface
+// (inset/variant/sx). Shared item styling mirrors dropdown-menu for consistency.
 
 const u = spacing["--spacing"]
 
@@ -57,10 +53,7 @@ const styles = stylex.create({
     userSelect: "none",
   },
 
-  // Shared menu item (shadcn: relative flex items-center gap-2 rounded-sm px-2
-  // py-1.5 text-sm outline-hidden select-none focus:bg-accent
-  // focus:text-accent-foreground). Hover surface = background-muted (the same
-  // hover token Combobox items use, so the two menus stay consistent).
+  // Shared menu item: relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm; hover=background-muted
   item: {
     display: "flex",
     position: "relative",
@@ -81,9 +74,7 @@ const styles = stylex.create({
     opacity: { default: 1, ":disabled": 0.5 },
     pointerEvents: { default: null, ":disabled": "none" },
   },
-  // data-[inset]:pl-8 — self attribute selectors don't compile in StyleX, so
-  // `inset` is applied conditionally here (the data-inset attr is still set for
-  // consumers/devtools/tests).
+  // data-[inset]:pl-8 → StyleX drops self data-attr sel → `inset` applied conditionally
   itemInset: {
     paddingInlineStart: `calc(${u} * 8)`, // pl-8
   },
@@ -171,9 +162,7 @@ const styles = stylex.create({
   },
 })
 
-// Variable tag so the Shortcut primitive (a plain <span>, no Base UI
-// counterpart) isn't flagged by its own `no-raw-html` rule — the same technique
-// Field/Textarea/Label use internally.
+// SpanTag so Shortcut isn't flagged by `no-raw-html`; same technique Field/Textarea/Label use.
 const SpanTag = "span" as const
 
 const ContextMenu = ContextMenuPrimitive.Root
@@ -203,9 +192,7 @@ function ContextMenuTrigger({ sx, ...props }: ContextMenuTriggerProps) {
   )
 }
 
-// Content + SubContent share the Portal > Positioner > Popup shell. The popup
-// positioner props (align/alignOffset/side/sideOffset) mirror shadcn's defaults:
-// the root content opens to the right of the click point; submenus open right.
+// Content + SubContent share Portal > Positioner > Popup; root opens right of click, submenus right
 type ContextMenuContentProps = Omit<
   ContextMenuPrimitive.Popup.Props,
   "className" | "style"

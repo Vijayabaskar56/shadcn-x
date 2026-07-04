@@ -63,9 +63,8 @@ const styles = stylex.create({
     },
   },
   hitArea: {
-    // Enlarges the 1px separator into a spacing.xs grab target; it must remain
-    // pointer-interactive (like shadcn's `after:` hit area) or the widened
-    // region falls through to the panels and the handle is hard to grab.
+    // Enlarge 1px separator to spacing.xs grab target; must stay pointer-interactive
+    // or panels swallow widened region.
     position: "absolute",
     height: {
       default: "auto",
@@ -93,10 +92,8 @@ const styles = stylex.create({
         "translateY(-50%)",
     },
   },
-  // `when.ancestor('[dir="rtl"]')` can't be used: the `dir` attribute lives on
-  // <html>, which never carries our StyleX marker, so that branch emits no
-  // usable CSS. Apply the flip via a JS conditional keyed off `useDirection`.
-  // Kept orientation-aware so vertical groups keep their vertical centering.
+  // `when.ancestor('[dir="rtl"]')` fails (dir on <html> lacks StyleX marker);
+  // apply flip via JS `useDirection` — still orientation-aware for vertical.
   hitAreaRtl: {
     transform: {
       default: "translateX(50%)",

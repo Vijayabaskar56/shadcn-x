@@ -73,9 +73,7 @@ function jsxComponentNames(source: string): Array<string> {
 }
 
 describe("every JSX component used in content/docs/*.mdx is registered", () => {
-  // A missing entry in the MDX component map fails silently at doc-render
-  // time (or throws deep inside the compiled doc). This turns it into a test
-  // failure: add the component to its doc's entry in src/docs/registry.ts.
+  // Missing MDX component entry fails silently at doc-render or throws deep inside. Test: add component to registry.ts.
   const mdxFiles = docFiles.filter((file) => file.endsWith(".mdx"))
 
   it.each(mdxFiles)("%s", (file) => {

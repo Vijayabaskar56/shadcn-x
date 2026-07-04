@@ -66,6 +66,17 @@ button:not(:disabled),
   color: var(--shiki-dark);
 }
 
+/* ScrollArea `scrollbarGutter`: reserve space for the overlay scrollbar so
+   content clears it — but only on an axis that actually overflows. Gated on
+   Base UI's `data-has-overflow-*`, which StyleX can't target inline. 0.625rem
+   matches the scrollbar's width (6px) + margin (4px). */
+[data-slot="scroll-area-viewport"][data-scrollbar-gutter][data-has-overflow-y] {
+  padding-inline-end: 0.625rem;
+}
+[data-slot="scroll-area-viewport"][data-scrollbar-gutter][data-has-overflow-x] {
+  padding-bottom: 0.625rem;
+}
+
 /* Prose typography for the `.md` html path (DocContent renders [data-prose]).
    The `.mdx` path is styled by mdxComponents (Box), so it only needs the anchor
    reset + scroll-margin below. */

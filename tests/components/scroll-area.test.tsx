@@ -68,6 +68,33 @@ describe("ScrollArea", () => {
     )
   })
 
+  it("marks the viewport for a scrollbar gutter only when requested", () => {
+    const { container, rerender } = render(<ScrollArea>Content</ScrollArea>)
+    expect(
+      container.querySelector('[data-slot="scroll-area-viewport"]')
+    ).not.toHaveAttribute("data-scrollbar-gutter")
+
+    rerender(<ScrollArea scrollbarGutter>Content</ScrollArea>)
+    expect(
+      container.querySelector('[data-slot="scroll-area-viewport"]')
+    ).toHaveAttribute("data-scrollbar-gutter")
+  })
+
+  it("applies the edge-fade mask on the viewport when scrollFade is set", () => {
+    const { container } = render(<ScrollArea scrollFade>Content</ScrollArea>)
+    const plain = render(<ScrollArea>Content</ScrollArea>)
+
+    const faded = container
+      .querySelector('[data-slot="scroll-area-viewport"]')
+      ?.getAttribute("class")
+    const unfaded = plain.container
+      .querySelector('[data-slot="scroll-area-viewport"]')
+      ?.getAttribute("class")
+
+    // The mask styles compile to an extra atomic class the plain viewport lacks.
+    expect(faded).not.toBe(unfaded)
+  })
+
   it("accepts sx on ScrollBar", () => {
     render(
       <ScrollArea>
