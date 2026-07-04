@@ -129,9 +129,6 @@ export type BoxAllowedTag = Extract<
   { readonly boxAllowed: BoxAllowedReason }
 >["tag"]
 
-/** Tags the `no-raw-html` guardrail bans (i.e. a primitive covers them). */
-export type CoveredTag = Extract<Entry, { readonly primitive: string }>["tag"]
-
 /**
  * Default banned host elements → the shadcn-x primitive that covers them.
  * This is the `no-raw-html` rule's default `elements` option.

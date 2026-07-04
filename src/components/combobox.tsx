@@ -2,7 +2,6 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 import * as stylex from "@stylexjs/stylex"
-import { useRef } from "react"
 
 import { Icon } from "@/components/icon"
 import {
@@ -607,10 +606,6 @@ function ComboboxChipsInput({ sx, ...props }: ComboboxChipsInputProps) {
   )
 }
 
-function useComboboxAnchor() {
-  return useRef<HTMLDivElement | null>(null)
-}
-
 export {
   Combobox,
   ComboboxChip,
@@ -628,7 +623,6 @@ export {
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,
-  useComboboxAnchor,
 }
 
 export type {
