@@ -4,6 +4,10 @@ import type { ComponentPropsWithoutRef } from "react"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 
+import type { VariantKey } from "@/components/variants"
+
+import { defineVariants } from "@/components/variants"
+
 import {
   borderRadius,
   colors,
@@ -14,23 +18,6 @@ import {
 
 const Div = "div" as const
 const u = spacing["--spacing"]
-
-type AlertVariant = "default" | "destructive"
-
-type AlertProps = Omit<
-  ComponentPropsWithoutRef<"div">,
-  "className" | "style" | "color"
-> & {
-  variant?: AlertVariant
-  sx?: StyleXStyles
-}
-
-type AlertSlotProps = Omit<
-  ComponentPropsWithoutRef<"div">,
-  "className" | "style" | "color"
-> & {
-  sx?: StyleXStyles
-}
 
 const styles = stylex.create({
   alert: {
@@ -45,8 +32,7 @@ const styles = stylex.create({
     alignItems: "flex-start",
     columnGap: {
       default: spacing.none,
-      [stylex.when.descendant('[data-slot="icon"]')]:
-        `calc(${u} * 2.5)`,
+      [stylex.when.descendant('[data-slot="icon"]')]: `calc(${u} * 2.5)`,
     },
     rowGap: `calc(${u} * 0.5)`,
     borderRadius: borderRadius.l,
@@ -58,16 +44,11 @@ const styles = stylex.create({
     paddingInlineStart: spacing.l,
     paddingInlineEnd: {
       default: spacing.l,
-      [stylex.when.descendant('[data-slot="alert-action"]')]:
-        `calc(${u} * 18)`,
+      [stylex.when.descendant('[data-slot="alert-action"]')]: `calc(${u} * 18)`,
     },
     textAlign: "start",
     fontSize: fontSize.s,
     color: colors["text-primary"],
-  },
-  default: {},
-  destructive: {
-    color: colors.destructive,
   },
   title: {
     gridColumnStart: 2,
@@ -97,10 +78,32 @@ const styles = stylex.create({
   },
 })
 
-const variantStyles = {
-  default: styles.default,
-  destructive: styles.destructive,
-} satisfies Record<AlertVariant, StyleXStyles>
+const variants = defineVariants(
+  stylex.create({
+    default: {},
+    destructive: {
+      color: colors.destructive,
+    },
+  }),
+  "default"
+)
+
+type AlertVariant = VariantKey<typeof variants>
+
+type AlertProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "className" | "style" | "color"
+> & {
+  variant?: AlertVariant
+  sx?: StyleXStyles
+}
+
+type AlertSlotProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "className" | "style" | "color"
+> & {
+  sx?: StyleXStyles
+}
 
 type AlertVariantContextValue = {
   variant: AlertVariant
@@ -111,19 +114,21 @@ const AlertVariantContext = React.createContext<AlertVariantContextValue>({
 })
 
 function Alert({
-  variant = "default",
+  variant,
   sx,
   children,
   role = "alert",
   ...props
 }: AlertProps) {
+  const resolvedVariant = variants.resolve(variant)
+
   return (
-    <AlertVariantContext.Provider value={{ variant }}>
+    <AlertVariantContext.Provider value={{ variant: resolvedVariant }}>
       <Div
         data-slot="alert"
-        data-variant={variant}
+        data-variant={resolvedVariant}
         role={role}
-        {...stylex.props(styles.alert, variantStyles[variant], sx)}
+        {...stylex.props(styles.alert, variants(variant), sx)}
         {...props}
       >
         {children}

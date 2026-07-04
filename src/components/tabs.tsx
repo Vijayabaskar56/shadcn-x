@@ -6,6 +6,8 @@ import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import * as stylex from "@stylexjs/stylex"
 import { createContext, useContext, useState } from "react"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   boxShadow,
@@ -16,13 +18,13 @@ import {
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 const u = spacing["--spacing"]
 const Indicator = "span" as const
 
 type TabsValue = unknown
 type TabsOrientation = "horizontal" | "vertical"
-type TabsListVariant = "default" | "line"
 
 type TabsContextValue = {
   value: TabsValue
@@ -67,17 +69,6 @@ const styles = stylex.create({
   listVertical: {
     height: "fit-content",
     flexDirection: "column",
-  },
-  listDefault: {
-    borderRadius: borderRadius.l,
-    backgroundColor: colors["background-muted"],
-    padding: `calc(${u} * 0.75)`,
-  },
-  listLine: {
-    gap: spacing.xs,
-    borderRadius: borderRadius.none,
-    backgroundColor: "transparent",
-    padding: 0,
   },
   trigger: {
     position: "relative",
@@ -180,10 +171,24 @@ const listOrientationStyles = {
   vertical: styles.listVertical,
 } satisfies Record<TabsOrientation, StyleXStyles>
 
-export const tabsListVariants = {
-  default: styles.listDefault,
-  line: styles.listLine,
-} satisfies Record<TabsListVariant, StyleXStyles>
+export const tabsListVariants = defineVariants(
+  stylex.create({
+    default: {
+      borderRadius: borderRadius.l,
+      backgroundColor: colors["background-muted"],
+      padding: `calc(${u} * 0.75)`,
+    },
+    line: {
+      gap: spacing.xs,
+      borderRadius: borderRadius.none,
+      backgroundColor: "transparent",
+      padding: 0,
+    },
+  }),
+  "default"
+)
+
+type TabsListVariant = VariantKey<typeof tabsListVariants>
 
 type TabsProps = Omit<
   TabsPrimitive.Root.Props,
@@ -243,28 +248,24 @@ type TabsListProps = Omit<
   sx?: StyleXStyles
 }
 
-function TabsList({
-  variant = "default",
-  children,
-  sx,
-  ...props
-}: TabsListProps) {
+function TabsList({ variant, children, sx, ...props }: TabsListProps) {
   const { orientation } = useContext(TabsContext)
+  const resolvedVariant = tabsListVariants.resolve(variant)
 
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      data-variant={variant}
+      data-variant={resolvedVariant}
       {...stylex.props(
         styles.list,
         listOrientationStyles[orientation],
-        tabsListVariants[variant],
+        tabsListVariants(variant),
         stylex.defaultMarker(),
         sx
       )}
       {...props}
     >
-      <TabsListContext.Provider value={{ variant }}>
+      <TabsListContext.Provider value={{ variant: resolvedVariant }}>
         {children}
       </TabsListContext.Provider>
     </TabsPrimitive.List>

@@ -9,9 +9,11 @@ import * as stylex from "@stylexjs/stylex"
 import * as LucideIcons from "lucide-react"
 import { cloneElement, createElement } from "react"
 
-import { useDirection } from "./direction"
+import type { VariantKey } from "./variants"
 
-type IconSize = "s" | "m" | "l"
+import { useDirection } from "./direction"
+import { defineVariants } from "./variants"
+
 type IconPosition = "inline-start" | "inline-end"
 
 const styles = stylex.create({
@@ -33,9 +35,6 @@ const styles = stylex.create({
       [stylex.when.ancestor('[data-size="xs"]')]: "0.75rem",
     },
   },
-  s: { width: "0.75rem", height: "0.75rem" },
-  m: { width: "1rem", height: "1rem" },
-  l: { width: "1.25rem", height: "1.25rem" },
   // Directional icons (arrows, chevrons, carets) mirror in RTL. `when.ancestor`
   // can't be used here: the `dir` attribute lives on <html>, which never carries
   // our StyleX marker, so that branch emits no usable CSS. Instead we apply this
@@ -45,11 +44,15 @@ const styles = stylex.create({
   },
 })
 
-const sizeStyles = {
-  s: styles.s,
-  m: styles.m,
-  l: styles.l,
-} satisfies Record<IconSize, unknown>
+const sizes = defineVariants(
+  stylex.create({
+    s: { width: "0.75rem", height: "0.75rem" },
+    m: { width: "1rem", height: "1rem" },
+    l: { width: "1.25rem", height: "1.25rem" },
+  })
+)
+
+type IconSize = VariantKey<typeof sizes>
 
 // A library is any record of named icon components (lucide-react, tabler, a
 // custom set, …). `IconName` narrows the keys to the component-valued ones, so
@@ -117,7 +120,7 @@ function createIcon<TLib extends IconLibrary>(library: TLib) {
         // an explicit `size` overlays width/height and, being later, wins — so a
         // sized icon keeps its size and doesn't auto-shrink in xs buttons.
         styles.base,
-        size && sizeStyles[size],
+        sizes(size),
         flipRtl && direction === "rtl" && styles.flipRtl,
         stylex.defaultMarker(),
         sx

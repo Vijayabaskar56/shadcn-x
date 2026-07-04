@@ -4,6 +4,8 @@ import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   boxShadow,
@@ -14,11 +16,9 @@ import {
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 const u = spacing["--spacing"]
-
-type Variant = "default" | "outline"
-type Size = "default" | "sm" | "lg"
 
 export const toggleStyles = stylex.create({
   base: {
@@ -47,66 +47,70 @@ export const toggleStyles = stylex.create({
       ":disabled": "none",
     },
   },
-  defaultVariant: {
-    backgroundColor: {
-      default: "transparent",
-      ":hover": colors["background-muted"],
-    },
-    color: {
-      default: colors["text-primary"],
-      ":hover": colors["muted-foreground"],
-    },
-    boxShadow: {
-      default: null,
-      ":focus-visible": focusRing.ring,
-    },
-  },
-  outline: {
-    backgroundColor: {
-      default: "transparent",
-      ":hover": colors.accent,
-    },
-    borderColor: colors.input,
-    color: {
-      default: colors["text-primary"],
-      ":hover": colors["accent-foreground"],
-    },
-    boxShadow: {
-      default: boxShadow.s,
-      ":focus-visible": focusRing.ring,
-    },
-  },
   pressed: {
     backgroundColor: colors.accent,
     color: colors["accent-foreground"],
   },
-  sizeDefault: {
-    height: `calc(${u} * 9)`,
-    minWidth: `calc(${u} * 9)`,
-    paddingInline: `calc(${u} * 2)`,
-  },
-  sizeSm: {
-    height: `calc(${u} * 8)`,
-    minWidth: `calc(${u} * 8)`,
-    paddingInline: `calc(${u} * 1.5)`,
-  },
-  sizeLg: {
-    height: `calc(${u} * 10)`,
-    minWidth: `calc(${u} * 10)`,
-    paddingInline: `calc(${u} * 2.5)`,
-  },
 })
 
-const variantStyles = {
-  default: toggleStyles.defaultVariant,
-  outline: toggleStyles.outline,
-} satisfies Record<Variant, StyleXStyles>
+const toggleVariants = defineVariants(
+  stylex.create({
+    default: {
+      backgroundColor: {
+        default: "transparent",
+        ":hover": colors["background-muted"],
+      },
+      color: {
+        default: colors["text-primary"],
+        ":hover": colors["muted-foreground"],
+      },
+      boxShadow: {
+        default: null,
+        ":focus-visible": focusRing.ring,
+      },
+    },
+    outline: {
+      backgroundColor: {
+        default: "transparent",
+        ":hover": colors.accent,
+      },
+      borderColor: colors.input,
+      color: {
+        default: colors["text-primary"],
+        ":hover": colors["accent-foreground"],
+      },
+      boxShadow: {
+        default: boxShadow.s,
+        ":focus-visible": focusRing.ring,
+      },
+    },
+  }),
+  "default"
+)
 
-const sizeStyles = {
-  default: toggleStyles.sizeDefault,
-  sm: toggleStyles.sizeSm,
-  lg: toggleStyles.sizeLg,
-} satisfies Record<Size, StyleXStyles>
+const toggleSizes = defineVariants(
+  stylex.create({
+    default: {
+      height: `calc(${u} * 9)`,
+      minWidth: `calc(${u} * 9)`,
+      paddingInline: `calc(${u} * 2)`,
+    },
+    sm: {
+      height: `calc(${u} * 8)`,
+      minWidth: `calc(${u} * 8)`,
+      paddingInline: `calc(${u} * 1.5)`,
+    },
+    lg: {
+      height: `calc(${u} * 10)`,
+      minWidth: `calc(${u} * 10)`,
+      paddingInline: `calc(${u} * 2.5)`,
+    },
+  }),
+  "default"
+)
+
+type Variant = VariantKey<typeof toggleVariants>
+type Size = VariantKey<typeof toggleSizes>
 
 type ToggleProps = Omit<
   TogglePrimitive.Props,
@@ -118,8 +122,8 @@ type ToggleProps = Omit<
 }
 
 function Toggle({
-  variant = "default",
-  size = "default",
+  variant,
+  size,
   sx,
   pressed,
   defaultPressed,
@@ -136,8 +140,8 @@ function Toggle({
   return (
     <TogglePrimitive
       data-slot="toggle"
-      data-size={size}
-      data-variant={variant}
+      data-size={toggleSizes.resolve(size)}
+      data-variant={toggleVariants.resolve(variant)}
       pressed={pressed}
       defaultPressed={defaultPressed}
       onPressedChange={(nextPressed, eventDetails) => {
@@ -146,8 +150,8 @@ function Toggle({
       }}
       {...stylex.props(
         toggleStyles.base,
-        variantStyles[variant],
-        sizeStyles[size],
+        toggleVariants(variant),
+        toggleSizes(size),
         isPressed && toggleStyles.pressed,
         sx
       )}
@@ -156,5 +160,5 @@ function Toggle({
   )
 }
 
-export { Toggle }
+export { Toggle, toggleVariants, toggleSizes }
 export type { ToggleProps, Variant as ToggleVariant, Size as ToggleSize }

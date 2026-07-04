@@ -1,3 +1,5 @@
+import { docsRegistry } from "@/docs/registry"
+
 export type DocsNavItem = {
   label: string
   /** Slug matching a doc's `slug` (its path under content/docs without extension) */
@@ -10,85 +12,17 @@ export type DocsNavSection = {
 }
 
 /**
- * Sidebar structure for the docs site. Order here drives both the sidebar and
- * the prev/next navigation. Each `slug` must match a file in `content/docs`.
+ * Sidebar structure for the docs site, derived from the docs registry
+ * (`src/docs/registry.ts` — the single place a doc is registered). Registry
+ * order drives both the sidebar and the prev/next navigation; entries marked
+ * `navHidden` render but stay out of the sidebar.
  */
-export const docsNav: Array<DocsNavSection> = [
-  {
-    label: "Getting Started",
-    items: [
-      { label: "Introduction", slug: "introduction" },
-      { label: "Installation", slug: "installation" },
-      { label: "Theming", slug: "theming" },
-    ],
-  },
-  {
-    label: "Components",
-    items: [
-      { label: "Accordion", slug: "accordion" },
-      { label: "Alert", slug: "alert" },
-      { label: "Alert Dialog", slug: "alert-dialog" },
-      { label: "Aspect Ratio", slug: "aspect-ratio" },
-      { label: "Avatar", slug: "avatar" },
-      { label: "Badge", slug: "badge" },
-      { label: "Box", slug: "box" },
-      { label: "Breadcrumb", slug: "breadcrumb" },
-      { label: "Button", slug: "button" },
-      { label: "Button Group", slug: "button-group" },
-      { label: "Calendar", slug: "calendar" },
-      { label: "Card", slug: "card" },
-      { label: "Carousel", slug: "carousel" },
-      { label: "Chart", slug: "chart" },
-      { label: "Checkbox", slug: "checkbox" },
-      { label: "Collapsible", slug: "collapsible" },
-      { label: "Combobox", slug: "combobox" },
-      { label: "Command", slug: "command" },
-      { label: "Context Menu", slug: "context-menu" },
-      { label: "Dialog", slug: "dialog" },
-      { label: "Direction", slug: "direction" },
-      { label: "Drawer", slug: "drawer" },
-      { label: "Dropdown Menu", slug: "dropdown-menu" },
-      { label: "Empty", slug: "empty" },
-      { label: "Field", slug: "field" },
-      { label: "Form", slug: "form" },
-      { label: "Hover Card", slug: "hover-card" },
-      { label: "Icon", slug: "icon" },
-      { label: "Image", slug: "image" },
-      { label: "Input", slug: "input" },
-      { label: "Input Group", slug: "input-group" },
-      { label: "Input OTP", slug: "input-otp" },
-      { label: "Item", slug: "item" },
-      { label: "Kbd", slug: "kbd" },
-      { label: "Label", slug: "label" },
-      { label: "Link", slug: "link" },
-      { label: "Menubar", slug: "menubar" },
-      { label: "Native Select", slug: "native-select" },
-      { label: "Navigation Menu", slug: "navigation-menu" },
-      { label: "Pagination", slug: "pagination" },
-      { label: "Popover", slug: "popover" },
-      { label: "Progress", slug: "progress" },
-      { label: "Radio Group", slug: "radio-group" },
-      { label: "Resizable", slug: "resizable" },
-      { label: "Scroll Area", slug: "scroll-area" },
-      { label: "Select", slug: "select" },
-      { label: "Separator", slug: "separator" },
-      { label: "Sheet", slug: "sheet" },
-      { label: "Sidebar", slug: "sidebar" },
-      { label: "Skeleton", slug: "skeleton" },
-      { label: "Slider", slug: "slider" },
-      { label: "Sonner", slug: "sonner" },
-      { label: "Spinner", slug: "spinner" },
-      { label: "Switch", slug: "switch" },
-      { label: "Table", slug: "table" },
-      { label: "Tabs", slug: "tabs" },
-      { label: "Text", slug: "text" },
-      { label: "Textarea", slug: "textarea" },
-      { label: "Toggle", slug: "toggle" },
-      { label: "Toggle Group", slug: "toggle-group" },
-      { label: "Tooltip", slug: "tooltip" },
-    ],
-  },
-]
+export const docsNav: Array<DocsNavSection> = docsRegistry.map((section) => ({
+  label: section.label,
+  items: section.entries
+    .filter((entry) => !entry.navHidden)
+    .map(({ label, slug }) => ({ label, slug })),
+}))
 
 /** Flattened, in-order list of nav items — used for prev/next links. */
 export const docsNavFlat: Array<DocsNavItem> = docsNav.flatMap(
@@ -97,3 +31,24 @@ export const docsNavFlat: Array<DocsNavItem> = docsNav.flatMap(
 
 /** The slug of the first doc, used as the `/docs` landing target. */
 export const firstDocSlug = docsNavFlat[0].slug
+
+export type DocsPager = {
+  prev: DocsNavItem | undefined
+  next: DocsNavItem | undefined
+}
+
+/**
+ * Prev/next pager entries for a doc slug, in nav (registry) order. A slug
+ * that isn't in the nav — a typo, or a `navHidden` doc like `theme-toggle` —
+ * gets no pager at all (both `undefined`) rather than a bogus pair.
+ */
+export function docsPager(
+  slug: string,
+  items: ReadonlyArray<DocsNavItem> = docsNavFlat
+): DocsPager {
+  const index = items.findIndex((item) => item.slug === slug)
+  return {
+    prev: index > 0 ? items[index - 1] : undefined,
+    next: index >= 0 && index < items.length - 1 ? items[index + 1] : undefined,
+  }
+}

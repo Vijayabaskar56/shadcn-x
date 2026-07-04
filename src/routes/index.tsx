@@ -178,15 +178,15 @@ function App() {
             backgroundColor="background-muted"
             borderRadius="s"
           >
-            <a href="#" {...stylex.props(styles.demoLink)}>
+            <Link href="#" sx={styles.demoLink}>
               Home
-            </a>
-            <a href="#" {...stylex.props(styles.demoLink)}>
+            </Link>
+            <Link href="#" sx={styles.demoLink}>
               About
-            </a>
-            <a href="#" {...stylex.props(styles.demoLink)}>
+            </Link>
+            <Link href="#" sx={styles.demoLink}>
               Contact
-            </a>
+            </Link>
           </Box>
           <Box color="text-secondary" fontSize="s">
             Use{" "}

@@ -1,3 +1,5 @@
+import type { StyleXStyles } from "@stylexjs/stylex"
+
 import * as stylex from "@stylexjs/stylex"
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 
@@ -79,5 +81,9 @@ function ColorThemeScope({ children }: { children: React.ReactNode }) {
   const { theme } = useColorTheme()
   const themeStyles =
     theme === "sunset" ? sunsetTheme : theme === "forest" ? forestTheme : null
-  return <div {...stylex.props(themeStyles)}>{children}</div>
+  // `createTheme` returns a `Theme` object, which StyleX's `stylex.props`
+  // (called inside Box) accepts, but `Theme` isn't part of the `StyleXStyles`
+  // union `sx` is typed as. Cast at this one boundary: applying a color theme to
+  // a subtree is exactly what a wrapping Box is for.
+  return <Box sx={themeStyles as StyleXStyles | null}>{children}</Box>
 }

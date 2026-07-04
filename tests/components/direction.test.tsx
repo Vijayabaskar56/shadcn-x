@@ -11,7 +11,12 @@ import {
 } from "@/components/dialog"
 import { DirectionProvider, useDirection } from "@/components/direction"
 import { Icon } from "@/components/icon"
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/sheet"
 
 function DirectionProbe() {
   return (
@@ -26,15 +31,20 @@ afterEach(() => {
 })
 
 describe("DirectionProvider", () => {
-  it("sets the document direction and provides it through context", () => {
+  it("provides the direction through context and applies it to the DOM", () => {
     render(
       <DirectionProvider dir="rtl">
         <DirectionProbe />
       </DirectionProvider>
     )
 
+    const probe = screen.getByTestId("dir")
+    expect(probe).toHaveTextContent("rtl")
+    // The subtree wrapper carries `dir` (scopes the flip, correct under SSR).
+    expect(probe.closest("[dir='rtl']")).not.toBeNull()
+    // And <html> gets `dir` so portaled overlays — which mount outside this
+    // subtree — inherit the direction too (see the Dialog/Sheet cases below).
     expect(document.documentElement).toHaveAttribute("dir", "rtl")
-    expect(screen.getByTestId("dir")).toHaveTextContent("rtl")
   })
 
   it("accepts the Base UI `direction` prop", () => {
@@ -44,8 +54,9 @@ describe("DirectionProvider", () => {
       </DirectionProvider>
     )
 
-    expect(document.documentElement).toHaveAttribute("dir", "rtl")
-    expect(screen.getByTestId("dir")).toHaveTextContent("rtl")
+    const probe = screen.getByTestId("dir")
+    expect(probe).toHaveTextContent("rtl")
+    expect(probe.closest("[dir='rtl']")).not.toBeNull()
   })
 
   it("prefers `direction` over `dir` when both are supplied", () => {
@@ -55,8 +66,9 @@ describe("DirectionProvider", () => {
       </DirectionProvider>
     )
 
-    expect(document.documentElement).toHaveAttribute("dir", "rtl")
-    expect(screen.getByTestId("dir")).toHaveTextContent("rtl")
+    const probe = screen.getByTestId("dir")
+    expect(probe).toHaveTextContent("rtl")
+    expect(probe.closest("[dir='rtl']")).not.toBeNull()
   })
 
   it("renders directional icon and button patterns in RTL", () => {
@@ -70,7 +82,9 @@ describe("DirectionProvider", () => {
     )
 
     expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
-    expect(document.querySelector("[data-icon='inline-end']")).toBeInTheDocument()
+    expect(
+      document.querySelector("[data-icon='inline-end']")
+    ).toBeInTheDocument()
   })
 
   it("renders centered overlays under RTL", () => {
@@ -85,11 +99,13 @@ describe("DirectionProvider", () => {
       </DirectionProvider>
     )
 
-    expect(screen.getByRole("dialog")).toHaveAttribute(
-      "data-slot",
-      "dialog-content"
-    )
+    const content = screen.getByRole("dialog")
+    expect(content).toHaveAttribute("data-slot", "dialog-content")
     expect(screen.getByText("RTL dialog")).toBeInTheDocument()
+    // The dialog is portaled to <body>, outside the provider's subtree — it must
+    // still inherit RTL from an ancestor (<html dir="rtl">) so its logical
+    // properties resolve right-to-left.
+    expect(content.closest("[dir='rtl']")).not.toBeNull()
   })
 
   it("renders edge overlays under RTL", () => {
@@ -104,7 +120,10 @@ describe("DirectionProvider", () => {
       </DirectionProvider>
     )
 
-    expect(screen.getByRole("dialog")).toHaveAttribute("data-side", "right")
+    const content = screen.getByRole("dialog")
+    expect(content).toHaveAttribute("data-side", "right")
     expect(screen.getByText("RTL sheet")).toBeInTheDocument()
+    // Portaled to <body>: must inherit RTL from <html dir="rtl">.
+    expect(content.closest("[dir='rtl']")).not.toBeNull()
   })
 })

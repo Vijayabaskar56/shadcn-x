@@ -77,4 +77,45 @@ describe("Link", async () => {
     )
     expect((await screen.findByText("Docs")).className).not.toBe("")
   })
+
+  // The plain-anchor form (`href` instead of `to`): external URLs, in-page
+  // hash anchors, mailto. It bypasses the router entirely, so it renders
+  // without router context — which these tests prove by not providing one.
+  describe("plain-anchor form (href)", () => {
+    it("renders an external URL as a styled anchor without router context", () => {
+      render(<Link href="https://base-ui.com">Base UI</Link>)
+      const link = screen.getByText("Base UI")
+      expect(link.tagName).toBe("A")
+      expect(link).toHaveAttribute("href", "https://base-ui.com")
+      expect(link).toHaveAttribute("data-slot", "link")
+      expect(link).toHaveAttribute("data-variant", "default")
+    })
+
+    it("renders a same-page hash anchor", () => {
+      render(<Link href="#usage">Usage</Link>)
+      expect(screen.getByText("Usage")).toHaveAttribute("href", "#usage")
+    })
+
+    it("supports variant and sx like the router form", () => {
+      render(
+        <Link href="#top" variant="subtle" sx={sx.custom}>
+          Top
+        </Link>
+      )
+      const link = screen.getByText("Top")
+      expect(link).toHaveAttribute("data-variant", "subtle")
+      expect(link.className).not.toBe("")
+    })
+
+    it("passes through anchor attributes (target/rel)", () => {
+      render(
+        <Link href="https://stylexjs.com" target="_blank" rel="noreferrer">
+          StyleX
+        </Link>
+      )
+      const link = screen.getByText("StyleX")
+      expect(link).toHaveAttribute("target", "_blank")
+      expect(link).toHaveAttribute("rel", "noreferrer")
+    })
+  })
 })

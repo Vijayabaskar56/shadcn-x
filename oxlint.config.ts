@@ -1,10 +1,11 @@
 import { fileURLToPath } from "node:url"
-
 import { defineConfig } from "oxlint"
 
 // Absolute path to our local lint plugin, derived from this config's location so
 // it resolves regardless of cwd (oxlint loads JS plugins via Node ESM).
-const shadcnXPlugin = fileURLToPath(new URL("./src/lint/index.ts", import.meta.url))
+const shadcnXPlugin = fileURLToPath(
+  new URL("./src/lint/index.ts", import.meta.url)
+)
 
 export default defineConfig({
   plugins: [
@@ -76,7 +77,10 @@ export default defineConfig({
     // shadcn-x guardrails (ADR-0001/0002/0003). "warn" while the migration is in
     // flight; each flips to "error" as the matching primitive ships and the app
     // layer is ported off raw HTML / className.
-    "shadcn-x/no-raw-html": "warn",
+    // no-raw-html: src is fully migrated, so raw hosts there are a hard error.
+    // Test fixtures deliberately render raw hosts (asserting the guardrail, and
+    // exercising primitives' host props) — kept at "warn" via the tests override.
+    "shadcn-x/no-raw-html": "error",
     "shadcn-x/no-className-style": "warn",
     "shadcn-x/no-physical-stylex-properties": "warn",
     "shadcn-x/no-raw-design-values": "warn",
@@ -130,12 +134,20 @@ export default defineConfig({
     },
     {
       // Docs MDX infra: the renderer map's heading functions receive content via
-      // props.children (heading-has-content can't see it), and content-collections'
-      // useMDXComponent legitimately derives a component in render.
-      files: ["src/components/docs/mdx-components.tsx", "src/components/docs/doc-content.tsx"],
+      // props.children (heading-has-content can't see it).
+      files: ["src/components/docs/mdx-components.tsx"],
       rules: {
         "jsx-a11y/heading-has-content": "off",
-        "react-hooks-js/static-components": "off",
+      },
+    },
+    {
+      // Test fixtures deliberately render raw host elements — to assert the
+      // guardrail itself and to exercise primitives' native host props. Keep
+      // no-raw-html at "warn" here so those fixtures don't fail the build (src
+      // stays at "error").
+      files: ["tests/**"],
+      rules: {
+        "shadcn-x/no-raw-html": "warn",
       },
     },
   ],

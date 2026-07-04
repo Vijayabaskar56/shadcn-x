@@ -4,9 +4,12 @@ import type { ComponentPropsWithoutRef } from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import * as stylex from "@stylexjs/stylex"
 
+import type { VariantKey } from "@/components/variants"
+
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
+import { defineVariants } from "@/components/variants"
 
 import {
   boxShadow,
@@ -22,8 +25,6 @@ import {
 // `side` prop instead of centered. The Portal/Backdrop/Popup/Close wiring
 // mirrors Dialog.tsx exactly; `side` drives both positioning and the edge that
 // receives a divider border.
-type Side = "top" | "right" | "bottom" | "left"
-
 const styles = stylex.create({
   overlay: {
     position: "fixed",
@@ -48,46 +49,6 @@ const styles = stylex.create({
     boxShadow: boxShadow.l,
     padding: spacing.xl,
     outline: "none",
-  },
-
-  sideRight: {
-    top: 0,
-    insetInlineEnd: 0,
-    bottom: 0,
-    height: "100%",
-    width: "75%",
-    maxWidth: "24rem",
-    borderInlineStartWidth: 1,
-    borderInlineStartStyle: "solid",
-    borderInlineStartColor: colors["border-primary"],
-  },
-
-  sideLeft: {
-    top: 0,
-    insetInlineStart: 0,
-    bottom: 0,
-    height: "100%",
-    width: "75%",
-    maxWidth: "24rem",
-    borderInlineEndWidth: 1,
-    borderInlineEndStyle: "solid",
-    borderInlineEndColor: colors["border-primary"],
-  },
-
-  sideTop: {
-    top: 0,
-    insetInline: 0,
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
-    borderBottomColor: colors["border-primary"],
-  },
-
-  sideBottom: {
-    bottom: 0,
-    insetInline: 0,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
-    borderTopColor: colors["border-primary"],
   },
 
   close: {
@@ -124,12 +85,49 @@ const styles = stylex.create({
   },
 })
 
-const sideStyles = {
-  top: styles.sideTop,
-  right: styles.sideRight,
-  bottom: styles.sideBottom,
-  left: styles.sideLeft,
-} satisfies Record<Side, StyleXStyles>
+const sides = defineVariants(
+  stylex.create({
+    top: {
+      top: 0,
+      insetInline: 0,
+      borderBottomWidth: 1,
+      borderBottomStyle: "solid",
+      borderBottomColor: colors["border-primary"],
+    },
+    right: {
+      top: 0,
+      insetInlineEnd: 0,
+      bottom: 0,
+      height: "100%",
+      width: "75%",
+      maxWidth: "24rem",
+      borderInlineStartWidth: 1,
+      borderInlineStartStyle: "solid",
+      borderInlineStartColor: colors["border-primary"],
+    },
+    bottom: {
+      bottom: 0,
+      insetInline: 0,
+      borderTopWidth: 1,
+      borderTopStyle: "solid",
+      borderTopColor: colors["border-primary"],
+    },
+    left: {
+      top: 0,
+      insetInlineStart: 0,
+      bottom: 0,
+      height: "100%",
+      width: "75%",
+      maxWidth: "24rem",
+      borderInlineEndWidth: 1,
+      borderInlineEndStyle: "solid",
+      borderInlineEndColor: colors["border-primary"],
+    },
+  }),
+  "right"
+)
+
+type Side = VariantKey<typeof sides>
 
 const Sheet = DialogPrimitive.Root
 
@@ -201,18 +199,20 @@ type SheetContentProps = Omit<
 
 function SheetContent({
   children,
-  side = "right",
+  side,
   showCloseButton = true,
   sx,
   ...props
 }: SheetContentProps) {
+  const resolvedSide = sides.resolve(side)
+
   return (
     <SheetPortal>
       <SheetOverlay />
       <DialogPrimitive.Popup
         data-slot="sheet-content"
-        data-side={side}
-        {...stylex.props(styles.content, sideStyles[side], sx)}
+        data-side={resolvedSide}
+        {...stylex.props(styles.content, sides(side), sx)}
         {...props}
       >
         {children}

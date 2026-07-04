@@ -2,8 +2,11 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 
 import * as stylex from "@stylexjs/stylex"
 
+import type { VariantKey } from "@/components/variants"
+
 import { Box } from "@/components/box"
 import { Icon } from "@/components/icon"
+import { defineVariants } from "@/components/variants"
 
 import {
   borderRadius,
@@ -17,8 +20,6 @@ import {
 } from "../styles/tokens.stylex"
 
 const u = spacing["--spacing"]
-
-type Size = "default" | "sm"
 
 const styles = stylex.create({
   wrapper: {
@@ -70,18 +71,6 @@ const styles = stylex.create({
     },
     // Native arrow is hidden by appearance: none; custom chevron fills in.
   },
-  selectDefault: {
-    height: `calc(${u} * 9)`,
-    paddingInline: spacing.m,
-    paddingInlineEnd: `calc(${u} * 10)`,
-    paddingBlock: spacing.xs,
-  },
-  selectSm: {
-    height: `calc(${u} * 8)`,
-    paddingInline: spacing.s,
-    paddingInlineEnd: `calc(${u} * 8)`,
-    paddingBlock: spacing.xs,
-  },
   icon: {
     position: "absolute",
     insetInlineEnd: spacing.m,
@@ -93,10 +82,6 @@ const styles = stylex.create({
     height: "1rem",
     color: colors["text-primary"],
   },
-  iconSm: {
-    width: "0.75rem",
-    height: "0.75rem",
-  },
   option: {
     backgroundColor: colors["background-primary"],
     color: colors["text-primary"],
@@ -107,15 +92,36 @@ const styles = stylex.create({
   },
 })
 
-const selectSizeStyles = {
-  default: styles.selectDefault,
-  sm: styles.selectSm,
-} satisfies Record<Size, StyleXStyles>
+const selectSizes = defineVariants(
+  stylex.create({
+    default: {
+      height: `calc(${u} * 9)`,
+      paddingInline: spacing.m,
+      paddingInlineEnd: `calc(${u} * 10)`,
+      paddingBlock: spacing.xs,
+    },
+    sm: {
+      height: `calc(${u} * 8)`,
+      paddingInline: spacing.s,
+      paddingInlineEnd: `calc(${u} * 8)`,
+      paddingBlock: spacing.xs,
+    },
+  }),
+  "default"
+)
 
-const iconSizeStyles = {
-  default: styles.icon,
-  sm: [styles.icon, styles.iconSm],
-} satisfies Record<Size, StyleXStyles | StyleXStyles[]>
+const iconSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      width: "0.75rem",
+      height: "0.75rem",
+    },
+  }),
+  "default"
+)
+
+type Size = VariantKey<typeof selectSizes>
 
 // Variable tags so these defining primitives aren't flagged by their own
 // `no-raw-html` rule (the same technique Box/Textarea use internally).
@@ -131,25 +137,22 @@ type NativeSelectProps = Omit<
   sx?: StyleXStyles
 }
 
-function NativeSelect({
-  size = "default",
-  sx,
-  children,
-  ...props
-}: NativeSelectProps) {
+function NativeSelect({ size, sx, children, ...props }: NativeSelectProps) {
+  const resolvedSize = selectSizes.resolve(size)
+
   return (
     <Box
       as="div"
       data-slot="native-select-wrapper"
-      data-size={size}
+      data-size={resolvedSize}
       sx={styles.wrapper}
     >
       <SelectTag
         data-slot="native-select"
-        data-size={size}
+        data-size={resolvedSize}
         {...stylex.props(
           styles.select,
-          selectSizeStyles[size],
+          selectSizes(size),
           sx,
           stylex.defaultMarker()
         )}
@@ -160,7 +163,7 @@ function NativeSelect({
       <Icon
         name="ChevronDown"
         data-slot="native-select-icon"
-        sx={iconSizeStyles[size]}
+        sx={[styles.icon, iconSizes(size)]}
       />
     </Box>
   )

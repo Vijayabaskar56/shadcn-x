@@ -3,6 +3,8 @@ import type { ComponentPropsWithoutRef } from "react"
 
 import * as stylex from "@stylexjs/stylex"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   colors,
@@ -10,12 +12,11 @@ import {
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 // Host element aliased so the on-system `no-raw-html` guardrail (which matches
 // raw JSX tag names) stays satisfied while these low-level slots render a div.
 const Div = "div" as const
-
-type EmptyMediaVariant = "default" | "icon"
 
 type EmptyProps = Omit<
   ComponentPropsWithoutRef<"div">,
@@ -78,16 +79,6 @@ const styles = stylex.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  mediaDefault: {
-    backgroundColor: "transparent",
-  },
-  mediaIcon: {
-    width: `calc(${u} * 10)`,
-    height: `calc(${u} * 10)`,
-    borderRadius: borderRadius.l,
-    backgroundColor: colors["background-muted"],
-    color: colors["text-primary"],
-  },
   title: {
     fontSize: fontSize.l,
     fontWeight: fontWeight.medium,
@@ -111,10 +102,23 @@ const styles = stylex.create({
   },
 })
 
-const mediaVariantStyles = {
-  default: styles.mediaDefault,
-  icon: styles.mediaIcon,
-} satisfies Record<EmptyMediaVariant, StyleXStyles>
+const mediaVariants = defineVariants(
+  stylex.create({
+    default: {
+      backgroundColor: "transparent",
+    },
+    icon: {
+      width: `calc(${u} * 10)`,
+      height: `calc(${u} * 10)`,
+      borderRadius: borderRadius.l,
+      backgroundColor: colors["background-muted"],
+      color: colors["text-primary"],
+    },
+  }),
+  "default"
+)
+
+type EmptyMediaVariant = VariantKey<typeof mediaVariants>
 
 function Empty({ sx, ...props }: EmptyProps) {
   return (
@@ -132,12 +136,12 @@ function EmptyHeader({ sx, ...props }: EmptySlotProps) {
   )
 }
 
-function EmptyMedia({ variant = "default", sx, ...props }: EmptyMediaProps) {
+function EmptyMedia({ variant, sx, ...props }: EmptyMediaProps) {
   return (
     <Div
       data-slot="empty-icon"
-      data-variant={variant}
-      {...stylex.props(styles.media, mediaVariantStyles[variant], sx)}
+      data-variant={mediaVariants.resolve(variant)}
+      {...stylex.props(styles.media, mediaVariants(variant), sx)}
       {...props}
     />
   )

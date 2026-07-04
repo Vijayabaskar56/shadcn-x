@@ -5,6 +5,8 @@ import * as stylex from "@stylexjs/stylex"
 import { createLink } from "@tanstack/react-router"
 import * as React from "react"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   colors,
@@ -12,13 +14,12 @@ import {
   focusRing,
   fontWeight,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 // shadcn has no Link component — its examples drop to a raw `<a>` or the
 // framework's link. This is the on-system primitive: it wraps TanStack Router's
 // type-safe Link (via createLink, so `to`/`params`/`search`/`preload` keep their
 // full type safety) and styles it with StyleX tokens. No className, no raw <a>.
-type Variant = "default" | "subtle"
-
 const styles = stylex.create({
   base: {
     cursor: "pointer",
@@ -34,25 +35,28 @@ const styles = stylex.create({
       ":focus-visible": focusRing.ring,
     },
   },
-  // The prose/inline link: accent-colored and underlined, matching the
-  // repo's existing anchor convention (see docs MDX anchor).
-  default: {
-    color: colors.accent,
-    fontWeight: fontWeight.medium,
-    textDecorationLine: { default: "underline", ":hover": "none" },
-  },
-  // The in-context link (nav, cards): inherits its surrounding color and only
-  // underlines on hover.
-  subtle: {
-    color: "inherit",
-    textDecorationLine: { default: "none", ":hover": "underline" },
-  },
 })
 
-const variantStyles = {
-  default: styles.default,
-  subtle: styles.subtle,
-} satisfies Record<Variant, StyleXStyles>
+const variants = defineVariants(
+  stylex.create({
+    // The prose/inline link: accent-colored and underlined, matching the
+    // repo's existing anchor convention (see docs MDX anchor).
+    default: {
+      color: colors.accent,
+      fontWeight: fontWeight.medium,
+      textDecorationLine: { default: "underline", ":hover": "none" },
+    },
+    // The in-context link (nav, cards): inherits its surrounding color and only
+    // underlines on hover.
+    subtle: {
+      color: "inherit",
+      textDecorationLine: { default: "none", ":hover": "underline" },
+    },
+  }),
+  "default"
+)
+
+type Variant = VariantKey<typeof variants>
 
 type LinkBaseProps = Omit<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -71,13 +75,13 @@ type LinkBaseProps = Omit<
 const Anchor = "a" as const
 
 const LinkBase = React.forwardRef<HTMLAnchorElement, LinkBaseProps>(
-  function LinkBase({ variant = "default", sx, ...props }, ref) {
+  function LinkBase({ variant, sx, ...props }, ref) {
     return (
       <Anchor
         ref={ref}
         data-slot="link"
-        data-variant={variant}
-        {...stylex.props(styles.base, variantStyles[variant], sx)}
+        data-variant={variants.resolve(variant)}
+        {...stylex.props(styles.base, variants(variant), sx)}
         {...props}
       />
     )
@@ -86,13 +90,42 @@ const LinkBase = React.forwardRef<HTMLAnchorElement, LinkBaseProps>(
 
 const CreatedLink = createLink(LinkBase)
 
+// The plain-anchor form: for URLs the router doesn't own — external sites,
+// same-page hash anchors, mailto/tel. Passing `href` opts out of router
+// resolution (`to`/`params` are unavailable in this form); the anchor keeps
+// the same token styling, variants and `sx` surface.
+type PlainLinkProps = LinkBaseProps & {
+  href: string
+  to?: never
+  params?: never
+  search?: never
+  hash?: never
+  preload?: never
+}
+
+type LinkComponentType = LinkComponent<typeof LinkBase> &
+  ((
+    props: PlainLinkProps & React.RefAttributes<HTMLAnchorElement>
+  ) => React.JSX.Element)
+
 /**
  * Type-safe, on-system navigation link. Defaults `preload="intent"` (the app's
  * router default) so links prefetch on hover/focus without extra wiring.
+ *
+ * Two forms, discriminated by prop:
+ * - `to` (+ `params`/`search`/…): router-resolved, fully type-safe navigation.
+ * - `href`: a plain styled anchor for URLs outside the router — external
+ *   links, in-page `#hash` anchors, `mailto:` — no router context required.
  */
-const Link: LinkComponent<typeof LinkBase> = (props) => {
-  return <CreatedLink preload="intent" {...props} />
-}
+const Link: LinkComponentType = ((props: PlainLinkProps) =>
+  typeof props.href === "string" ? (
+    <LinkBase {...props} />
+  ) : (
+    <CreatedLink
+      preload="intent"
+      {...(props as React.ComponentProps<typeof CreatedLink>)}
+    />
+  )) as LinkComponentType
 
 export { Link }
 export type { Variant as LinkVariant }

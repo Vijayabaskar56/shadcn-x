@@ -6,12 +6,14 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import * as stylex from "@stylexjs/stylex"
 import { createContext, useContext, useState } from "react"
 
+import type { VariantKey } from "./variants"
+
 import { borderRadius } from "../styles/tokens.stylex"
 import { groupItemEdges } from "./group-item-edges"
-import { toggleStyles } from "./toggle"
+import { toggleSizes, toggleStyles, toggleVariants } from "./toggle"
 
-type Variant = "default" | "outline"
-type Size = "default" | "sm" | "lg"
+type Variant = VariantKey<typeof toggleVariants>
+type Size = VariantKey<typeof toggleSizes>
 
 type ToggleGroupContextValue = {
   variant?: Variant
@@ -27,8 +29,8 @@ type ToggleGroupContextValue = {
 const EMPTY: readonly string[] = []
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue>({
-  size: "default",
-  variant: "default",
+  size: toggleSizes.defaultKey,
+  variant: toggleVariants.defaultKey,
   spacing: 0,
   orientation: "horizontal",
   value: EMPTY,
@@ -88,8 +90,8 @@ function ToggleGroup({
   return (
     <ToggleGroupPrimitive
       data-slot="toggle-group"
-      data-variant={variant}
-      data-size={size}
+      data-variant={toggleVariants.resolve(variant)}
+      data-size={toggleSizes.resolve(size)}
       data-spacing={gap}
       data-orientation={orientation}
       style={{ "--gap": gap } as CSSProperties}
@@ -122,17 +124,6 @@ function ToggleGroup({
   )
 }
 
-const groupItemVariantStyles = {
-  default: toggleStyles.defaultVariant,
-  outline: toggleStyles.outline,
-} satisfies Record<Variant, StyleXStyles>
-
-const groupItemSizeStyles = {
-  default: toggleStyles.sizeDefault,
-  sm: toggleStyles.sizeSm,
-  lg: toggleStyles.sizeLg,
-} satisfies Record<Size, StyleXStyles>
-
 type ToggleGroupItemProps = Omit<
   TogglePrimitive.Props,
   "className" | "style" | "color"
@@ -150,8 +141,8 @@ function ToggleGroupItem({
   ...props
 }: ToggleGroupItemProps) {
   const context = useContext(ToggleGroupContext)
-  const variant = context.variant ?? itemVariant ?? "default"
-  const size = context.size ?? itemSize ?? "default"
+  const variant = toggleVariants.resolve(context.variant ?? itemVariant)
+  const size = toggleSizes.resolve(context.size ?? itemSize)
   // Pressed is derived from the group value (Base UI only fires the item's
   // onPressedChange on user clicks, not on group-driven deselection).
   const isPressed =
@@ -164,8 +155,8 @@ function ToggleGroupItem({
       data-size={size}
       {...stylex.props(
         toggleStyles.base,
-        groupItemVariantStyles[variant],
-        groupItemSizeStyles[size],
+        toggleVariants(variant),
+        toggleSizes(size),
         isPressed && toggleStyles.pressed,
         context.spacing === 0 && groupItemEdges,
         sx

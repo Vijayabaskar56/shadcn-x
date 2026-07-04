@@ -8,7 +8,7 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"],
-      "content-collections": ["./.content-collections/generated"]
+      "collections/*": ["./.source/*"]
     },
 
     /* Bundler mode */

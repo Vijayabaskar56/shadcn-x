@@ -124,22 +124,24 @@ Plan: `docs/plans/2026-06-30-rtl-support.md` (implemented in `9680f1c`)
 
 ## Box AllowedElement retirement
 
-When Primitive ships, Box loses these elements from its `AllowedElement` type
+**Canonical table: `src/element-coverage.ts`** — the single source of truth
+for tag → retiring primitive and for which tags Box's `as=` still permits
+(each with a documented `boxAllowed` reason). Both `no-raw-html`'s
+`DEFAULT_ELEMENTS` and Box's `AllowedElement` union are derived from it;
+`tests/lint/element-coverage.test.ts` asserts the whole table. Do not
+hand-list tags here — edit the module instead.
 
-and `no-raw-html` remaps them from `Box` → `Primitive`:
+Open retirements (flip the entry in `src/element-coverage.ts` when done):
 
-
-| Element(s)                                                                  | Moves to                             | When          |
-| --------------------------------------------------------------------------- | ------------------------------------ | ------------- |
-| `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`, `code` | **Primitive** (new)                  | Primitive [ ] |
-| `form`, `fieldset`                                                          | **Form** (Phase 1)                   | Phase 1       |
-| `p`, `h1`–`h6`                                                              | **Text**                             | Done ✓        |
-| `button`                                                                    | **Button**                           | Done ✓        |
-| `a`                                                                         | **Link**                             | Done ✓        |
-| `label`                                                                     | **Label**                            | Done ✓        |
-| `img`                                                                       | **Image**                            | Done ✓        |
-| `hr`                                                                        | **Separator**                        | Done ✓        |
-| `table`, `thead`, `tbody`, `tr`, `th`, `td`, `caption`                      | **Table** (th/td kept for MDX prose) | Done ✓        |
+- [ ] `ul`/`ol`/`li`, `time`, `figure`, `figcaption`, `blockquote`, `pre`,
+  `code` — move from **Box** to a new **Primitive** component
+- [x] `fieldset` — `FieldSet` shipped and no call sites remain on
+  `Box as="fieldset"`; `boxAllowed` dropped, so the raw tag is banned and Box no
+  longer accepts it
+- [ ] `form` — no primitive yet (`Form` is the react-hook-form provider, no
+  DOM); ban the raw tag when a DOM-rendering primitive lands
+- [ ] `table`/`th`/`td`/`hr` — kept as `boxAllowed: "mdx-prose-infra"` for
+  markdown prose in docs; retire if mdx-components stops needing them
 
 
 ---

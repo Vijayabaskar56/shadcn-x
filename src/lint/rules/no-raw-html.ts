@@ -2,67 +2,14 @@ import type { Context } from "@oxlint/plugins"
 
 import { defineRule } from "@oxlint/plugins"
 
-/**
- * Default banned host elements → the shadcn-x primitive that covers them.
- *
- * The list is curated, not exhaustive (ADR-0003): we ban only the host elements
- * a primitive already replaces, so raw HTML shrinks toward zero as primitives
- * ship. Elements with no primitive yet (e.g. img) are intentionally absent and
- * stay allowed until their primitive lands.
- */
-const DEFAULT_ELEMENTS: Record<string, string> = {
-  div: "Box",
-  span: "Box",
-  section: "Box",
-  nav: "Box",
-  article: "Box",
-  main: "Box",
-  aside: "Box",
-  header: "Box",
-  footer: "Box",
-  ul: "Box",
-  ol: "Box",
-  li: "Box",
-  p: "Text",
-  h1: "Text",
-  h2: "Text",
-  h3: "Text",
-  h4: "Text",
-  h5: "Text",
-  h6: "Text",
-  figure: "Box",
-  figcaption: "Box",
-  blockquote: "Box",
-  pre: "Box",
-  code: "Box",
-  kbd: "Kbd",
-  time: "Box",
-  table: "Table",
-  thead: "TableHeader",
-  tbody: "TableBody",
-  tfoot: "TableFooter",
-  tr: "TableRow",
-  th: "TableHead",
-  td: "TableCell",
-  caption: "TableCaption",
-  hr: "Separator",
-  img: "Image",
-  button: "Button",
-  a: "Link",
-  label: "Label",
-  svg: "Icon",
-  textarea: "Textarea",
-  input: "Input",
-  select: "NativeSelect",
-  option: "NativeSelectOption",
-  optgroup: "NativeSelectOptGroup",
-  // No `form` mapping: our `Form` is the react-hook-form `FormProvider` context
-  // (it renders no DOM), so it does NOT retire the `<form>` element — you still
-  // need a real `<form onSubmit>` inside it. Like `img` before `Image`, `<form>`
-  // stays allowed until a primitive actually covers it.
-  fieldset: "FieldSet",
-  legend: "FieldLegend",
-}
+// Default banned host elements → the shadcn-x primitive that covers them,
+// derived from the single source of truth for element coverage (ADR-0003).
+// The list is curated, not exhaustive: elements with no primitive yet (e.g.
+// `form`, whose react-hook-form `Form` renders no DOM) are intentionally
+// absent and stay allowed until their primitive lands. Curation notes live
+// with the table in `src/element-coverage.ts`.
+import { DEFAULT_ELEMENTS } from "../../element-coverage.ts"
+import { perFileOption } from "../rule-kit.ts"
 
 export const noRawHtml = defineRule({
   meta: {
@@ -90,19 +37,18 @@ export const noRawHtml = defineRule({
   createOnce(context: Context) {
     // `createOnce` runs once; `context.options` is only populated per-file, so
     // resolve the option in `before()` (which the runtime calls for each file).
-    let elements = DEFAULT_ELEMENTS
+    const option = perFileOption<{
+      elements: Readonly<Record<string, string>>
+    }>(context, { elements: DEFAULT_ELEMENTS })
     return {
       before() {
-        const option = ((context.options ?? [])[0] ?? {}) as {
-          elements?: Record<string, string>
-        }
-        elements = option.elements ?? DEFAULT_ELEMENTS
+        option.before()
       },
       JSXOpeningElement(node: any) {
         const nameNode = node.name
         if (nameNode.type !== "JSXIdentifier") return
         const tag: string = nameNode.name
-        const primitive = elements[tag]
+        const primitive = option.current.elements[tag]
         if (primitive === undefined) return
         context.report({
           node: nameNode,

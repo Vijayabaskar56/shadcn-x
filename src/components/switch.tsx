@@ -4,6 +4,8 @@ import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import * as stylex from "@stylexjs/stylex"
 import { useState } from "react"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   boxShadow,
@@ -11,8 +13,7 @@ import {
   duration,
   focusRing,
 } from "../styles/tokens.stylex"
-
-type Size = "default" | "sm"
+import { defineVariants } from "./variants"
 
 const styles = stylex.create({
   root: {
@@ -42,14 +43,6 @@ const styles = stylex.create({
       ":disabled": "none",
     },
   },
-  rootDefault: {
-    height: "1.15rem",
-    width: "2rem",
-  },
-  rootSm: {
-    height: "0.875rem",
-    width: "1.5rem",
-  },
   checked: {
     backgroundColor: colors.primary,
     borderColor: colors.primary,
@@ -61,28 +54,40 @@ const styles = stylex.create({
     transitionProperty: "transform",
     transitionDuration: duration.fast,
   },
-  thumbDefault: {
-    width: "1rem",
-    height: "1rem",
-  },
-  thumbSm: {
-    width: "0.75rem",
-    height: "0.75rem",
-  },
   thumbChecked: {
     transform: "translateX(calc(100% - 2px))",
   },
 })
 
-const rootSizeStyles = {
-  default: styles.rootDefault,
-  sm: styles.rootSm,
-} satisfies Record<Size, StyleXStyles>
+const rootSizes = defineVariants(
+  stylex.create({
+    default: {
+      height: "1.15rem",
+      width: "2rem",
+    },
+    sm: {
+      height: "0.875rem",
+      width: "1.5rem",
+    },
+  }),
+  "default"
+)
 
-const thumbSizeStyles = {
-  default: styles.thumbDefault,
-  sm: styles.thumbSm,
-} satisfies Record<Size, StyleXStyles>
+const thumbSizes = defineVariants(
+  stylex.create({
+    default: {
+      width: "1rem",
+      height: "1rem",
+    },
+    sm: {
+      width: "0.75rem",
+      height: "0.75rem",
+    },
+  }),
+  "default"
+)
+
+type Size = VariantKey<typeof rootSizes>
 
 type SwitchProps = Omit<
   SwitchPrimitive.Root.Props,
@@ -93,7 +98,7 @@ type SwitchProps = Omit<
 }
 
 function Switch({
-  size = "default",
+  size,
   sx,
   checked,
   defaultChecked,
@@ -110,7 +115,7 @@ function Switch({
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
-      data-size={size}
+      data-size={rootSizes.resolve(size)}
       checked={checked}
       defaultChecked={defaultChecked}
       onCheckedChange={(nextChecked, eventDetails) => {
@@ -119,7 +124,7 @@ function Switch({
       }}
       {...stylex.props(
         styles.root,
-        rootSizeStyles[size],
+        rootSizes(size),
         isChecked && styles.checked,
         sx
       )}
@@ -129,7 +134,7 @@ function Switch({
         data-slot="switch-thumb"
         {...stylex.props(
           styles.thumb,
-          thumbSizeStyles[size],
+          thumbSizes(size),
           isChecked && styles.thumbChecked
         )}
       />

@@ -78,7 +78,7 @@ bun run dev            # docs site + demo
 bunx tsc --noEmit      # typecheck
 bunx vitest run        # tests
 bunx oxlint --type-aware src   # lint (shadcn-x warnings = the migration surface)
-node scripts/build-content.mjs # compile MDX docs
+bunx fumadocs-mdx      # compile MDX docs (regenerates .source/)
 bun run build          # production build
 ```
 

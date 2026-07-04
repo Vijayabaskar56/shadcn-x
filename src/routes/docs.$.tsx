@@ -1,36 +1,50 @@
 import * as stylex from "@stylexjs/stylex"
 import { Link, createFileRoute, notFound } from "@tanstack/react-router"
-import { allDocs } from "content-collections"
+import { createServerFn } from "@tanstack/react-start"
+import browserCollections from "collections/browser"
+import { Suspense } from "react"
+
+import type { DocsNavItem } from "@/docs/docs-config"
 
 import { Box } from "@/components/box"
-import { DocContent, DocMdxContent } from "@/components/docs/doc-content"
+import { DocMdxContent } from "@/components/docs/doc-content"
 import { DocToc } from "@/components/docs/doc-toc"
-import { docsNavFlat } from "@/docs/docs-config"
+import { docsPager } from "@/docs/docs-config"
 
 import { colors, spacing } from "../styles/tokens.stylex"
 
-export const Route = createFileRoute("/docs/$")({
-  loader: ({ params }) => {
-    const slug = params._splat ?? ""
-    const doc = allDocs.find((d) => d.slug === slug)
-    if (!doc) throw notFound()
-
-    const index = docsNavFlat.findIndex((item) => item.slug === slug)
+// Resolves a slug to its compiled-doc path + head metadata on the server only
+// (`@/lib/source` reaches `collections/server`, which is node-only). The
+// TanStack Start compiler strips this handler — and the source import — from
+// the client bundle, leaving an RPC stub for client-side navigations.
+const serverLoader = createServerFn({ method: "GET" })
+  .validator((slug: string) => slug)
+  .handler(async ({ data: slug }) => {
+    const { source } = await import("@/lib/source")
+    const page = source.getPage(slug === "" ? [] : slug.split("/"))
+    if (!page) throw notFound()
     return {
-      doc,
-      prev: index > 0 ? docsNavFlat[index - 1] : undefined,
-      next:
-        index >= 0 && index < docsNavFlat.length - 1
-          ? docsNavFlat[index + 1]
-          : undefined,
+      path: page.path,
+      title: page.data.title,
+      description: page.data.description,
     }
+  })
+
+export const Route = createFileRoute("/docs/$")({
+  loader: async ({ params }) => {
+    const slug = params._splat ?? ""
+    const data = await serverLoader({ data: slug })
+    // Warm the compiled-MDX module cache so SSR renders the doc synchronously.
+    await clientLoader.preload(data.path)
+
+    return { ...data, ...docsPager(slug) }
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.doc.title} — shadcn-x` },
-          ...(loaderData.doc.description
-            ? [{ name: "description", content: loaderData.doc.description }]
+          { title: `${loaderData.title} — shadcn-x` },
+          ...(loaderData.description
+            ? [{ name: "description", content: loaderData.description }]
             : []),
         ]
       : [],
@@ -68,51 +82,57 @@ const styles = stylex.create({
   },
 })
 
-function DocPage() {
-  const { doc, prev, next } = Route.useLoaderData()
+type DocPageProps = {
+  prev: DocsNavItem | undefined
+  next: DocsNavItem | undefined
+}
 
-  return (
-    <Box as="div" display="flex" gap="2xl">
-      <Box as="article" flex="1" sx={styles.article}>
-        {doc.mdx ? (
-          <DocMdxContent code={doc.mdx} />
-        ) : (
-          <DocContent html={doc.html} />
-        )}
-        <Box
-          as="nav"
-          display="flex"
-          justifyContent="between"
-          borderTop
-          borderColor="border-primary"
-          fontSize="s"
-          sx={styles.nav}
-        >
-          {prev ? (
-            <Box as="span" sx={styles.navLink}>
-              <Link to="/docs/$" params={{ _splat: prev.slug }}>
-                ← {prev.label}
-              </Link>
-            </Box>
-          ) : (
-            <Box as="span" />
-          )}
-          {next ? (
-            <Box as="span" sx={styles.navLink}>
-              <Link to="/docs/$" params={{ _splat: next.slug }}>
-                {next.label} →
-              </Link>
-            </Box>
-          ) : (
-            <Box as="span" />
-          )}
+const clientLoader = browserCollections.docs.createClientLoader({
+  component({ toc, default: Mdx }, { prev, next }: DocPageProps) {
+    return (
+      <Box as="div" display="flex" gap="2xl">
+        <Box as="article" flex="1" sx={styles.article}>
+          <DocMdxContent Mdx={Mdx} />
+          <Box
+            as="nav"
+            display="flex"
+            justifyContent="between"
+            borderTop
+            borderColor="border-primary"
+            fontSize="s"
+            sx={styles.nav}
+          >
+            {prev ? (
+              <Box as="span" sx={styles.navLink}>
+                <Link to="/docs/$" params={{ _splat: prev.slug }}>
+                  ← {prev.label}
+                </Link>
+              </Box>
+            ) : (
+              <Box as="span" />
+            )}
+            {next ? (
+              <Box as="span" sx={styles.navLink}>
+                <Link to="/docs/$" params={{ _splat: next.slug }}>
+                  {next.label} →
+                </Link>
+              </Box>
+            ) : (
+              <Box as="span" />
+            )}
+          </Box>
+        </Box>
+        <Box as="aside" sx={styles.aside}>
+          <Box as="div" sx={styles.sticky}>
+            <DocToc toc={toc} />
+          </Box>
         </Box>
       </Box>
-      <Box as="aside" sx={styles.aside}>
-        <Box as="div" sx={styles.sticky}>
-          <DocToc toc={doc.toc} />
-        </Box>
-      </Box>
-    </Box>
-  )
+    )
+  },
+})
+
+function DocPage() {
+  const { path, prev, next } = Route.useLoaderData()
+  return <Suspense>{clientLoader.useContent(path, { prev, next })}</Suspense>
 }

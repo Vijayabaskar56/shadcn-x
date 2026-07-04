@@ -4,6 +4,10 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 
+import type { VariantKey } from "@/components/variants"
+
+import { defineVariants } from "@/components/variants"
+
 import {
   borderRadius,
   colors,
@@ -15,22 +19,6 @@ import {
 } from "../styles/tokens.stylex"
 
 const u = spacing["--spacing"]
-
-type BadgeVariant =
-  | "default"
-  | "secondary"
-  | "destructive"
-  | "outline"
-  | "ghost"
-  | "link"
-
-type BadgeProps = Omit<
-  useRender.ComponentProps<"span">,
-  "className" | "style" | "color"
-> & {
-  variant?: BadgeVariant
-  sx?: StyleXStyles
-}
 
 const styles = stylex.create({
   base: {
@@ -62,54 +50,6 @@ const styles = stylex.create({
       ":focus-visible": focusRing.ring,
     },
   },
-  default: {
-    backgroundColor: {
-      default: colors.primary,
-      ":hover": `color-mix(in oklch, ${colors.primary}, transparent 10%)`,
-    },
-    color: colors["primary-foreground"],
-  },
-  secondary: {
-    backgroundColor: {
-      default: colors.secondary,
-      ":hover": `color-mix(in oklch, ${colors.secondary}, ${colors["text-primary"]} 10%)`,
-    },
-    color: colors["secondary-foreground"],
-  },
-  destructive: {
-    backgroundColor: {
-      default: colors.destructive,
-      ":hover": `color-mix(in oklch, ${colors.destructive}, transparent 10%)`,
-    },
-    color: colors["destructive-foreground"],
-  },
-  outline: {
-    borderColor: {
-      default: colors["border-primary"],
-      ":focus-visible": colors.ring,
-    },
-    color: colors["text-primary"],
-    backgroundColor: {
-      default: "transparent",
-      ":hover": colors["background-muted"],
-    },
-  },
-  ghost: {
-    color: colors["text-primary"],
-    backgroundColor: {
-      default: "transparent",
-      ":hover": colors["background-muted"],
-    },
-  },
-  link: {
-    color: colors.primary,
-    backgroundColor: "transparent",
-    textUnderlineOffset: spacing.xs,
-    textDecorationLine: {
-      default: "none",
-      ":hover": "underline",
-    },
-  },
   invalid: {
     borderColor: colors.destructive,
     boxShadow: {
@@ -119,29 +59,80 @@ const styles = stylex.create({
   },
 })
 
-const variantStyles = {
-  default: styles.default,
-  secondary: styles.secondary,
-  destructive: styles.destructive,
-  outline: styles.outline,
-  ghost: styles.ghost,
-  link: styles.link,
-} satisfies Record<BadgeVariant, StyleXStyles>
+const variants = defineVariants(
+  stylex.create({
+    default: {
+      backgroundColor: {
+        default: colors.primary,
+        ":hover": `color-mix(in oklch, ${colors.primary}, transparent 10%)`,
+      },
+      color: colors["primary-foreground"],
+    },
+    secondary: {
+      backgroundColor: {
+        default: colors.secondary,
+        ":hover": `color-mix(in oklch, ${colors.secondary}, ${colors["text-primary"]} 10%)`,
+      },
+      color: colors["secondary-foreground"],
+    },
+    destructive: {
+      backgroundColor: {
+        default: colors.destructive,
+        ":hover": `color-mix(in oklch, ${colors.destructive}, transparent 10%)`,
+      },
+      color: colors["destructive-foreground"],
+    },
+    outline: {
+      borderColor: {
+        default: colors["border-primary"],
+        ":focus-visible": colors.ring,
+      },
+      color: colors["text-primary"],
+      backgroundColor: {
+        default: "transparent",
+        ":hover": colors["background-muted"],
+      },
+    },
+    ghost: {
+      color: colors["text-primary"],
+      backgroundColor: {
+        default: "transparent",
+        ":hover": colors["background-muted"],
+      },
+    },
+    link: {
+      color: colors.primary,
+      backgroundColor: "transparent",
+      textUnderlineOffset: spacing.xs,
+      textDecorationLine: {
+        default: "none",
+        ":hover": "underline",
+      },
+    },
+  }),
+  "default"
+)
 
-function Badge({
-  variant = "default",
-  render,
-  sx,
-  ...props
-}: BadgeProps) {
+type BadgeVariant = VariantKey<typeof variants>
+
+type BadgeProps = Omit<
+  useRender.ComponentProps<"span">,
+  "className" | "style" | "color"
+> & {
+  variant?: BadgeVariant
+  sx?: StyleXStyles
+}
+
+function Badge({ variant, render, sx, ...props }: BadgeProps) {
   const ariaInvalid = props["aria-invalid"]
   const invalid = ariaInvalid === true || ariaInvalid === "true"
+  const resolvedVariant = variants.resolve(variant)
   const ownProps = {
     "data-slot": "badge",
-    "data-variant": variant,
+    "data-variant": resolvedVariant,
     ...stylex.props(
       styles.base,
-      variantStyles[variant],
+      variants(variant),
       invalid && styles.invalid,
       sx
     ),
@@ -153,7 +144,7 @@ function Badge({
     props: mergeProps<"span">(ownProps, props),
     state: {
       slot: "badge",
-      variant,
+      variant: resolvedVariant,
     },
   })
 }

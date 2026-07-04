@@ -7,6 +7,8 @@ import * as stylex from "@stylexjs/stylex"
 
 import { Box } from "@/components/box"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   colors,
@@ -15,10 +17,9 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 import { groupItemEdges } from "./group-item-edges"
+import { defineVariants } from "./variants"
 
 const u = spacing["--spacing"]
-
-type Orientation = "horizontal" | "vertical"
 
 const styles = stylex.create({
   // Root container. The flush look (collapsed inner corners + shared borders)
@@ -30,8 +31,6 @@ const styles = stylex.create({
     width: "fit-content",
     alignItems: "stretch",
   },
-  horizontal: { flexDirection: "row" },
-  vertical: { flexDirection: "column" },
 
   // ButtonGroupText — a non-interactive label/affordance that sits flush in the
   // group (e.g. "1 of 10", a unit suffix). Mirrors shadcn's bg-muted bordered
@@ -83,10 +82,15 @@ const styles = stylex.create({
   },
 })
 
-const orientationStyles = {
-  horizontal: styles.horizontal,
-  vertical: styles.vertical,
-} satisfies Record<Orientation, StyleXStyles>
+const orientations = defineVariants(
+  stylex.create({
+    horizontal: { flexDirection: "row" },
+    vertical: { flexDirection: "column" },
+  }),
+  "horizontal"
+)
+
+type Orientation = VariantKey<typeof orientations>
 
 type ButtonGroupProps = Omit<
   React.ComponentPropsWithoutRef<typeof Box<"div">>,
@@ -96,27 +100,18 @@ type ButtonGroupProps = Omit<
   sx?: StyleXStyles
 }
 
-function ButtonGroup({
-  orientation = "horizontal",
-  sx,
-  ...props
-}: ButtonGroupProps) {
+function ButtonGroup({ orientation, sx, ...props }: ButtonGroupProps) {
   return (
     <Box
       as="div"
       role="group"
       data-slot="button-group"
       // data-orientation is what each child observes via stylex.when.ancestor.
-      data-orientation={orientation}
+      data-orientation={orientations.resolve(orientation)}
       // The marker is REQUIRED: children observe the group via
       // stylex.when.ancestor, which compiles to `.x-default-marker[...] *` — so
       // the ancestor must carry both the marker class and data-orientation.
-      sx={[
-        styles.group,
-        orientationStyles[orientation],
-        stylex.defaultMarker(),
-        sx,
-      ]}
+      sx={[styles.group, orientations(orientation), stylex.defaultMarker(), sx]}
       {...props}
     />
   )

@@ -9,7 +9,7 @@ shadcn-x components have first-class support for right-to-left (RTL) layouts. Al
 
 ## Quick start
 
-Wrap your app in `DirectionProvider` to set the direction:
+Wrap any subtree in `DirectionProvider` to set its direction:
 
 ```tsx
 import { DirectionProvider } from "@/components/direction"
@@ -17,13 +17,15 @@ import { DirectionProvider } from "@/components/direction"
 function App() {
   return (
     <DirectionProvider dir="rtl">
-      {/* all components now render in RTL */}
+      {/* everything inside renders in RTL */}
     </DirectionProvider>
   )
 }
 ```
 
-Direction defaults to `"ltr"` when omitted. `DirectionProvider` wraps Base UI's own `DirectionProvider` (so Base UI components adjust their behavior) and adds a shadcn-x enhancement: it mirrors the resolved direction onto `document.documentElement.dir`, so all components respond via CSS logical properties. This DOM write is a shadcn-x-specific divergence — Base UI's `DirectionProvider` does not touch the DOM on its own.
+Direction defaults to `"ltr"` when omitted. `DirectionProvider` wraps Base UI's own `DirectionProvider` (so Base UI components adjust their behavior) and adds a shadcn-x enhancement: it renders a boxless (`display: contents`) wrapper carrying the `dir` attribute, so all components inside respond via CSS logical properties. The direction is **scoped to the subtree** — it never touches the rest of the page.
+
+For an app-wide RTL layout, also set `dir` on the document root (e.g. `<html dir="rtl">`) so portaled overlays and the page scrollbar follow too.
 
 ## Props
 

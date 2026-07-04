@@ -50,7 +50,7 @@ Component checklist + status: `todo.md`.
 - `tests/` — tests mirroring `src/` (`tests/components`, `tests/lint`, `tests/lib`)
 - `docs/stylex-docs/` — the full StyleX docs (consult before guessing; see "When in doubt, read the docs")
 - `content/docs/*.mdx` — component docs with live previews; nav in `src/docs/docs-config.ts`
-- reference (read-only, external): `/Users/vijayabaskar/work/references/ui` (shadcn/ui; Base UI variant under `apps/v4/registry/bases/base/ui`)
+- reference (read-only): `references/ui` — a **local symlink** to the shadcn/ui repo (see `references/README.md`); same target as the absolute `/Users/vijayabaskar/work/references/ui`. Base UI variant lives under `references/ui/apps/v4/registry/bases/base/ui`.
 
 ## Verify
 
@@ -58,6 +58,6 @@ Component checklist + status: `todo.md`.
 bunx tsc --noEmit                  # tsconfig globs **/*.tsx, so tests/ are type-checked too
 bunx vitest run                    # runs tests/** (see vitest.config.ts include)
 bunx oxlint --type-aware src tests # exit 0; shadcn-x warnings are the migration surface
-node scripts/build-content.mjs
+bunx fumadocs-mdx                  # regenerate .source/ (docs content entries + types)
 bun run build
 ```

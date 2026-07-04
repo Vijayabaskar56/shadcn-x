@@ -7,6 +7,8 @@ import { Drawer as DrawerPrimitive } from "vaul"
 
 import { Box } from "@/components/box"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   colors,
@@ -14,6 +16,7 @@ import {
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 // The single spacing knob (CSS `--spacing`); drawer margins/dimensions are
 // multiples of it, so they re-scale with the spacing token — matching shadcn.
@@ -26,10 +29,6 @@ const u = spacing["--spacing"]
 // and publishes it through context; Content/Header/Handle consume it. This
 // keeps the public API identical to shadcn (direction on Root) and stays
 // on-system (JS conditional, not a distance/attribute selector).
-type Direction = "top" | "bottom" | "left" | "right"
-
-const DrawerContext = createContext<Direction>("bottom")
-
 const styles = stylex.create({
   // Mirrors DialogOverlay: a fixed, isolated scrim derived from the text
   // token (shadcn's bg-black/50, expressed through our themable surface).
@@ -49,53 +48,6 @@ const styles = stylex.create({
     flexDirection: "column",
     backgroundColor: colors["background-primary"],
     outline: "none",
-  },
-
-  // Direction-specific anchoring, radius, and border (shadcn's
-  // data-[vaul-drawer-direction=*] utilities, ported token-by-token).
-  contentBottom: {
-    insetInline: 0,
-    bottom: 0,
-    marginTop: spacing["5xl"], // mt-24
-    maxHeight: "80vh",
-    borderStartStartRadius: borderRadius.l, // rounded-t-lg
-    borderStartEndRadius: borderRadius.l,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
-    borderColor: colors["border-primary"],
-  },
-  contentTop: {
-    insetInline: 0,
-    top: 0,
-    marginBottom: spacing["5xl"], // mb-24
-    maxHeight: "80vh",
-    borderEndStartRadius: borderRadius.l, // rounded-b-lg
-    borderEndEndRadius: borderRadius.l,
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
-    borderColor: colors["border-primary"],
-  },
-  contentRight: {
-    insetBlock: 0,
-    insetInlineEnd: 0,
-    width: "75%", // w-3/4
-    borderInlineStartWidth: 1, // border-l
-    borderInlineStartStyle: "solid",
-    borderColor: colors["border-primary"],
-    "@media (min-width: 640px)": {
-      maxWidth: "24rem", // sm:max-w-sm
-    },
-  },
-  contentLeft: {
-    insetBlock: 0,
-    insetInlineStart: 0,
-    width: "75%",
-    borderInlineEndWidth: 1, // border-r
-    borderInlineEndStyle: "solid",
-    borderColor: colors["border-primary"],
-    "@media (min-width: 640px)": {
-      maxWidth: "24rem",
-    },
   },
 
   // The drag grip (vaul's Handle primitive). shadcn shows it only for the
@@ -147,12 +99,61 @@ const styles = stylex.create({
   },
 })
 
-const directionContent = {
-  top: styles.contentTop,
-  bottom: styles.contentBottom,
-  left: styles.contentLeft,
-  right: styles.contentRight,
-} satisfies Record<Direction, StyleXStyles>
+const directions = defineVariants(
+  stylex.create({
+    // Direction-specific anchoring, radius, and border (shadcn's
+    // data-[vaul-drawer-direction=*] utilities, ported token-by-token).
+    top: {
+      insetInline: 0,
+      top: 0,
+      marginBottom: spacing["5xl"], // mb-24
+      maxHeight: "80vh",
+      borderEndStartRadius: borderRadius.l, // rounded-b-lg
+      borderEndEndRadius: borderRadius.l,
+      borderBottomWidth: 1,
+      borderBottomStyle: "solid",
+      borderColor: colors["border-primary"],
+    },
+    bottom: {
+      insetInline: 0,
+      bottom: 0,
+      marginTop: spacing["5xl"], // mt-24
+      maxHeight: "80vh",
+      borderStartStartRadius: borderRadius.l, // rounded-t-lg
+      borderStartEndRadius: borderRadius.l,
+      borderTopWidth: 1,
+      borderTopStyle: "solid",
+      borderColor: colors["border-primary"],
+    },
+    left: {
+      insetBlock: 0,
+      insetInlineStart: 0,
+      width: "75%",
+      borderInlineEndWidth: 1, // border-r
+      borderInlineEndStyle: "solid",
+      borderColor: colors["border-primary"],
+      "@media (min-width: 640px)": {
+        maxWidth: "24rem",
+      },
+    },
+    right: {
+      insetBlock: 0,
+      insetInlineEnd: 0,
+      width: "75%", // w-3/4
+      borderInlineStartWidth: 1, // border-l
+      borderInlineStartStyle: "solid",
+      borderColor: colors["border-primary"],
+      "@media (min-width: 640px)": {
+        maxWidth: "24rem", // sm:max-w-sm
+      },
+    },
+  }),
+  "bottom"
+)
+
+type Direction = VariantKey<typeof directions>
+
+const DrawerContext = createContext<Direction>(directions.resolve())
 
 // vaul's DialogProps is `Base & (WithFadeFromProps | WithoutFadeFromProps)` — a
 // discriminated union keyed on `fadeFromIndex`. A plain Omit collapses that
@@ -169,12 +170,13 @@ type DrawerProps = DistributiveOmit<
   direction?: Direction
 }
 
-function Drawer({ direction = "bottom", ...props }: DrawerProps) {
+function Drawer({ direction, ...props }: DrawerProps) {
+  const resolvedDirection = directions.resolve(direction)
   return (
-    <DrawerContext.Provider value={direction}>
+    <DrawerContext.Provider value={resolvedDirection}>
       <DrawerPrimitive.Root
         data-slot="drawer"
-        direction={direction}
+        direction={resolvedDirection}
         {...props}
       />
     </DrawerContext.Provider>
@@ -276,7 +278,7 @@ function DrawerContent({
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         data-direction={direction}
-        {...stylex.props(styles.contentBase, directionContent[direction], sx)}
+        {...stylex.props(styles.contentBase, directions(direction), sx)}
         {...props}
       >
         {showHandle && direction === "bottom" && <DrawerHandle />}

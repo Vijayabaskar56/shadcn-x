@@ -7,6 +7,10 @@ import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 
+import type { VariantKey } from "@/components/variants"
+
+import { defineVariants } from "@/components/variants"
+
 import {
   borderRadius,
   colors,
@@ -15,7 +19,7 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 
-type AvatarSize = "default" | "sm" | "lg"
+type AvatarSize = VariantKey<typeof sizes>
 
 type AvatarProps = Omit<
   AvatarPrimitive.Root.Props,
@@ -82,18 +86,6 @@ const styles = stylex.create({
         `0 0 0 2px ${colors["background-primary"]}, inset 0 0 0 1px ${colors["border-primary"]}`,
     },
   },
-  rootDefault: {
-    width: `calc(${u} * 8)`,
-    height: `calc(${u} * 8)`,
-  },
-  rootSm: {
-    width: `calc(${u} * 6)`,
-    height: `calc(${u} * 6)`,
-  },
-  rootLg: {
-    width: `calc(${u} * 10)`,
-    height: `calc(${u} * 10)`,
-  },
   image: {
     display: "block",
     width: "100%",
@@ -115,9 +107,6 @@ const styles = stylex.create({
     fontWeight: fontWeight.medium,
     lineHeight: 1,
   },
-  fallbackSm: {
-    fontSize: fontSize.xs,
-  },
   badge: {
     position: "absolute",
     insetInlineEnd: 0,
@@ -131,18 +120,6 @@ const styles = stylex.create({
     color: colors["primary-foreground"],
     boxShadow: `0 0 0 2px ${colors["background-primary"]}`,
     userSelect: "none",
-  },
-  badgeDefault: {
-    width: `calc(${u} * 2.5)`,
-    height: `calc(${u} * 2.5)`,
-  },
-  badgeSm: {
-    width: spacing.s,
-    height: spacing.s,
-  },
-  badgeLg: {
-    width: spacing.m,
-    height: spacing.m,
   },
   group: {
     display: "flex",
@@ -177,41 +154,67 @@ const styles = stylex.create({
   },
 })
 
-const avatarSizeStyles = {
-  default: styles.rootDefault,
-  sm: styles.rootSm,
-  lg: styles.rootLg,
-} satisfies Record<AvatarSize, StyleXStyles>
+const sizes = defineVariants(
+  stylex.create({
+    default: {
+      width: `calc(${u} * 8)`,
+      height: `calc(${u} * 8)`,
+    },
+    sm: {
+      width: `calc(${u} * 6)`,
+      height: `calc(${u} * 6)`,
+    },
+    lg: {
+      width: `calc(${u} * 10)`,
+      height: `calc(${u} * 10)`,
+    },
+  }),
+  "default"
+)
 
-const fallbackSizeStyles = {
-  default: null,
-  sm: styles.fallbackSm,
-  lg: null,
-} satisfies Record<AvatarSize, StyleXStyles | null>
+const fallbackSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      fontSize: fontSize.xs,
+    },
+    lg: {},
+  }),
+  "default"
+)
 
-const badgeSizeStyles = {
-  default: styles.badgeDefault,
-  sm: styles.badgeSm,
-  lg: styles.badgeLg,
-} satisfies Record<AvatarSize, StyleXStyles>
+const badgeSizes = defineVariants(
+  stylex.create({
+    default: {
+      width: `calc(${u} * 2.5)`,
+      height: `calc(${u} * 2.5)`,
+    },
+    sm: {
+      width: spacing.s,
+      height: spacing.s,
+    },
+    lg: {
+      width: spacing.m,
+      height: spacing.m,
+    },
+  }),
+  "default"
+)
 
 function Avatar({
-  size = "default",
+  size,
   children,
   sx,
   ...props
 }: AvatarProps & { children?: ReactNode }) {
+  const resolvedSize = sizes.resolve(size)
+
   return (
-    <AvatarContext.Provider value={{ size }}>
+    <AvatarContext.Provider value={{ size: resolvedSize }}>
       <AvatarPrimitive.Root
         data-slot="avatar"
-        data-size={size}
-        {...stylex.props(
-          styles.root,
-          avatarSizeStyles[size],
-          stylex.defaultMarker(),
-          sx
-        )}
+        data-size={resolvedSize}
+        {...stylex.props(styles.root, sizes(size), stylex.defaultMarker(), sx)}
         {...props}
       >
         {children}
@@ -236,7 +239,7 @@ function AvatarFallback({ sx, ...props }: AvatarFallbackProps) {
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
-      {...stylex.props(styles.fallback, fallbackSizeStyles[size], sx)}
+      {...stylex.props(styles.fallback, fallbackSizes(size), sx)}
       {...props}
     />
   )
@@ -248,7 +251,7 @@ function AvatarBadge({ sx, ...props }: AvatarSlotProps) {
   return (
     <Span
       data-slot="avatar-badge"
-      {...stylex.props(styles.badge, badgeSizeStyles[size], sx)}
+      {...stylex.props(styles.badge, badgeSizes(size), sx)}
       {...props}
     />
   )

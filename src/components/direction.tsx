@@ -4,9 +4,21 @@ import {
   DirectionProvider as BaseDirectionProvider,
   useDirection,
 } from "@base-ui/react/direction-provider"
-import { useEffect } from "react"
+import * as stylex from "@stylexjs/stylex"
+import * as React from "react"
+
+import { Box } from "@/components/box"
 
 type Direction = TextDirection
+
+const styles = stylex.create({
+  // Boxless wrapper: carries the `dir` attribute (CSS `direction` inherits
+  // through `display: contents`) without adding a layout box, so the provider
+  // can sit inside flex/grid parents transparently.
+  scope: {
+    display: "contents",
+  },
+})
 
 function DirectionProvider({
   dir,
@@ -22,16 +34,32 @@ function DirectionProvider({
   const resolved = direction ?? dir ?? "ltr"
 
   // shadcn-x enhancement: Base UI's DirectionProvider only feeds context to
-  // Base UI components and does NOT touch the DOM. Our styles flip via CSS
-  // logical properties, which key off the document's `dir` attribute, so we
-  // also mirror the resolved direction onto <html>. (Documented divergence.)
-  useEffect(() => {
-    document.documentElement.dir = resolved
+  // Base UI components. Our styles flip via CSS logical properties, which
+  // resolve against the DOM `dir` an element inherits — not React context — so
+  // the direction has to reach the actual DOM. We do that in two places:
+  //
+  // 1. A boxless wrapper (`display: contents`) carrying `dir` scopes the flip to
+  //    this subtree and, since it renders on the server too, gives correct SSR
+  //    output before the effect below runs.
+  // 2. Portaled overlays (DialogContent, SheetContent) mount OUTSIDE this
+  //    subtree — at the end of <body> — so the wrapper can't reach them. The
+  //    effect sets `dir` on <html> so portaled content (and the page scrollbar)
+  //    inherit the direction. Restored on unmount.
+  React.useEffect(() => {
+    const root = document.documentElement
+    const previous = root.getAttribute("dir")
+    root.setAttribute("dir", resolved)
+    return () => {
+      if (previous === null) root.removeAttribute("dir")
+      else root.setAttribute("dir", previous)
+    }
   }, [resolved])
 
   return (
     <BaseDirectionProvider direction={resolved}>
-      {children}
+      <Box as="span" dir={resolved} sx={styles.scope}>
+        {children}
+      </Box>
     </BaseDirectionProvider>
   )
 }

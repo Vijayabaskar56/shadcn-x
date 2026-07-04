@@ -9,9 +9,11 @@ import type {
   ButtonSize,
   ButtonVariant,
 } from "@/components/button"
+import type { VariantKey } from "@/components/variants"
 
 import { Box } from "@/components/box"
 import { Button } from "@/components/button"
+import { defineVariants } from "@/components/variants"
 
 import {
   borderRadius,
@@ -23,8 +25,6 @@ import {
 } from "../styles/tokens.stylex"
 
 const u = spacing["--spacing"]
-
-type Size = "default" | "sm"
 
 const styles = stylex.create({
   overlay: {
@@ -56,16 +56,6 @@ const styles = stylex.create({
     padding: spacing.xl,
     boxShadow: boxShadow.l,
     outline: "none",
-  },
-
-  // Per-size maxWidth — a component dimension decision (shadcn's max-w-lg /
-  // max-w-xs), not a cross-cutting theme token. The closed `size` prop is the
-  // menu; these literals are the size *decision*.
-  sizeDefault: {
-    maxWidth: "32rem", // max-w-lg
-  },
-  sizeSm: {
-    maxWidth: "20rem", // max-w-xs
   },
 
   header: {
@@ -108,10 +98,22 @@ const styles = stylex.create({
   },
 })
 
-const sizeStyles = {
-  default: styles.sizeDefault,
-  sm: styles.sizeSm,
-} satisfies Record<Size, StyleXStyles>
+const sizes = defineVariants(
+  stylex.create({
+    // Per-size maxWidth — a component dimension decision (shadcn's max-w-lg /
+    // max-w-xs), not a cross-cutting theme token. The closed `size` prop is the
+    // menu; these literals are the size *decision*.
+    default: {
+      maxWidth: "32rem", // max-w-lg
+    },
+    sm: {
+      maxWidth: "20rem", // max-w-xs
+    },
+  }),
+  "default"
+)
+
+type Size = VariantKey<typeof sizes>
 
 const AlertDialog = AlertDialogPrimitive.Root
 
@@ -165,18 +167,16 @@ type AlertDialogContentProps = Omit<
   sx?: StyleXStyles
 }
 
-function AlertDialogContent({
-  size = "default",
-  sx,
-  ...props
-}: AlertDialogContentProps) {
+function AlertDialogContent({ size, sx, ...props }: AlertDialogContentProps) {
+  const resolvedSize = sizes.resolve(size)
+
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Popup
         data-slot="alert-dialog-content"
-        data-size={size}
-        {...stylex.props(styles.content, sizeStyles[size], sx)}
+        data-size={resolvedSize}
+        {...stylex.props(styles.content, sizes(size), sx)}
         {...props}
       />
     </AlertDialogPortal>

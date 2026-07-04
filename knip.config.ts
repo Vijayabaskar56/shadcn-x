@@ -4,8 +4,7 @@ export default {
   entry: [
     "src/routes/**/*.{ts,tsx}", // TanStack Router file-based routes
     "src/router.tsx", // router factory (framework convention)
-    "content-collections.ts", // content-collections config (default export consumed by the build)
-    "scripts/build-content.mjs", // standalone content generation
+    "source.config.ts", // fumadocs-mdx config (consumed by the vite plugin + CLI)
   ],
   project: ["src/**/*.{ts,tsx}"],
   ignoreDependencies: [

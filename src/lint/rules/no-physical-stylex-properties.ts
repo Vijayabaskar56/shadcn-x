@@ -2,6 +2,8 @@ import type { Context } from "@oxlint/plugins"
 
 import { defineRule } from "@oxlint/plugins"
 
+import { findAncestor } from "../rule-kit.ts"
+
 const PHYSICAL_PROPERTY_REPLACEMENTS: Record<string, string> = {
   left: "insetInlineStart",
   right: "insetInlineEnd",
@@ -35,19 +37,19 @@ function isStylexCreateCall(node: any): boolean {
   const callee = node.callee
   if (callee?.type !== "MemberExpression") return false
   const property = callee.property
-  if (property?.type !== "Identifier" || property.name !== "create") return false
+  if (property?.type !== "Identifier" || property.name !== "create")
+    return false
   return true
 }
 
 function isInsideStylexCreate(node: any): boolean {
-  let current = node.parent
-  while (current) {
-    if (current.type === "CallExpression" && isStylexCreateCall(current)) {
-      return true
-    }
-    current = current.parent
-  }
-  return false
+  return (
+    findAncestor(
+      node,
+      (ancestor) =>
+        ancestor.type === "CallExpression" && isStylexCreateCall(ancestor)
+    ) !== null
+  )
 }
 
 export const noPhysicalStylexProperties = defineRule({

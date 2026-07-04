@@ -11,7 +11,7 @@ description: shadcn-x is a small, themeable React component layer built on Base 
 edit directly — no black-box dependency to upgrade.
 
 > [!NOTE]
-> These docs are themselves powered by [content-collections](https://www.content-collections.dev),
+> These docs are themselves powered by [fumadocs-mdx](https://fumadocs.dev/docs/mdx),
 > compiled at build time and rendered through TanStack Start.
 
 ## Why shadcn-x

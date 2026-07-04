@@ -5,6 +5,8 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   colors,
@@ -15,41 +17,9 @@ import {
   spacing,
 } from "../styles/tokens.stylex"
 import { Separator } from "./separator"
+import { defineVariants } from "./variants"
 
 const u = spacing["--spacing"]
-
-type ItemVariant = "default" | "outline" | "muted"
-type ItemSize = "default" | "sm" | "xs"
-type ItemMediaVariant = "default" | "icon" | "image"
-
-type ItemProps = Omit<
-  useRender.ComponentProps<"div">,
-  "className" | "style" | "color"
-> & {
-  variant?: ItemVariant
-  size?: ItemSize
-  sx?: StyleXStyles
-}
-
-type ItemSlotProps = Omit<
-  ComponentPropsWithoutRef<"div">,
-  "className" | "style" | "color"
-> & {
-  sx?: StyleXStyles
-}
-
-type ItemDescriptionProps = Omit<
-  ComponentPropsWithoutRef<"p">,
-  "className" | "style" | "color"
-> & {
-  sx?: StyleXStyles
-}
-
-type ItemMediaProps = ItemSlotProps & {
-  variant?: ItemMediaVariant
-}
-
-type ItemSeparatorProps = ComponentPropsWithoutRef<typeof Separator>
 
 const Div = "div" as const
 const Paragraph = "p" as const
@@ -82,53 +52,12 @@ const styles = stylex.create({
       ":focus-visible": focusRing.ring,
     },
   },
-  itemDefault: {
-    backgroundColor: "transparent",
-  },
-  itemOutline: {
-    borderColor: {
-      default: colors["border-primary"],
-      ":focus-visible": colors.ring,
-    },
-  },
-  itemMuted: {
-    backgroundColor: `color-mix(in oklch, ${colors["background-muted"]}, transparent 50%)`,
-  },
-  itemSizeDefault: {
-    gap: spacing.l,
-    padding: spacing.l,
-  },
-  itemSizeSm: {
-    gap: `calc(${u} * 2.5)`,
-    paddingInline: spacing.l,
-    paddingBlock: spacing.m,
-  },
-  itemSizeXs: {
-    gap: spacing.s,
-    paddingInline: spacing.m,
-    paddingBlock: spacing.s,
-  },
   media: {
     display: "flex",
     flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.s,
-  },
-  mediaIcon: {
-    width: `calc(${u} * 8)`,
-    height: `calc(${u} * 8)`,
-    borderRadius: borderRadius.s,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: colors["border-primary"],
-    backgroundColor: colors["background-muted"],
-  },
-  mediaImage: {
-    width: `calc(${u} * 10)`,
-    height: `calc(${u} * 10)`,
-    overflow: "hidden",
-    borderRadius: borderRadius.s,
   },
   content: {
     display: "flex",
@@ -184,23 +113,98 @@ const styles = stylex.create({
   },
 })
 
-const itemVariantStyles = {
-  default: styles.itemDefault,
-  outline: styles.itemOutline,
-  muted: styles.itemMuted,
-} satisfies Record<ItemVariant, StyleXStyles>
+const itemVariants = defineVariants(
+  stylex.create({
+    default: {
+      backgroundColor: "transparent",
+    },
+    outline: {
+      borderColor: {
+        default: colors["border-primary"],
+        ":focus-visible": colors.ring,
+      },
+    },
+    muted: {
+      backgroundColor: `color-mix(in oklch, ${colors["background-muted"]}, transparent 50%)`,
+    },
+  }),
+  "default"
+)
 
-const itemSizeStyles = {
-  default: styles.itemSizeDefault,
-  sm: styles.itemSizeSm,
-  xs: styles.itemSizeXs,
-} satisfies Record<ItemSize, StyleXStyles>
+const itemSizes = defineVariants(
+  stylex.create({
+    default: {
+      gap: spacing.l,
+      padding: spacing.l,
+    },
+    sm: {
+      gap: `calc(${u} * 2.5)`,
+      paddingInline: spacing.l,
+      paddingBlock: spacing.m,
+    },
+    xs: {
+      gap: spacing.s,
+      paddingInline: spacing.m,
+      paddingBlock: spacing.s,
+    },
+  }),
+  "default"
+)
 
-const itemMediaVariantStyles = {
-  default: null,
-  icon: styles.mediaIcon,
-  image: styles.mediaImage,
-} satisfies Record<ItemMediaVariant, StyleXStyles | null>
+const itemMediaVariants = defineVariants(
+  stylex.create({
+    default: {},
+    icon: {
+      width: `calc(${u} * 8)`,
+      height: `calc(${u} * 8)`,
+      borderRadius: borderRadius.s,
+      borderWidth: 1,
+      borderStyle: "solid",
+      borderColor: colors["border-primary"],
+      backgroundColor: colors["background-muted"],
+    },
+    image: {
+      width: `calc(${u} * 10)`,
+      height: `calc(${u} * 10)`,
+      overflow: "hidden",
+      borderRadius: borderRadius.s,
+    },
+  }),
+  "default"
+)
+
+type ItemVariant = VariantKey<typeof itemVariants>
+type ItemSize = VariantKey<typeof itemSizes>
+type ItemMediaVariant = VariantKey<typeof itemMediaVariants>
+
+type ItemProps = Omit<
+  useRender.ComponentProps<"div">,
+  "className" | "style" | "color"
+> & {
+  variant?: ItemVariant
+  size?: ItemSize
+  sx?: StyleXStyles
+}
+
+type ItemSlotProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "className" | "style" | "color"
+> & {
+  sx?: StyleXStyles
+}
+
+type ItemDescriptionProps = Omit<
+  ComponentPropsWithoutRef<"p">,
+  "className" | "style" | "color"
+> & {
+  sx?: StyleXStyles
+}
+
+type ItemMediaProps = ItemSlotProps & {
+  variant?: ItemMediaVariant
+}
+
+type ItemSeparatorProps = ComponentPropsWithoutRef<typeof Separator>
 
 function ItemGroup({ sx, ...props }: ItemSlotProps) {
   return (
@@ -228,21 +232,17 @@ function ItemSeparator({
   )
 }
 
-function Item({
-  variant = "default",
-  size = "default",
-  sx,
-  render,
-  ...props
-}: ItemProps) {
+function Item({ variant, size, sx, render, ...props }: ItemProps) {
+  const resolvedVariant = itemVariants.resolve(variant)
+  const resolvedSize = itemSizes.resolve(size)
   const ownProps = {
     "data-slot": "item",
-    "data-variant": variant,
-    "data-size": size,
+    "data-variant": resolvedVariant,
+    "data-size": resolvedSize,
     ...stylex.props(
       styles.item,
-      itemVariantStyles[variant],
-      itemSizeStyles[size],
+      itemVariants(variant),
+      itemSizes(size),
       stylex.defaultMarker(),
       sx
     ),
@@ -254,20 +254,20 @@ function Item({
     props: mergeProps<"div">(ownProps, props),
     state: {
       slot: "item",
-      variant,
-      size,
+      variant: resolvedVariant,
+      size: resolvedSize,
     },
   })
 }
 
-function ItemMedia({ variant = "default", sx, ...props }: ItemMediaProps) {
+function ItemMedia({ variant, sx, ...props }: ItemMediaProps) {
   return (
     <Div
       data-slot="item-media"
-      data-variant={variant}
+      data-variant={itemMediaVariants.resolve(variant)}
       {...stylex.props(
         styles.media,
-        itemMediaVariantStyles[variant],
+        itemMediaVariants(variant),
         stylex.defaultMarker(),
         sx
       )}

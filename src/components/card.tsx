@@ -4,6 +4,8 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 
+import type { VariantKey } from "./variants"
+
 import {
   borderRadius,
   boxShadow,
@@ -12,27 +14,11 @@ import {
   fontWeight,
   spacing,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
 // Host element aliased so the on-system `no-raw-html` guardrail (which matches
 // raw JSX tag names) stays satisfied while these low-level slots render a div.
 const Div = "div" as const
-
-type CardSize = "default" | "sm"
-
-type CardProps = Omit<
-  ComponentPropsWithoutRef<"div">,
-  "className" | "style" | "color"
-> & {
-  size?: CardSize
-  sx?: StyleXStyles
-}
-
-type CardSlotProps = Omit<
-  ComponentPropsWithoutRef<"div">,
-  "className" | "style" | "color"
-> & {
-  sx?: StyleXStyles
-}
 
 const styles = stylex.create({
   card: {
@@ -48,11 +34,6 @@ const styles = stylex.create({
     paddingBlock: spacing.xl,
     boxShadow: boxShadow.s,
   },
-  cardSizeDefault: {},
-  cardSizeSm: {
-    gap: spacing.l,
-    paddingBlock: spacing.l,
-  },
   header: {
     display: "grid",
     gridAutoRows: "min-content",
@@ -65,9 +46,6 @@ const styles = stylex.create({
       [stylex.when.descendant('[data-slot="card-action"]')]:
         "minmax(0, 1fr) auto",
     },
-  },
-  headerSizeSm: {
-    paddingInline: spacing.l,
   },
   title: {
     fontWeight: fontWeight.semibold,
@@ -87,38 +65,70 @@ const styles = stylex.create({
   content: {
     paddingInline: spacing.xl,
   },
-  contentSizeSm: {
-    paddingInline: spacing.l,
-  },
   footer: {
     display: "flex",
     alignItems: "center",
     paddingInline: spacing.xl,
   },
-  footerSizeSm: {
-    paddingInline: spacing.l,
-  },
 })
 
-const cardSizeStyles = {
-  default: styles.cardSizeDefault,
-  sm: styles.cardSizeSm,
-} satisfies Record<CardSize, StyleXStyles>
+const cardSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      gap: spacing.l,
+      paddingBlock: spacing.l,
+    },
+  }),
+  "default"
+)
 
-const headerSizeStyles = {
-  default: null,
-  sm: styles.headerSizeSm,
-} satisfies Record<CardSize, StyleXStyles | null>
+const headerSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      paddingInline: spacing.l,
+    },
+  }),
+  "default"
+)
 
-const contentSizeStyles = {
-  default: null,
-  sm: styles.contentSizeSm,
-} satisfies Record<CardSize, StyleXStyles | null>
+const contentSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      paddingInline: spacing.l,
+    },
+  }),
+  "default"
+)
 
-const footerSizeStyles = {
-  default: null,
-  sm: styles.footerSizeSm,
-} satisfies Record<CardSize, StyleXStyles | null>
+const footerSizes = defineVariants(
+  stylex.create({
+    default: {},
+    sm: {
+      paddingInline: spacing.l,
+    },
+  }),
+  "default"
+)
+
+type CardSize = VariantKey<typeof cardSizes>
+
+type CardProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "className" | "style" | "color"
+> & {
+  size?: CardSize
+  sx?: StyleXStyles
+}
+
+type CardSlotProps = Omit<
+  ComponentPropsWithoutRef<"div">,
+  "className" | "style" | "color"
+> & {
+  sx?: StyleXStyles
+}
 
 type CardSizeContextValue = {
   size: CardSize
@@ -129,17 +139,18 @@ const CardSizeContext = React.createContext<CardSizeContextValue>({
 })
 
 function Card({
-  size = "default",
+  size,
   sx,
   children,
   ...props
 }: CardProps & { children?: ReactNode }) {
+  const resolvedSize = cardSizes.resolve(size)
   return (
-    <CardSizeContext.Provider value={{ size }}>
+    <CardSizeContext.Provider value={{ size: resolvedSize }}>
       <Div
         data-slot="card"
-        data-size={size}
-        {...stylex.props(styles.card, cardSizeStyles[size], sx)}
+        data-size={resolvedSize}
+        {...stylex.props(styles.card, cardSizes(size), sx)}
         {...props}
       >
         {children}
@@ -155,7 +166,7 @@ function CardHeader({ sx, ...props }: CardSlotProps) {
       data-slot="card-header"
       {...stylex.props(
         styles.header,
-        headerSizeStyles[size],
+        headerSizes(size),
         stylex.defaultMarker(),
         sx
       )}
@@ -199,7 +210,7 @@ function CardContent({ sx, ...props }: CardSlotProps) {
   return (
     <Div
       data-slot="card-content"
-      {...stylex.props(styles.content, contentSizeStyles[size], sx)}
+      {...stylex.props(styles.content, contentSizes(size), sx)}
       {...props}
     />
   )
@@ -210,7 +221,7 @@ function CardFooter({ sx, ...props }: CardSlotProps) {
   return (
     <Div
       data-slot="card-footer"
-      {...stylex.props(styles.footer, footerSizeStyles[size], sx)}
+      {...stylex.props(styles.footer, footerSizes(size), sx)}
       {...props}
     />
   )

@@ -2,6 +2,8 @@ import type { Context } from "@oxlint/plugins"
 
 import { defineRule } from "@oxlint/plugins"
 
+import { matchesSource, perFileOption } from "../rule-kit.ts"
+
 /**
  * Import sources banned as arbitrary-value escape hatches (ADR-0002). StyleX's
  * `@stylexjs/atoms` exposes an open inline-value surface — `x.padding._16px`,
@@ -13,10 +15,6 @@ import { defineRule } from "@oxlint/plugins"
  * list is configurable so consumers can extend it to other atom-like packages.
  */
 const DEFAULT_SOURCES = ["@stylexjs/atoms"]
-
-function matchesSource(value: string, sources: string[]): boolean {
-  return sources.some((s) => value === s || value.startsWith(`${s}/`))
-}
 
 export const noStylexAtoms = defineRule({
   meta: {
@@ -42,13 +40,13 @@ export const noStylexAtoms = defineRule({
   createOnce(context: Context) {
     // `createOnce` runs once; resolve per-file config in `before()` (the runtime
     // calls it for each file; `context.options` is null at setup time).
-    let sources = DEFAULT_SOURCES
+    const option = perFileOption(context, { sources: DEFAULT_SOURCES })
 
     const reportIfBanned = (sourceNode: any) => {
       if (!sourceNode) return
       const value = sourceNode.value
       if (typeof value !== "string") return
-      if (!matchesSource(value, sources)) return
+      if (!matchesSource(value, option.current.sources)) return
       context.report({
         node: sourceNode,
         messageId: "noAtoms",
@@ -58,10 +56,7 @@ export const noStylexAtoms = defineRule({
 
     return {
       before() {
-        const option = ((context.options ?? [])[0] ?? {}) as {
-          sources?: string[]
-        }
-        sources = option.sources ?? DEFAULT_SOURCES
+        option.before()
       },
       // Static named/default/side-effect import.
       ImportDeclaration(node: any) {

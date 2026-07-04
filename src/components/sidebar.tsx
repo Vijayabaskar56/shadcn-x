@@ -10,6 +10,7 @@ import type { ButtonProps } from "@/components/button"
 import type { InputProps } from "@/components/input"
 import type { SeparatorProps } from "@/components/separator"
 import type { TooltipContentProps } from "@/components/tooltip"
+import type { VariantKey } from "@/components/variants"
 
 import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
@@ -24,6 +25,7 @@ import {
 } from "@/components/sheet"
 import { Text } from "@/components/text"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/tooltip"
+import { defineVariants } from "@/components/variants"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 import {
@@ -46,9 +48,6 @@ type SidebarState = "expanded" | "collapsed"
 type SidebarSide = "left" | "right"
 type SidebarVariant = "sidebar" | "floating" | "inset"
 type SidebarCollapsible = "offcanvas" | "icon" | "none"
-type SidebarMenuButtonVariant = "default" | "outline"
-type SidebarMenuButtonSize = "default" | "sm" | "lg"
-type SidebarMenuSubButtonSize = "sm" | "md"
 
 type SidebarContextProps = {
   state: SidebarState
@@ -359,21 +358,6 @@ const styles = stylex.create({
       ":disabled": "none",
     },
   },
-  menuButtonDefault: {
-    height: `calc(${u} * 8)`,
-  },
-  menuButtonSm: {
-    height: `calc(${u} * 7)`,
-    fontSize: fontSize.xs,
-  },
-  menuButtonLg: {
-    height: `calc(${u} * 12)`,
-  },
-  menuButtonOutline: {
-    backgroundColor: colors["background-primary"],
-    borderColor: colors["border-primary"],
-    boxShadow: boxShadow.s,
-  },
   menuButtonActive: {
     backgroundColor: colors["background-muted"],
     color: colors["text-primary"],
@@ -513,33 +497,55 @@ const styles = stylex.create({
       ":disabled": "none",
     },
   },
-  menuSubButtonSm: {
-    fontSize: fontSize.xs,
-  },
-  menuSubButtonMd: {
-    fontSize: fontSize.s,
-  },
   separator: {
     width: "auto",
     marginInline: spacing.s,
   },
 })
 
-const menuButtonSizeStyles = {
-  default: styles.menuButtonDefault,
-  sm: styles.menuButtonSm,
-  lg: styles.menuButtonLg,
-} satisfies Record<SidebarMenuButtonSize, StyleXStyles>
+const menuButtonSizes = defineVariants(
+  stylex.create({
+    default: {
+      height: `calc(${u} * 8)`,
+    },
+    sm: {
+      height: `calc(${u} * 7)`,
+      fontSize: fontSize.xs,
+    },
+    lg: {
+      height: `calc(${u} * 12)`,
+    },
+  }),
+  "default"
+)
 
-const menuButtonVariantStyles = {
-  default: null,
-  outline: styles.menuButtonOutline,
-} satisfies Record<SidebarMenuButtonVariant, StyleXStyles | null>
+const menuButtonVariants = defineVariants(
+  stylex.create({
+    default: {},
+    outline: {
+      backgroundColor: colors["background-primary"],
+      borderColor: colors["border-primary"],
+      boxShadow: boxShadow.s,
+    },
+  }),
+  "default"
+)
 
-const menuSubButtonSizeStyles = {
-  sm: styles.menuSubButtonSm,
-  md: styles.menuSubButtonMd,
-} satisfies Record<SidebarMenuSubButtonSize, StyleXStyles>
+const menuSubButtonSizes = defineVariants(
+  stylex.create({
+    sm: {
+      fontSize: fontSize.xs,
+    },
+    md: {
+      fontSize: fontSize.s,
+    },
+  }),
+  "md"
+)
+
+type SidebarMenuButtonVariant = VariantKey<typeof menuButtonVariants>
+type SidebarMenuButtonSize = VariantKey<typeof menuButtonSizes>
+type SidebarMenuSubButtonSize = VariantKey<typeof menuSubButtonSizes>
 
 type CleanDivProps = Omit<
   ComponentPropsWithoutRef<"div">,
@@ -1057,21 +1063,23 @@ function SidebarMenuButton({
   render,
   isActive = false,
   tooltip,
-  variant = "default",
-  size = "default",
+  variant,
+  size,
   sx,
   ...props
 }: SidebarMenuButtonProps) {
   const { isMobile, state } = useSidebar()
   const collapsed = state === "collapsed"
+  const resolvedSize = menuButtonSizes.resolve(size)
+
   const button = useRender({
     defaultTagName: "button",
     props: mergeProps<"button">(
       {
         ...stylex.props(
           styles.menuButton,
-          menuButtonVariantStyles[variant],
-          menuButtonSizeStyles[size],
+          menuButtonVariants(variant),
+          menuButtonSizes(size),
           isActive && styles.menuButtonActive,
           collapsed && styles.menuButtonCollapsed,
           sx
@@ -1083,7 +1091,7 @@ function SidebarMenuButton({
     state: {
       slot: "sidebar-menu-button",
       sidebar: "menu-button",
-      size,
+      size: resolvedSize,
       active: String(isActive),
     },
   })
@@ -1252,12 +1260,13 @@ type SidebarMenuSubButtonProps = useRender.ComponentProps<"a"> &
 
 function SidebarMenuSubButton({
   render,
-  size = "md",
+  size,
   isActive = false,
   sx,
   ...props
 }: SidebarMenuSubButtonProps) {
   const { state } = useSidebar()
+  const resolvedSize = menuSubButtonSizes.resolve(size)
 
   return useRender({
     defaultTagName: "a",
@@ -1265,7 +1274,7 @@ function SidebarMenuSubButton({
       {
         ...stylex.props(
           styles.menuSubButton,
-          menuSubButtonSizeStyles[size],
+          menuSubButtonSizes(size),
           isActive && styles.menuButtonActive,
           state === "collapsed" && styles.hideWhenCollapsed,
           sx
@@ -1277,7 +1286,7 @@ function SidebarMenuSubButton({
     state: {
       slot: "sidebar-menu-sub-button",
       sidebar: "menu-sub-button",
-      size,
+      size: resolvedSize,
       active: String(isActive),
     },
   })

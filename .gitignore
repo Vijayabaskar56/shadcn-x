@@ -1,0 +1,25 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env*
+.tanstack
+.wrangler
+.output
+.vinxi
+.source
+__unconfig*
+todos.json
+
+# turbo
+.turbo
+
+# typescript
+*.tsbuildinfo
+stylex-docs
+component.build
+
+# references/<name> are local symlinks to external repos (see references/README.md)
+references/ui
+references/coss

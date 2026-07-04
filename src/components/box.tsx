@@ -2,6 +2,9 @@ import type { StyleXStyles } from "@stylexjs/stylex"
 
 import * as stylex from "@stylexjs/stylex"
 
+import type { BoxAllowedTag } from "../element-coverage.ts"
+import type { VariantKey } from "./variants"
+
 import {
   spacing,
   colors,
@@ -10,192 +13,259 @@ import {
   fontWeight,
   boxShadow,
 } from "../styles/tokens.stylex"
+import { defineVariants } from "./variants"
 
-type SpacingKey =
-  | "none"
-  | "xs"
-  | "s"
-  | "m"
-  | "l"
-  | "xl"
-  | "2xl"
-  | "3xl"
-  | "4xl"
-  | "5xl"
-type ColorKey =
-  | "background-primary"
-  | "background-card"
-  | "background-muted"
-  | "text-primary"
-  | "text-secondary"
-  | "text-disabled"
-  | "border-primary"
-  | "accent"
-  | "danger"
-  | "success"
-type RadiusKey = "none" | "s" | "m" | "l" | "xl" | "full"
-type FontSizeKey = "xs" | "s" | "m" | "l" | "xl" | "2xl" | "3xl"
-type FontWeightKey = "regular" | "medium" | "semibold" | "bold"
-type ShadowKey = "none" | "s" | "m" | "l" | "xl"
+const displays = defineVariants(
+  stylex.create({
+    flex: { display: "flex" },
+    grid: { display: "grid" },
+    "inline-flex": { display: "inline-flex" },
+    block: { display: "block" },
+    inline: { display: "inline" },
+    "inline-block": { display: "inline-block" },
+    none: { display: "none" },
+  })
+)
+
+const flexDirections = defineVariants(
+  stylex.create({
+    row: { flexDirection: "row" },
+    column: { flexDirection: "column" },
+    "row-reverse": { flexDirection: "row-reverse" },
+    "column-reverse": { flexDirection: "column-reverse" },
+  })
+)
+
+const flexWraps = defineVariants(
+  stylex.create({
+    wrap: { flexWrap: "wrap" },
+    nowrap: { flexWrap: "nowrap" },
+    "wrap-reverse": { flexWrap: "wrap-reverse" },
+  })
+)
+
+const alignments = defineVariants(
+  stylex.create({
+    start: { alignItems: "flex-start" },
+    end: { alignItems: "flex-end" },
+    center: { alignItems: "center" },
+    stretch: { alignItems: "stretch" },
+    baseline: { alignItems: "baseline" },
+  })
+)
+
+const justifications = defineVariants(
+  stylex.create({
+    start: { justifyContent: "flex-start" },
+    end: { justifyContent: "flex-end" },
+    center: { justifyContent: "center" },
+    between: { justifyContent: "space-between" },
+    around: { justifyContent: "space-around" },
+    evenly: { justifyContent: "space-evenly" },
+  })
+)
+
+const gaps = defineVariants(
+  stylex.create({
+    none: { gap: spacing.none },
+    xs: { gap: spacing.xs },
+    s: { gap: spacing.s },
+    m: { gap: spacing.m },
+    l: { gap: spacing.l },
+    xl: { gap: spacing.xl },
+    "2xl": { gap: spacing["2xl"] },
+    "3xl": { gap: spacing["3xl"] },
+    "4xl": { gap: spacing["4xl"] },
+    "5xl": { gap: spacing["5xl"] },
+  })
+)
+
+const paddings = defineVariants(
+  stylex.create({
+    none: { padding: spacing.none },
+    xs: { padding: spacing.xs },
+    s: { padding: spacing.s },
+    m: { padding: spacing.m },
+    l: { padding: spacing.l },
+    xl: { padding: spacing.xl },
+    "2xl": { padding: spacing["2xl"] },
+    "3xl": { padding: spacing["3xl"] },
+    "4xl": { padding: spacing["4xl"] },
+    "5xl": { padding: spacing["5xl"] },
+  })
+)
+
+const paddingXs = defineVariants(
+  stylex.create({
+    none: { paddingInline: spacing.none },
+    xs: { paddingInline: spacing.xs },
+    s: { paddingInline: spacing.s },
+    m: { paddingInline: spacing.m },
+    l: { paddingInline: spacing.l },
+    xl: { paddingInline: spacing.xl },
+    "2xl": { paddingInline: spacing["2xl"] },
+    "3xl": { paddingInline: spacing["3xl"] },
+    "4xl": { paddingInline: spacing["4xl"] },
+    "5xl": { paddingInline: spacing["5xl"] },
+  })
+)
+
+const paddingYs = defineVariants(
+  stylex.create({
+    none: { paddingTop: spacing.none, paddingBottom: spacing.none },
+    xs: { paddingTop: spacing.xs, paddingBottom: spacing.xs },
+    s: { paddingTop: spacing.s, paddingBottom: spacing.s },
+    m: { paddingTop: spacing.m, paddingBottom: spacing.m },
+    l: { paddingTop: spacing.l, paddingBottom: spacing.l },
+    xl: { paddingTop: spacing.xl, paddingBottom: spacing.xl },
+    "2xl": { paddingTop: spacing["2xl"], paddingBottom: spacing["2xl"] },
+    "3xl": { paddingTop: spacing["3xl"], paddingBottom: spacing["3xl"] },
+    "4xl": { paddingTop: spacing["4xl"], paddingBottom: spacing["4xl"] },
+    "5xl": { paddingTop: spacing["5xl"], paddingBottom: spacing["5xl"] },
+  })
+)
+
+const margins = defineVariants(
+  stylex.create({
+    none: { margin: spacing.none },
+    xs: { margin: spacing.xs },
+    s: { margin: spacing.s },
+    m: { margin: spacing.m },
+    l: { margin: spacing.l },
+    xl: { margin: spacing.xl },
+    "2xl": { margin: spacing["2xl"] },
+    "3xl": { margin: spacing["3xl"] },
+    "4xl": { margin: spacing["4xl"] },
+    "5xl": { margin: spacing["5xl"] },
+  })
+)
+
+const backgroundColors = defineVariants(
+  stylex.create({
+    "background-primary": { backgroundColor: colors["background-primary"] },
+    "background-card": { backgroundColor: colors["background-card"] },
+    "background-muted": { backgroundColor: colors["background-muted"] },
+    accent: { backgroundColor: colors.accent },
+    danger: { backgroundColor: colors.danger },
+    success: { backgroundColor: colors.success },
+    transparent: { backgroundColor: "transparent" },
+  })
+)
+
+const textColors = defineVariants(
+  stylex.create({
+    "text-primary": { color: colors["text-primary"] },
+    "text-secondary": { color: colors["text-secondary"] },
+    "text-disabled": { color: colors["text-disabled"] },
+    accent: { color: colors.accent },
+    danger: { color: colors.danger },
+    success: { color: colors.success },
+  })
+)
+
+const borderColors = defineVariants(
+  stylex.create({
+    "border-primary": { borderColor: colors["border-primary"] },
+    accent: { borderColor: colors.accent },
+    danger: { borderColor: colors.danger },
+    success: { borderColor: colors.success },
+    transparent: { borderColor: "transparent" },
+  })
+)
+
+const radii = defineVariants(
+  stylex.create({
+    none: { borderRadius: borderRadius.none },
+    s: { borderRadius: borderRadius.s },
+    m: { borderRadius: borderRadius.m },
+    l: { borderRadius: borderRadius.l },
+    xl: { borderRadius: borderRadius.xl },
+    full: { borderRadius: borderRadius.full },
+  })
+)
+
+const shadows = defineVariants(
+  stylex.create({
+    none: { boxShadow: boxShadow.none },
+    s: { boxShadow: boxShadow.s },
+    m: { boxShadow: boxShadow.m },
+    l: { boxShadow: boxShadow.l },
+    xl: { boxShadow: boxShadow.xl },
+  })
+)
+
+const fontSizes = defineVariants(
+  stylex.create({
+    xs: { fontSize: fontSize.xs },
+    s: { fontSize: fontSize.s },
+    m: { fontSize: fontSize.m },
+    l: { fontSize: fontSize.l },
+    xl: { fontSize: fontSize.xl },
+    "2xl": { fontSize: fontSize["2xl"] },
+    "3xl": { fontSize: fontSize["3xl"] },
+  })
+)
+
+const fontWeights = defineVariants(
+  stylex.create({
+    regular: { fontWeight: fontWeight.regular },
+    medium: { fontWeight: fontWeight.medium },
+    semibold: { fontWeight: fontWeight.semibold },
+    bold: { fontWeight: fontWeight.bold },
+  })
+)
+
+const positions = defineVariants(
+  stylex.create({
+    static: { position: "static" },
+    relative: { position: "relative" },
+    absolute: { position: "absolute" },
+    fixed: { position: "fixed" },
+    sticky: { position: "sticky" },
+  })
+)
+
+const overflows = defineVariants(
+  stylex.create({
+    visible: { overflow: "visible" },
+    hidden: { overflow: "hidden" },
+    scroll: { overflow: "scroll" },
+    auto: { overflow: "auto" },
+    clip: { overflow: "clip" },
+  })
+)
+
+const textAlignments = defineVariants(
+  stylex.create({
+    start: { textAlign: "start" },
+    center: { textAlign: "center" },
+    end: { textAlign: "end" },
+  })
+)
+
+const flexes = defineVariants(
+  stylex.create({
+    none: { flex: "none" },
+    "1": { flex: "1" },
+    auto: { flex: "auto" },
+  })
+)
+
+const sizings = defineVariants(
+  stylex.create({
+    full: { width: "100%" },
+    auto: { width: "auto" },
+  })
+)
+
+const heightSizings = defineVariants(
+  stylex.create({
+    full: { height: "100%" },
+    auto: { height: "auto" },
+  })
+)
 
 const styles = stylex.create({
-  displayFlex: { display: "flex" },
-  displayGrid: { display: "grid" },
-  displayInlineFlex: { display: "inline-flex" },
-  displayBlock: { display: "block" },
-  displayInline: { display: "inline" },
-  displayInlineBlock: { display: "inline-block" },
-  displayNone: { display: "none" },
-
-  flexDirectionRow: { flexDirection: "row" },
-  flexDirectionColumn: { flexDirection: "column" },
-  flexDirectionRowReverse: { flexDirection: "row-reverse" },
-  flexDirectionColumnReverse: { flexDirection: "column-reverse" },
-
-  flexWrapWrap: { flexWrap: "wrap" },
-  flexWrapNowrap: { flexWrap: "nowrap" },
-  flexWrapWrapReverse: { flexWrap: "wrap-reverse" },
-
-  alignItemsStart: { alignItems: "flex-start" },
-  alignItemsEnd: { alignItems: "flex-end" },
-  alignItemsCenter: { alignItems: "center" },
-  alignItemsStretch: { alignItems: "stretch" },
-  alignItemsBaseline: { alignItems: "baseline" },
-
-  justifyContentStart: { justifyContent: "flex-start" },
-  justifyContentEnd: { justifyContent: "flex-end" },
-  justifyContentCenter: { justifyContent: "center" },
-  justifyContentBetween: { justifyContent: "space-between" },
-  justifyContentAround: { justifyContent: "space-around" },
-  justifyContentEvenly: { justifyContent: "space-evenly" },
-
-  gapNone: { gap: spacing.none },
-  gapXs: { gap: spacing.xs },
-  gapS: { gap: spacing.s },
-  gapM: { gap: spacing.m },
-  gapL: { gap: spacing.l },
-  gapXl: { gap: spacing.xl },
-  gap2xl: { gap: spacing["2xl"] },
-  gap3xl: { gap: spacing["3xl"] },
-  gap4xl: { gap: spacing["4xl"] },
-  gap5xl: { gap: spacing["5xl"] },
-
-  paddingNone: { padding: spacing.none },
-  paddingXs: { padding: spacing.xs },
-  paddingS: { padding: spacing.s },
-  paddingM: { padding: spacing.m },
-  paddingL: { padding: spacing.l },
-  paddingXl: { padding: spacing.xl },
-  padding2xl: { padding: spacing["2xl"] },
-  padding3xl: { padding: spacing["3xl"] },
-  padding4xl: { padding: spacing["4xl"] },
-  padding5xl: { padding: spacing["5xl"] },
-
-  paddingXNone: { paddingInline: spacing.none },
-  paddingXXs: { paddingInline: spacing.xs },
-  paddingXS: { paddingInline: spacing.s },
-  paddingXM: { paddingInline: spacing.m },
-  paddingXL: { paddingInline: spacing.l },
-  paddingXXl: { paddingInline: spacing.xl },
-  paddingX2xl: { paddingInline: spacing["2xl"] },
-  paddingX3xl: { paddingInline: spacing["3xl"] },
-  paddingX4xl: { paddingInline: spacing["4xl"] },
-  paddingX5xl: { paddingInline: spacing["5xl"] },
-
-  paddingYNone: { paddingTop: spacing.none, paddingBottom: spacing.none },
-  paddingYXs: { paddingTop: spacing.xs, paddingBottom: spacing.xs },
-  paddingYS: { paddingTop: spacing.s, paddingBottom: spacing.s },
-  paddingYM: { paddingTop: spacing.m, paddingBottom: spacing.m },
-  paddingYL: { paddingTop: spacing.l, paddingBottom: spacing.l },
-  paddingYXl: { paddingTop: spacing.xl, paddingBottom: spacing.xl },
-  paddingY2xl: { paddingTop: spacing["2xl"], paddingBottom: spacing["2xl"] },
-  paddingY3xl: { paddingTop: spacing["3xl"], paddingBottom: spacing["3xl"] },
-  paddingY4xl: { paddingTop: spacing["4xl"], paddingBottom: spacing["4xl"] },
-  paddingY5xl: { paddingTop: spacing["5xl"], paddingBottom: spacing["5xl"] },
-
-  marginNone: { margin: spacing.none },
-  marginXs: { margin: spacing.xs },
-  marginS: { margin: spacing.s },
-  marginM: { margin: spacing.m },
-  marginL: { margin: spacing.l },
-  marginXl: { margin: spacing.xl },
-  margin2xl: { margin: spacing["2xl"] },
-  margin3xl: { margin: spacing["3xl"] },
-  margin4xl: { margin: spacing["4xl"] },
-  margin5xl: { margin: spacing["5xl"] },
-
-  bgBackgroundPrimary: { backgroundColor: colors["background-primary"] },
-  bgBackgroundCard: { backgroundColor: colors["background-card"] },
-  bgBackgroundMuted: { backgroundColor: colors["background-muted"] },
-  bgAccent: { backgroundColor: colors.accent },
-  bgDanger: { backgroundColor: colors.danger },
-  bgSuccess: { backgroundColor: colors.success },
-  bgTransparent: { backgroundColor: "transparent" },
-
-  colorTextPrimary: { color: colors["text-primary"] },
-  colorTextSecondary: { color: colors["text-secondary"] },
-  colorTextDisabled: { color: colors["text-disabled"] },
-  colorAccent: { color: colors.accent },
-  colorDanger: { color: colors.danger },
-  colorSuccess: { color: colors.success },
-
-  borderColorBorderPrimary: { borderColor: colors["border-primary"] },
-  borderColorAccent: { borderColor: colors.accent },
-  borderColorDanger: { borderColor: colors.danger },
-  borderColorSuccess: { borderColor: colors.success },
-  borderColorTransparent: { borderColor: "transparent" },
-
-  borderRadiusNone: { borderRadius: borderRadius.none },
-  borderRadiusS: { borderRadius: borderRadius.s },
-  borderRadiusM: { borderRadius: borderRadius.m },
-  borderRadiusL: { borderRadius: borderRadius.l },
-  borderRadiusXl: { borderRadius: borderRadius.xl },
-  borderRadiusFull: { borderRadius: borderRadius.full },
-
-  boxShadowNone: { boxShadow: boxShadow.none },
-  boxShadowS: { boxShadow: boxShadow.s },
-  boxShadowM: { boxShadow: boxShadow.m },
-  boxShadowL: { boxShadow: boxShadow.l },
-  boxShadowXl: { boxShadow: boxShadow.xl },
-
-  fontSizeXs: { fontSize: fontSize.xs },
-  fontSizeS: { fontSize: fontSize.s },
-  fontSizeM: { fontSize: fontSize.m },
-  fontSizeL: { fontSize: fontSize.l },
-  fontSizeXl: { fontSize: fontSize.xl },
-  fontSize2xl: { fontSize: fontSize["2xl"] },
-  fontSize3xl: { fontSize: fontSize["3xl"] },
-
-  fontWeightRegular: { fontWeight: fontWeight.regular },
-  fontWeightMedium: { fontWeight: fontWeight.medium },
-  fontWeightSemibold: { fontWeight: fontWeight.semibold },
-  fontWeightBold: { fontWeight: fontWeight.bold },
-
-  positionStatic: { position: "static" },
-  positionRelative: { position: "relative" },
-  positionAbsolute: { position: "absolute" },
-  positionFixed: { position: "fixed" },
-  positionSticky: { position: "sticky" },
-
-  overflowVisible: { overflow: "visible" },
-  overflowHidden: { overflow: "hidden" },
-  overflowScroll: { overflow: "scroll" },
-  overflowAuto: { overflow: "auto" },
-  overflowClip: { overflow: "clip" },
-
-  textAlignStart: { textAlign: "start" },
-  textAlignCenter: { textAlign: "center" },
-  textAlignEnd: { textAlign: "end" },
-
-  flexNone: { flex: "none" },
-  flex1: { flex: "1" },
-  flexAuto: { flex: "auto" },
-
-  widthFull: { width: "100%" },
-  widthAuto: { width: "auto" },
-  heightFull: { height: "100%" },
-  heightAuto: { height: "auto" },
-
   border: {
     borderWidth: 1,
     borderStyle: "solid",
@@ -232,87 +302,41 @@ const styles = stylex.create({
   minHeight: (value) => ({ minHeight: value }),
 })
 
-type Display =
-  | "flex"
-  | "grid"
-  | "inline-flex"
-  | "block"
-  | "inline"
-  | "inline-block"
-  | "none"
-type FlexDirection = "row" | "column" | "row-reverse" | "column-reverse"
-type FlexWrap = "wrap" | "nowrap" | "wrap-reverse"
-type AlignItems = "start" | "end" | "center" | "stretch" | "baseline"
-type JustifyContent =
-  | "start"
-  | "end"
-  | "center"
-  | "between"
-  | "around"
-  | "evenly"
-type Position = "static" | "relative" | "absolute" | "fixed" | "sticky"
-type Overflow = "visible" | "hidden" | "scroll" | "auto" | "clip"
-type TextAlign = "start" | "center" | "end"
-type FlexValue = "none" | "1" | "auto"
-type Sizing = "full" | "auto"
-
-type AllowedElement =
-  | "div"
-  | "span"
-  | "section"
-  | "nav"
-  | "article"
-  | "main"
-  | "aside"
-  | "header"
-  | "footer"
-  | "ul"
-  | "ol"
-  | "li"
-  | "form"
-  | "fieldset"
-  | "time"
-  | "figure"
-  | "figcaption"
-  | "blockquote"
-  | "pre"
-  | "code"
-  // MDX prose infra only (markdown tables in docs)
-  | "table"
-  | "th"
-  | "td"
-  | "hr"
+// Derived from the element-coverage table (single source of truth for which
+// tags Box still renders and why — e.g. table/th/td/hr are MDX prose infra
+// only). To allow or retire a tag, edit `src/element-coverage.ts`.
+type AllowedElement = BoxAllowedTag
 
 type BoxProps<E extends AllowedElement = "div"> = {
   as?: E
   children?: React.ReactNode
   sx?: StyleXStyles
-  display?: Display
-  flexDirection?: FlexDirection
-  flexWrap?: FlexWrap
-  alignItems?: AlignItems
-  justifyContent?: JustifyContent
-  gap?: SpacingKey
-  padding?: SpacingKey
-  paddingX?: SpacingKey
-  paddingY?: SpacingKey
-  margin?: SpacingKey
-  marginX?: SpacingKey
-  marginY?: SpacingKey
-  backgroundColor?: ColorKey | "transparent"
-  color?: ColorKey
-  borderColor?: ColorKey | "transparent"
-  borderRadius?: RadiusKey
-  boxShadow?: ShadowKey
-  fontSize?: FontSizeKey
-  fontWeight?: FontWeightKey
-  width?: Sizing
-  height?: Sizing
+  display?: VariantKey<typeof displays>
+  flexDirection?: VariantKey<typeof flexDirections>
+  flexWrap?: VariantKey<typeof flexWraps>
+  alignItems?: VariantKey<typeof alignments>
+  justifyContent?: VariantKey<typeof justifications>
+  gap?: VariantKey<typeof gaps>
+  padding?: VariantKey<typeof paddings>
+  paddingX?: VariantKey<typeof paddingXs>
+  paddingY?: VariantKey<typeof paddingYs>
+  margin?: VariantKey<typeof margins>
+  marginX?: VariantKey<typeof margins>
+  marginY?: VariantKey<typeof margins>
+  backgroundColor?: VariantKey<typeof backgroundColors>
+  color?: VariantKey<typeof textColors>
+  borderColor?: VariantKey<typeof borderColors>
+  borderRadius?: VariantKey<typeof radii>
+  boxShadow?: VariantKey<typeof shadows>
+  fontSize?: VariantKey<typeof fontSizes>
+  fontWeight?: VariantKey<typeof fontWeights>
+  width?: VariantKey<typeof sizings>
+  height?: VariantKey<typeof heightSizings>
   minHeight?: string
-  position?: Position
-  overflow?: Overflow
-  textAlign?: TextAlign
-  flex?: FlexValue
+  position?: VariantKey<typeof positions>
+  overflow?: VariantKey<typeof overflows>
+  textAlign?: VariantKey<typeof textAlignments>
+  flex?: VariantKey<typeof flexes>
   flexGrow?: number
   flexShrink?: number
   order?: number
@@ -335,224 +359,6 @@ type BoxProps<E extends AllowedElement = "div"> = {
   | "order"
   | "overflow"
 >
-
-const displayMap = {
-  flex: styles.displayFlex,
-  grid: styles.displayGrid,
-  "inline-flex": styles.displayInlineFlex,
-  block: styles.displayBlock,
-  inline: styles.displayInline,
-  "inline-block": styles.displayInlineBlock,
-  none: styles.displayNone,
-}
-
-const flexDirectionMap = {
-  row: styles.flexDirectionRow,
-  column: styles.flexDirectionColumn,
-  "row-reverse": styles.flexDirectionRowReverse,
-  "column-reverse": styles.flexDirectionColumnReverse,
-}
-
-const flexWrapMap = {
-  wrap: styles.flexWrapWrap,
-  nowrap: styles.flexWrapNowrap,
-  "wrap-reverse": styles.flexWrapWrapReverse,
-}
-
-const alignItemsMap = {
-  start: styles.alignItemsStart,
-  end: styles.alignItemsEnd,
-  center: styles.alignItemsCenter,
-  stretch: styles.alignItemsStretch,
-  baseline: styles.alignItemsBaseline,
-}
-
-const justifyContentMap = {
-  start: styles.justifyContentStart,
-  end: styles.justifyContentEnd,
-  center: styles.justifyContentCenter,
-  between: styles.justifyContentBetween,
-  around: styles.justifyContentAround,
-  evenly: styles.justifyContentEvenly,
-}
-
-const gapMap = {
-  none: styles.gapNone,
-  xs: styles.gapXs,
-  s: styles.gapS,
-  m: styles.gapM,
-  l: styles.gapL,
-  xl: styles.gapXl,
-  "2xl": styles.gap2xl,
-  "3xl": styles.gap3xl,
-  "4xl": styles.gap4xl,
-  "5xl": styles.gap5xl,
-}
-
-const paddingMap = {
-  none: styles.paddingNone,
-  xs: styles.paddingXs,
-  s: styles.paddingS,
-  m: styles.paddingM,
-  l: styles.paddingL,
-  xl: styles.paddingXl,
-  "2xl": styles.padding2xl,
-  "3xl": styles.padding3xl,
-  "4xl": styles.padding4xl,
-  "5xl": styles.padding5xl,
-}
-
-const paddingXMap = {
-  none: styles.paddingXNone,
-  xs: styles.paddingXXs,
-  s: styles.paddingXS,
-  m: styles.paddingXM,
-  l: styles.paddingXL,
-  xl: styles.paddingXXl,
-  "2xl": styles.paddingX2xl,
-  "3xl": styles.paddingX3xl,
-  "4xl": styles.paddingX4xl,
-  "5xl": styles.paddingX5xl,
-}
-
-const paddingYMap = {
-  none: styles.paddingYNone,
-  xs: styles.paddingYXs,
-  s: styles.paddingYS,
-  m: styles.paddingYM,
-  l: styles.paddingYL,
-  xl: styles.paddingYXl,
-  "2xl": styles.paddingY2xl,
-  "3xl": styles.paddingY3xl,
-  "4xl": styles.paddingY4xl,
-  "5xl": styles.paddingY5xl,
-}
-
-const marginMap = {
-  none: styles.marginNone,
-  xs: styles.marginXs,
-  s: styles.marginS,
-  m: styles.marginM,
-  l: styles.marginL,
-  xl: styles.marginXl,
-  "2xl": styles.margin2xl,
-  "3xl": styles.margin3xl,
-  "4xl": styles.margin4xl,
-  "5xl": styles.margin5xl,
-}
-
-const bgMap = {
-  "background-primary": styles.bgBackgroundPrimary,
-  "background-card": styles.bgBackgroundCard,
-  "background-muted": styles.bgBackgroundMuted,
-  accent: styles.bgAccent,
-  danger: styles.bgDanger,
-  success: styles.bgSuccess,
-  transparent: styles.bgTransparent,
-  "text-primary": styles.colorTextPrimary,
-  "text-secondary": styles.colorTextSecondary,
-  "text-disabled": styles.colorTextDisabled,
-  "border-primary": styles.borderColorBorderPrimary,
-}
-
-const colorMap = {
-  "text-primary": styles.colorTextPrimary,
-  "text-secondary": styles.colorTextSecondary,
-  "text-disabled": styles.colorTextDisabled,
-  accent: styles.colorAccent,
-  danger: styles.colorDanger,
-  success: styles.colorSuccess,
-  "background-primary": styles.colorTextPrimary,
-  "background-card": styles.colorTextPrimary,
-  "background-muted": styles.colorTextPrimary,
-  "border-primary": styles.colorTextPrimary,
-}
-
-const borderColorMap = {
-  "border-primary": styles.borderColorBorderPrimary,
-  accent: styles.borderColorAccent,
-  danger: styles.borderColorDanger,
-  success: styles.borderColorSuccess,
-  transparent: styles.borderColorTransparent,
-  "text-primary": styles.borderColorBorderPrimary,
-  "text-secondary": styles.borderColorBorderPrimary,
-  "text-disabled": styles.borderColorBorderPrimary,
-  "background-primary": styles.borderColorBorderPrimary,
-  "background-card": styles.borderColorBorderPrimary,
-  "background-muted": styles.borderColorBorderPrimary,
-}
-
-const radiusMap = {
-  none: styles.borderRadiusNone,
-  s: styles.borderRadiusS,
-  m: styles.borderRadiusM,
-  l: styles.borderRadiusL,
-  xl: styles.borderRadiusXl,
-  full: styles.borderRadiusFull,
-}
-
-const shadowMap = {
-  none: styles.boxShadowNone,
-  s: styles.boxShadowS,
-  m: styles.boxShadowM,
-  l: styles.boxShadowL,
-  xl: styles.boxShadowXl,
-}
-
-const fontSizeMap = {
-  xs: styles.fontSizeXs,
-  s: styles.fontSizeS,
-  m: styles.fontSizeM,
-  l: styles.fontSizeL,
-  xl: styles.fontSizeXl,
-  "2xl": styles.fontSize2xl,
-  "3xl": styles.fontSize3xl,
-}
-
-const fontWeightMap = {
-  regular: styles.fontWeightRegular,
-  medium: styles.fontWeightMedium,
-  semibold: styles.fontWeightSemibold,
-  bold: styles.fontWeightBold,
-}
-
-const positionMap = {
-  static: styles.positionStatic,
-  relative: styles.positionRelative,
-  absolute: styles.positionAbsolute,
-  fixed: styles.positionFixed,
-  sticky: styles.positionSticky,
-}
-
-const overflowMap = {
-  visible: styles.overflowVisible,
-  hidden: styles.overflowHidden,
-  scroll: styles.overflowScroll,
-  auto: styles.overflowAuto,
-  clip: styles.overflowClip,
-}
-
-const textAlignMap = {
-  start: styles.textAlignStart,
-  center: styles.textAlignCenter,
-  end: styles.textAlignEnd,
-}
-
-const flexMap = {
-  none: styles.flexNone,
-  "1": styles.flex1,
-  auto: styles.flexAuto,
-}
-
-const sizingMap = {
-  full: styles.widthFull,
-  auto: styles.widthAuto,
-}
-
-const heightSizingMap = {
-  full: styles.heightFull,
-  auto: styles.heightAuto,
-}
 
 export function Box<E extends AllowedElement = "div">({
   as,
@@ -595,29 +401,29 @@ export function Box<E extends AllowedElement = "div">({
   const Tag = (as ?? "div") as React.ElementType
 
   const xstyle = stylex.props(
-    display && displayMap[display],
-    flexDirection && flexDirectionMap[flexDirection],
-    flexWrap && flexWrapMap[flexWrap],
-    alignItems && alignItemsMap[alignItems],
-    justifyContent && justifyContentMap[justifyContent],
-    gap && gapMap[gap],
-    padding && paddingMap[padding],
-    paddingX && paddingXMap[paddingX],
-    paddingY && paddingYMap[paddingY],
-    margin && marginMap[margin],
-    backgroundColor && bgMap[backgroundColor],
-    color && colorMap[color],
-    borderColor && borderColorMap[borderColor],
-    borderRadius && radiusMap[borderRadius],
-    boxShadow && shadowMap[boxShadow],
-    fontSize && fontSizeMap[fontSize],
-    fontWeight && fontWeightMap[fontWeight],
-    width && sizingMap[width],
-    height && heightSizingMap[height],
-    position && positionMap[position],
-    overflow && overflowMap[overflow],
-    textAlign && textAlignMap[textAlign],
-    flex && flexMap[flex],
+    display && displays(display),
+    flexDirection && flexDirections(flexDirection),
+    flexWrap && flexWraps(flexWrap),
+    alignItems && alignments(alignItems),
+    justifyContent && justifications(justifyContent),
+    gap && gaps(gap),
+    padding && paddings(padding),
+    paddingX && paddingXs(paddingX),
+    paddingY && paddingYs(paddingY),
+    margin && margins(margin),
+    backgroundColor && backgroundColors(backgroundColor),
+    color && textColors(color),
+    borderColor && borderColors(borderColor),
+    borderRadius && radii(borderRadius),
+    boxShadow && shadows(boxShadow),
+    fontSize && fontSizes(fontSize),
+    fontWeight && fontWeights(fontWeight),
+    width && sizings(width),
+    height && heightSizings(height),
+    position && positions(position),
+    overflow && overflows(overflow),
+    textAlign && textAlignments(textAlign),
+    flex && flexes(flex),
     border && styles.border,
     borderTop && styles.borderTop,
     borderBottom && styles.borderBottom,

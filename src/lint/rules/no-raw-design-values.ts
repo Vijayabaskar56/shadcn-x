@@ -2,6 +2,8 @@ import type { Context } from "@oxlint/plugins"
 
 import { defineRule } from "@oxlint/plugins"
 
+import { findAncestor } from "../rule-kit.ts"
+
 const HEX = /^#[0-9a-fA-F]{3,8}$/
 const UNIT = /^-?\d*\.?\d+(px|rem|em|vh|vw|pt)$/
 const COLOR_FN = /\b(rgba?|hsla?|oklch|oklab|lab|lch|color-mix)\(/
@@ -12,14 +14,14 @@ function isRawDesignValue(value: string): boolean {
 
 /** Walk up from a node; true if it sits inside a JSX attribute value. */
 function isInsideJsxAttribute(node: any): boolean {
-  let current = node.parent
-  while (current) {
-    if (current.type === "JSXAttribute") return true
-    if (current.type === "JSXElement" || current.type === "JSXFragment")
-      return false
-    current = current.parent
-  }
-  return false
+  return (
+    findAncestor(
+      node,
+      (ancestor) => ancestor.type === "JSXAttribute",
+      (ancestor) =>
+        ancestor.type === "JSXElement" || ancestor.type === "JSXFragment"
+    ) !== null
+  )
 }
 
 export const noRawDesignValues = defineRule({

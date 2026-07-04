@@ -17,8 +17,9 @@ Read first (once per session): `CONTEXT.md`, `docs/adr/0001`–`0003`,
 ## Checklist (make a TodoWrite item per step)
 
 ### 1. Study the reference (read-only)
-- Base UI variant (PRIMARY): `/Users/vijayabaskar/work/references/ui/apps/v4/registry/bases/base/ui/<name>.tsx`
-- Canonical (for full variant/size/API parity): `/Users/vijayabaskar/work/references/ui/apps/v4/registry/new-york-v4/ui/<name>.tsx`
+- Base UI variant (PRIMARY): `references/ui/apps/v4/registry/bases/base/ui/<name>.tsx`
+- Canonical (for full variant/size/API parity): `references/ui/apps/v4/registry/new-york-v4/ui/<name>.tsx`
+- `references/ui` is a local symlink to the shadcn/ui repo (see `references/README.md`). If it doesn't resolve, recreate it: `ln -s /path/to/references/ui references/ui`.
 - Note every `variant`, `size`, subcomponent, and prop. We match shadcn's API and
   variant names exactly.
 
@@ -71,7 +72,7 @@ type-safe equivalent is `stylex.when.*` + a marker (verified working in 0.19):
 ### 6. Verify (all must pass)
 - `bunx tsc --noEmit`
 - `bunx vitest run src/components`
-- `node scripts/build-content.mjs` (MDX compiles)
+- `bunx fumadocs-mdx` (MDX compiles; regenerates `.source/`)
 - `bunx oxlint --type-aware src` (exit 0; warnings ok)
 - `bun run build` (full build for any composed/route-level component)
 
@@ -83,5 +84,5 @@ type-safe equivalent is `stylex.when.*` + a marker (verified working in 0.19):
 - **`light-dark()` survives the build only because `vite.config.ts` pins `stylex.vite({ lightningcssOptions: { targets } })` to modern browsers.** StyleX's unplugin runs lightningcss over the token CSS; with old targets it lowers `light-dark(oklch(a),oklch(b))` into two space-separated values → invalid `background-color` (transparent) and split per-axis `border-color`. Do NOT lower those targets.
 - **No broad `*` resets in `globals.css`.** StyleX atomic styles live in `@layer`, and unlayered rules beat layered ones regardless of specificity — a `* { border-width: 0; margin: 0 }` silently kills every StyleX border/margin. Keep global resets narrow (box-sizing, `body` margin).
 - StyleX component tests need the StyleX plugin in `vitest.config.ts` (already wired) — `defineVars` throws at runtime otherwise. To verify a component in isolation while other files are mid-edit, run `bunx vitest run src/components/<name>.test.tsx` (loads only its import graph).
-- The lint plugin is authored with oxlint's `createOnce`; per-file options/state go in a `before()` hook (`context.options` is `null` at `createOnce` setup time).
+- The lint plugin is authored with oxlint's `createOnce`; per-file options/state go in a `before()` hook (`context.options` is `null` at `createOnce` setup time). Don't hand-roll that dance — `src/lint/rule-kit.ts` provides `perFileOption` (plus `matchesSource` and `findAncestor`) for rule scaffolding.
 - `.mdx` docs aren't linted (oxlint globs only js/ts) — keep examples on-system anyway; they're the canonical reference an agent will copy.
